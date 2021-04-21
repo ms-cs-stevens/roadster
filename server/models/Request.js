@@ -32,4 +32,4 @@ const requestSchema = new Schema(
   { timestamps: true, }
 );
 
-module.exports = mongoose.model('User', requestSchema);
+module.exports = mongoose.model('Request', requestSchema);
