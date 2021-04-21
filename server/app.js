@@ -1,16 +1,18 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const routes = require('./routes');
-const cors = require('cors');
-require('dotenv').config({ path: 'variables.env' });
+const routes = require("./routes");
+const cors = require("cors");
+require("dotenv").config({ path: "variables.env" });
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const configRoutes = require('./routes');
+const configRoutes = require("./routes");
 
 // Logging Middleware
 app.use(async (req, res, next) => {
-  console.log(`[${new Date().toUTCString()}]: ${req.method} ${ req.originalUrl }`);
+  console.log(
+    `[${new Date().toUTCString()}]: ${req.method} ${req.originalUrl}`
+  );
   next();
 });
 
@@ -22,6 +24,6 @@ app.use(cors());
 //   next();
 // });
 
-app.use('/', routes);
+app.use("/", routes);
 // done! we export it so we can start the site in start.js
 module.exports = app;

@@ -1,4 +1,5 @@
 {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.fontSize": 12,
   "editor.tabSize": 2,
   "files.trimTrailingWhitespace": true,
@@ -11,7 +12,7 @@
   "editor.formatOnSave": false,
   // Enable per-language
   "[javascript]": {
-    "editor.suggest.insertMode": "replace",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
   "[css]": {

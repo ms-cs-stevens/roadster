@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { nanoid } = require('nanoid');
+const { nanoid } = require("nanoid");
 
 const requestSchema = new Schema(
   {
@@ -10,26 +10,26 @@ const requestSchema = new Schema(
     },
     note: {
       type: String,
-      required: 'You must supply a description',
+      required: "You must supply a description",
     },
     status: {
       type: String,
-      enum: ['approved', 'rejected'],
+      enum: ["approved", "rejected"],
     },
     journeyId: {
       type: String,
-      required: [true, 'You must provide a journey'],
+      required: [true, "You must provide a journey"],
     },
     userId: {
       type: String,
-      required: [true, 'You must provide an user'],
+      required: [true, "You must provide an user"],
     },
     initiatorId: {
       type: String,
-      required: [true, 'You must provide an initiator'],
+      required: [true, "You must provide an initiator"],
     },
   },
-  { timestamps: true, }
+  { timestamps: true }
 );
 
-module.exports = mongoose.model('Request', requestSchema);
+module.exports = mongoose.model("Request", requestSchema);

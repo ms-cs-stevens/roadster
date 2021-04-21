@@ -1,1 +1,1 @@
-const seedData = require('../seedData');
+const seedData = require("../seedData");

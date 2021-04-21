@@ -1,11 +1,5 @@
 module.exports = {
-  users: [
-
-  ],
-  journeys: [
-
-  ],
-  requests: [
-
-  ]
+  users: [],
+  journeys: [],
+  requests: [],
 };
