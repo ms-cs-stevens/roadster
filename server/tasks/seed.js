@@ -1,0 +1,1 @@
+const seedData = require('../seedData');
