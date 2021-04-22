@@ -13,6 +13,16 @@ const Navigation = () => {
         Home
       </NavLink>
       {currentUser ? (
+        <NavLink
+          exact
+          activeClassName="active"
+          className="App-link"
+          to="/createJourney"
+        >
+          Plan your Trip
+        </NavLink>
+      ) : ('')}
+      {currentUser ? (
         <Signout />
       ) : (
         <>

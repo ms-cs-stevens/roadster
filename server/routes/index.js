@@ -4,6 +4,9 @@ const journeysController = require("../controllers/journeysController");
 const usersController = require("../controllers/usersController");
 
 router.get("/", journeysController.index);
+router.post("/createJourney", journeysController.create);
+router.get("/journey/:id", journeysController.getJourney);
+router.post("/editJourney", journeysController.editJourney);
 
 // user's routes
 router.get("/users", usersController.index);

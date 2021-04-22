@@ -1,3 +1,4 @@
+import CreateJourney from "./components/CreateJourney";
 import "./css/App.css";
 import Landing from "./components/Landing";
 import Navigation from "./components/Navigation";
@@ -18,6 +19,7 @@ function App() {
               <Route exact path="/" component={Landing} />
               <Route exact path="/login" component={SignIn} />
               <Route exact path="/register" component={SignUp} />
+              <Route exact path='/createJourney' component={CreateJourney} />
             </Switch>
           </div>
         </div>

@@ -5,6 +5,8 @@ const cors = require("cors");
 require("dotenv").config({ path: "variables.env" });
 
 const mongoose = require("mongoose");
+app.use(express.json());
+const configRoutes = require("./routes");
 
 // Logging Middleware
 app.use(async (req, res, next) => {
