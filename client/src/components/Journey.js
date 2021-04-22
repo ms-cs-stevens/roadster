@@ -23,7 +23,7 @@ const Journey = (props) => {
 	const classes = useStyles();
 
     const stopDataSet = (e) => {
-		setStopCities([{place:"New York"},{place:"New Jersey"}]);
+		setStopCities([{place:"Jersy City"},{place:"Hoboken"}]);
 	};
 
     const EditJourney = async (event) => {
@@ -54,7 +54,6 @@ const Journey = (props) => {
             console.log("test111 "+ props.id);
 			try{
                 const { data } = await axios.get('http://localhost:4000/journey/'+props.id);
-                alert(JSON.stringify(data));
                 console.log(data);
                 SetSource(data.source);
                 setDestination(data.destination);
