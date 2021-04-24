@@ -8,4 +8,8 @@ module.exports = {
   async request(req, res) {
     // create user's journey request
   },
+  async show(req, res) {
+    // create user's journey request
+    // User profile page
+  },
 };
