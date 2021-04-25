@@ -6,8 +6,6 @@ require("dotenv").config({ path: "variables.env" });
 
 const mongoose = require("mongoose");
 
-const configRoutes = require("./routes");
-
 // Logging Middleware
 app.use(async (req, res, next) => {
   console.log(
@@ -25,5 +23,6 @@ app.use(cors());
 // });
 
 app.use("/", routes);
+
 // done! we export it so we can start the site in start.js
 module.exports = app;
