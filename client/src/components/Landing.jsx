@@ -13,7 +13,7 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
 //page components
-import Header from './Header.jsx';
+import Navigation from './Navigation.jsx';
 import MainBanner from './MainBanner.jsx';
 import FeatureList from './FeatureList.jsx';
 import ContentLink from './ContentLink.jsx';
@@ -73,7 +73,7 @@ const Landing = () => {
       <React.Fragment>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header title="Roadster"/>
+        <Navigation title="Roadster"/>
         <contentLink>
           <MainBanner info={mainBanner} />
           {/* <Grid container spacing={4}>

@@ -54,9 +54,6 @@ export default function MainBanner(props) {
             <Typography variant="h5" color="inherit" paragraph>
               {info.description}
             </Typography>
-            <Link variant="subtitle1" href="#">
-              {info.linkText}
-            </Link>
           </div>
         </Grid>
       </Grid>
