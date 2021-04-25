@@ -9,6 +9,7 @@ import {
   MuiAppBar,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import { Redirect } from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -61,7 +62,7 @@ export default function Navigation(props) {
           className={clsx(classes.rightLink, classes.linkSecondary)}
           href="https://www.cdc.gov/coronavirus/2019-ncov/travelers/travel-during-covid19.html"
         >
-          {'The Latest COVID Travel Guidelines'}
+          {'! COVID Travel Guidelines !'}
         </Link>
       <NavLink exact activeClassName="active" className="App-link" to="/">
         Home

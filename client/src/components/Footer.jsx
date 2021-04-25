@@ -5,16 +5,12 @@ import {
     Grid,
     Container,
     Typography,
-    Link
 } from '@material-ui/core';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © TEAM SANS@Stevens'}
-      <Link color="inherit" href="https://github.com/ms-cs-stevens/roadster">
-        Our Repo
-      </Link>{'Link to GitHub'}
       {new Date().getFullYear()}
       {'.'}
     </Typography>

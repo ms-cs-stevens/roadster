@@ -1,7 +1,5 @@
-# Planning your Trip
+# Navigating Around The Virus
 
-Thinking about your next adventure down Route 66?
+We are committed to ensuring your safety in more ways than one.
 
-Or driving down with your pals to Vegas and maybe stopping by a few attractions along the way?
-
-We have you covered to discover the most scenic route and help discovering a few attractions worth your while.
+We will always provide you with the most up to date information regarding the virus and/or travel restrictions.
