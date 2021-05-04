@@ -1,48 +1,48 @@
-import React, { useContext } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Paper from "@material-ui/core/Paper";
-import { Redirect } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { AuthContext } from "../../firebase/Auth";
-import { emailSignIn, passwordReset } from "../../firebase/firebaseFunctions";
-import { makeStyles } from "@material-ui/core/styles";
-import SocialSignIn from "./SocialSignIn";
-import banner from "../../images/sign-in-page.jpg";
+import React, { useContext } from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
+import { Redirect } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import { AuthContext } from '../../firebase/Auth';
+import { emailSignIn, passwordReset } from '../../firebase/firebaseFunctions';
+import SocialSignIn from './SocialSignIn';
+import banner from '../../images/sign-in-page.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
+    height: '100vh',
   },
   image: {
     backgroundImage: `url(${banner})`,
-    backgroundRepeat: "no-repeat",
+    backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === "light"
+      theme.palette.type === 'light'
         ? theme.palette.grey[50]
         : theme.palette.grey[900],
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
   },
   paper: {
     margin: theme.spacing(8, 4),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -56,24 +56,24 @@ export default function SignInSide() {
   const { currentUser } = useContext(AuthContext);
   const handleLogin = async (event) => {
     event.preventDefault();
-    let { email, password } = event.target.elements;
+    const { email, password } = event.target.elements;
 
     try {
       await emailSignIn(email.value, password.value);
     } catch (error) {
-      alert("Invalid Email or Password");
+      alert('Invalid Email or Password');
     }
   };
 
   const handlePasswordReset = (event) => {
     event.preventDefault();
-    let email = document.getElementById("email").value;
+    const email = document.getElementById('email').value;
     if (email) {
       passwordReset(email);
-      alert("Password reset email was sent");
+      alert('Password reset email was sent');
     } else {
       alert(
-        "Please enter an email address below before you click the forgot password link"
+        'Please enter an email address below before you click the forgot password link',
       );
     }
   };
@@ -91,7 +91,7 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            What's your email and password?
+            What&apos;s your email and password?
           </Typography>
           <form className={classes.form} onSubmit={handleLogin} noValidate>
             <TextField
@@ -138,7 +138,7 @@ export default function SignInSide() {
               </Grid>
               <Grid item>
                 <Link href="/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  Don&apos;t have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>

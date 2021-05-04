@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
-import Signout from "./user/SignOut";
-import { NavLink } from "react-router-dom";
-import { AuthContext } from "../firebase/Auth";
+import React, { useContext } from 'react';
+import { NavLink } from 'react-router-dom';
+import Signout from './user/SignOut';
+import { AuthContext } from '../firebase/Auth';
 
 const Navigation = () => {
   const { currentUser } = useContext(AuthContext);
@@ -12,6 +12,16 @@ const Navigation = () => {
       <NavLink exact activeClassName="active" className="App-link" to="/">
         Home
       </NavLink>
+      {currentUser ? (
+        <NavLink
+          exact
+          activeClassName="active"
+          className="App-link"
+          to="/journeys/new"
+        >
+          Plan your Trip
+        </NavLink>
+      ) : ('')}
       {currentUser ? (
         <Signout />
       ) : (

@@ -1,5 +1,5 @@
-import React from "react";
-import { socialSignIn } from "../../firebase/firebaseFunctions";
+import React from 'react';
+import { socialSignIn } from '../../firebase/firebaseFunctions';
 
 const SocialSignIn = () => {
   const socialSignOn = async (provider) => {
@@ -12,14 +12,16 @@ const SocialSignIn = () => {
   return (
     <div>
       <img
-        onClick={() => socialSignOn("google")}
+        onClick={() => socialSignOn('google')}
         alt="google signin"
         src="/images/btn_google_signin.png"
+        aria-hidden="true"
       />
       <img
-        onClick={() => socialSignOn("facebook")}
+        onClick={() => socialSignOn('facebook')}
         alt="facebook signin"
         src="/images/facebook_signin.png"
+        aria-hidden="true"
       />
     </div>
   );

@@ -1,9 +1,10 @@
-import { Grid, makeStyles } from "@material-ui/core";
+import React from 'react';
+import { Grid, makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-    padding: "0 5em",
+    padding: '0 5em',
   },
 }));
 
