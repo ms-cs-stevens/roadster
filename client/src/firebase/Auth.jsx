@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
-import { firebaseConfig } from "../config";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { firebaseConfig } from '../config';
 
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
@@ -27,4 +28,8 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.string.isRequired,
 };

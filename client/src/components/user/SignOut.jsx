@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from "react";
-import { signout } from "../../firebase/firebaseFunctions";
-import { Button } from "@material-ui/core";
-import { AuthContext } from "../../firebase/Auth";
+import React, { useContext, useEffect } from 'react';
+import { Button } from '@material-ui/core';
+import { signout } from '../../firebase/firebaseFunctions';
+import { AuthContext } from '../../firebase/Auth';
 
 const Signout = () => {
   const { currentUser } = useContext(AuthContext);

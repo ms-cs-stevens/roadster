@@ -1,14 +1,18 @@
-import firebase from "firebase/app";
+import firebase from 'firebase/app';
 
 async function createUserWithEmailPass(email, password, displayName) {
   await firebase.auth().createUserWithEmailAndPassword(email, password);
-  firebase.auth().currentUser.updateProfile({ displayName: displayName });
+  firebase.auth().currentUser.updateProfile({ displayName });
+}
+
+async function signout() {
+  await firebase.auth().signOut();
 }
 
 async function changePassword(email, oldPassword, newPassword) {
-  let credential = firebase.auth.EmailAuthProvider.credential(
+  const credential = firebase.auth.EmailAuthProvider.credential(
     email,
-    oldPassword
+    oldPassword,
   );
   await firebase.auth().currentUser.reauthenticateWithCredential(credential);
   await firebase.auth().currentUser.updatePassword(newPassword);
@@ -21,9 +25,9 @@ async function emailSignIn(email, password) {
 
 async function socialSignIn(provider) {
   let socialProvider = null;
-  if (provider === "google") {
+  if (provider === 'google') {
     socialProvider = new firebase.auth.GoogleAuthProvider();
-  } else if (provider === "facebook") {
+  } else if (provider === 'facebook') {
     socialProvider = new firebase.auth.FacebookAuthProvider();
   }
   await firebase.auth().signInWithPopup(socialProvider);
@@ -35,10 +39,6 @@ async function passwordReset(email) {
 
 async function passwordUpdate(password) {
   await firebase.auth().updatePassword(password);
-}
-
-async function signout() {
-  await firebase.auth().signOut();
 }
 
 export {
