@@ -132,9 +132,9 @@ export default function SignInSide() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Button href="#" variant="body2" onClick={handlePasswordReset}>
+                <Link href="#" variant="body2" onClick={handlePasswordReset}>
                   Forgot password?
-                </Button>
+                </Link>
               </Grid>
               <Grid item>
                 <Link href="/register" variant="body2">
