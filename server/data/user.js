@@ -6,9 +6,7 @@ userObject = (user) => {
     firstName: user.firstName,
     lastName: user.lastName,
     email: user.email,
-    uid: user.uid,
-    phone: user.phone,
-    gender: user.gender,
+    profileImage: user.profileImage,
   };
 };
 
@@ -19,14 +17,20 @@ validateUserInfo = (user) => {
   if (!user.email) throw "Provide email";
 };
 
+async function getAllUsers() {
+  const data = await User.find({});
+  const users = data.map((user) => userObject(user));
+  return users;
+}
+
 async function createUser(userInfo) {
   validateUserInfo(userInfo);
   let user = await User.create({
+    _id: userInfo.uid,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
     email: userInfo.email,
     profileImage: userInfo.profileImage,
-    uid: userInfo.uid,
   });
 
   if (!user) throw "Trouble signing you up";
@@ -41,4 +45,5 @@ async function getUser(id) {
 module.exports = {
   createUser,
   getUser,
+  getAllUsers,
 };

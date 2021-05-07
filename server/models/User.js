@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { nanoid } = require("nanoid");
 const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = new Schema(
   {
     _id: {
       type: String,
-      default: () => nanoid(),
     },
     firstName: {
       type: String,
@@ -16,10 +14,6 @@ const userSchema = new Schema(
     lastName: {
       type: String,
       required: [true, "You must provide a lastname"],
-    },
-    uid: {
-      type: String,
-      required: [true, "Firebase ID required"],
     },
     profileImage: {
       type: String,

@@ -8,9 +8,7 @@
   "html.format.enable": true,
   "html.format.indentHandlebars": true,
   "html.format.maxPreserveNewLines": 0,
-  // Set the default
   "editor.formatOnSave": false,
-  // Enable per-language
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true

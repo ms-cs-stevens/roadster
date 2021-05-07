@@ -5,7 +5,7 @@ import { apiUrl } from "../config";
 const createToken = async () => {
   let authToken = localStorage.getItem("@token");
   if(!authToken){
-    const user = firebase.auth().currentUser;
+    const user = await firebase.auth().currentUser;
     const authToken = user && (await user.getIdToken());
     if (authToken) {
       localStorage.setItem("@token", authToken);
@@ -55,6 +55,7 @@ async function socialSignIn(provider) {
 
   if(currentUser) {
     let userData;
+    console.log(currentUser);
     const isNewUser = currentUser.additionalUserInfo.isNewUser;
     const userProfile = currentUser.additionalUserInfo.profile;
     if (isNewUser) {
@@ -63,13 +64,14 @@ async function socialSignIn(provider) {
           firstName: userProfile.given_name,
           lastName: userProfile.family_name,
           email: userProfile.email,
-          profilePicture: userProfile.picture,
+          profileImage: userProfile.picture,
           uid: currentUser.user.uid
         }
       } else if(provider === 'facebook') {
         userData = {
           firstName: userProfile.first_name,
           lastName: userProfile.last_name,
+          profileImage: userProfile.picture.data.url,
           email: userProfile.email,
           uid: currentUser.user.uid
         }

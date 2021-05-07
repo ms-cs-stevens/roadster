@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import Signout from "./user/SignOut";
+import { Button } from '@material-ui/core';
 import { AuthContext } from "../firebase/Auth";
 
 const Navigation = () => {
@@ -16,22 +17,26 @@ const Navigation = () => {
 const Authenticated = () => {
   return (
     <>
-      <NavLink
-        exact
-        activeClassName="active"
-        className="App-link"
-        to="/journeys/new"
-      >
-        Plan your Trip
-      </NavLink>
-      <NavLink
-        exact
-        to="/account"
-        className="App-link"
-        activeClassName="active"
-      >
-        Account
-      </NavLink>
+      <Button color="inherit">
+        <NavLink
+          exact
+          activeClassName="active"
+          className="App-link"
+          to="/journeys/new"
+        >
+          Plan your Trip
+        </NavLink>
+      </Button>
+      <Button color="inherit">
+        <NavLink
+          exact
+          to="/account"
+          className="App-link"
+          activeClassName="active"
+        >
+          Account
+        </NavLink>
+      </Button>
       <Signout />
     </>
   );
@@ -40,9 +45,12 @@ const Authenticated = () => {
 const NonAuthenticated = () => {
   return (
     <>
+    <Button color="inherit">
       <NavLink exact activeClassName="active" className="App-link" to="/login">
         Login
       </NavLink>
+    </Button>
+    <Button color="inherit">
       <NavLink
         exact
         activeClassName="active"
@@ -51,6 +59,7 @@ const NonAuthenticated = () => {
       >
         Sign Up
       </NavLink>
+    </Button>
     </>
   );
 };
