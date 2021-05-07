@@ -1,39 +1,21 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const { nanoid } = require("nanoid");
 const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = new Schema(
   {
     _id: {
       type: String,
-      default: () => nanoid(),
     },
-    firstname: {
+    firstName: {
       type: String,
       required: [true, "You must provide a firstname"],
     },
-    lastname: {
+    lastName: {
       type: String,
       required: [true, "You must provide a lastname"],
     },
-    phone: {
-      type: String,
-      validate: {
-        validator: function (v) {
-          // validates to true for "+11234567890", false for any other format or number of characters
-          return /[+1]\d{3}\d{3}\d{4}/.test(v);
-        },
-        message: (props) => `${props.value} is not a valid phone number!`,
-      },
-      required: [true, "User phone number required"],
-      unique: true,
-    },
-    firebaseId: {
-      type: String,
-      required: [true, "Firebase ID required"],
-    },
-    profilePicture: {
+    profileImage: {
       type: String,
     },
     email: {
@@ -47,10 +29,6 @@ const userSchema = new Schema(
       index: true,
       unique: true,
       trim: true,
-    },
-    gender: {
-      type: String,
-      enum: ["Male", "Female", "Other"],
     },
   },
   {

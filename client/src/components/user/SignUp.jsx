@@ -69,7 +69,8 @@ export default function SignInSide() {
       await createUserWithEmailPass(
         email.value,
         password.value,
-        `${firstName} ${lastName}`,
+        firstName.value,
+        lastName.value,
       );
     } catch (error) {
       alert(error);

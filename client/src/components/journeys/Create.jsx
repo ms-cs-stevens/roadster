@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
-import axios from 'axios';
+// import axios from 'axios';
 import { Button, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 import Journey from './Journey';
+import journeyService from "../../services/apiService";
+import { apiUrl } from "../../config";
 
 const CreateJourney = () => {
   const [sourceCities, setSourceCities] = useState([]);
@@ -33,23 +35,17 @@ const CreateJourney = () => {
 
   const SaveJourney = async (event) => {
     event.preventDefault();
-    console.log(event.target.elements.occupancy.value);
-    const source = event.target.elements.source.value;
-    const destination = event.target.elements.destination.value;
-    const occupancy = event.target.elements.occupancy.value;
+    const {source, destination, occupancy} = event.target.elements;
 
-    const journey = {
-      source,
-      destination,
-      occupancy,
+    const journeyPayload = {
+      source: source.value,
+      destination: destination.value,
+      occupancy: occupancy.value,
     };
 
     try {
-      const { data } = await axios.post('http://localhost:4000/createJourney', journey, {
-        headers: { Accept: 'application/json' },
-      });
-
-      setJourneyID(data.id);
+      const journey = await journeyService.createResource(`${apiUrl}/createJourney`, journeyPayload)
+      setJourneyID(journey._id);
       setRedirectFlag(true);
     } catch (e) {
       alert('Provide correct values');

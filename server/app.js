@@ -5,6 +5,9 @@ const cors = require("cors");
 require("dotenv").config({ path: "variables.env" });
 const mongoose = require("mongoose");
 
+// enable cors to take in requests from client
+app.use(cors());
+
 app.use(express.json());
 
 // Logging Middleware
@@ -14,14 +17,6 @@ app.use(async (req, res, next) => {
   );
   next();
 });
-
-// allowing cors request because request originator would be react app
-app.use(cors());
-
-// We can allow cors for specific routes doing this
-// app.use('/api/files/filter', cors(), async (req, res, next) => {
-//   next();
-// });
 
 app.use("/", routes);
 
