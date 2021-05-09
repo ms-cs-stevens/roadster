@@ -10,7 +10,6 @@
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/client/src"
-<<<<<<< HEAD
     },
     {
       "type": "node",
@@ -23,8 +22,3 @@
     }
   ]
 }
-=======
-    }
-  ]
-}
->>>>>>> 75d0c7d (Add luanch.json for debugging client code)
