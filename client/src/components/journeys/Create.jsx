@@ -1,110 +1,167 @@
-import React, { useState } from 'react';
-
-// import axios from 'axios';
-import { Button, TextField } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import React, { useReducer, useState } from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
+import Explore from '@material-ui/icons/Explore';
+import TripOriginIcon from '@material-ui/icons/TripOrigin';
+import RoomIcon from '@material-ui/icons/Room';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Journey from './Journey';
-import journeyService from "../../services/apiService";
-import { apiUrl } from "../../config";
+import Container from '@material-ui/core/Container';
+import SearchLocationInput from '../SearchLocationInput';
 
-const CreateJourney = () => {
-  const [sourceCities, setSourceCities] = useState([]);
-  const [destinationCities, setDestinationCities] = useState([]);
-  const [redirectFlag, setRedirectFlag] = useState(false);
-  const [journeyID, setJourneyID] = useState('');
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      '& .MuiTextField-root': {
-        margin: theme.spacing(1),
-        width: '25ch',
-      },
-    },
-  }));
+const formReducer = (state, event) => {
+  console.log(state);
+  console.log(event);
+  return {
+    ...state,
+    // [event.target.destination]: event.target.value
+    [event.name]: event.value
+  }
+ }
 
+function CreateJourney() {
   const classes = useStyles();
+  const [formData, setFormData] = useReducer(formReducer, {});
+  const [submitting, setSubmitting] = useState(false);
 
-  const sourceDataSet = () => {
-    setSourceCities([{ place: 'New York' }, { place: 'New Jersey' }]);
-  };
+  const handleSubmit = (e) => {
+    console.log("-----6-----");
+    e.preventDefault();
+    setSubmitting(true);
+    console.log(e.key);
+    if (e.code === "Enter" || e.code === "NumpadEnter") return;
+    alert("submitting form");
+    console.log(e);
 
-  const destinationDataSet = () => {
-    setDestinationCities([{ place: 'New York' }, { place: 'New Jersey' }]);
-  };
+    setTimeout(() => {
+      setSubmitting(false);
+    }, 3000)
+  }
 
-  const SaveJourney = async (event) => {
-    event.preventDefault();
-    const {source, destination, occupancy} = event.target.elements;
-
-    const journeyPayload = {
-      source: source.value,
-      destination: destination.value,
-      occupancy: occupancy.value,
-    };
-
-    try {
-      const journey = await journeyService.createResource(`${apiUrl}/createJourney`, journeyPayload)
-      setJourneyID(journey._id);
-      setRedirectFlag(true);
-    } catch (e) {
-      alert('Provide correct values');
-    }
-  };
-
-  if (redirectFlag) {
-    return (
-      <Journey id={journeyID} />
-    );
+  const handleChange = event => {
+    const isCheckbox = event.target.type === 'checkbox';
+    console.log("-----3-----");
+    setFormData({
+      name: event.target.name,
+      value: isCheckbox ? event.target.checked : event.target.value,
+      // value: event.target.value,
+    });
+    console.log("-----4-----");
   }
 
   return (
-    <div>
-      <form
-        className={classes.root}
-        noValidate
-        autoComplete="off"
-        method="POST"
-        onSubmit={SaveJourney}
-      >
-
-        <Autocomplete
-          id="source"
-          options={sourceCities}
-          getOptionLabel={(option) => option.place}
-          style={{ width: 300 }}
-          name="source"
-          renderInput={(params) => <TextField required {...params} label="Source" variant="outlined" onChange={sourceDataSet}/>}
-        />
-
-        <Autocomplete
-          id="destination"
-          options={destinationCities}
-          getOptionLabel={(option) => option.place}
-          style={{ width: 300 }}
-          name="destination"
-          renderInput={(params) => <TextField required {...params} label="Destination" variant="outlined" onChange={destinationDataSet}/>}
-        />
-
-        <TextField
-          required
-          id="occupancy"
-          name="occupancy"
-          label="Occupancy"
-          type="number"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        <br />
-        <br />
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
-      </form>
-    </div>
+    <Container component="main" maxWidth="sm">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <Explore />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Plan Your Journey
+        </Typography>
+        {submitting &&
+          <div>
+            You are submitting the following:
+            <ul>
+              {Object.entries(formData).map(([name, value]) => (
+                <li key={name}><strong>{name}</strong>:{value.toString()}</li>
+              ))}
+            </ul>
+          </div>
+        }
+        <form className={classes.form} onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <SearchLocationInput
+              name = "origin"
+              label = "Origin"
+              setLocation={handleChange}
+              placeholder = "New York, NY"
+              id = "origin"
+              icon = {<TripOriginIcon color="action" fontSize="small" />}
+            />
+            <SearchLocationInput
+              name = "destination"
+              setLocation={handleChange}
+              label = "Destination"
+              placeholder = "Destination"
+              icon = {<RoomIcon color="action" />}
+              id = "destination"
+            />
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="Members"
+                name="occupancy"
+                type="number"
+                variant="outlined"
+                required
+                fullWidth
+                onChange={handleChange}
+                id="members"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                InputProps={{ inputProps: { min: 0, max: 10 } }}
+                label="Group Members"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                onChange={handleChange}
+                variant="outlined"
+                required
+                fullWidth
+                id="budget"
+                label="Tentative Budget"
+                name="budget"
+                autoComplete="budget"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Checkbox value="editable" color="primary" />}
+                label="I want to allow other members of the journey to update it."
+                onChange={handleChange}
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Plan your Journey
+          </Button>
+        </form>
+      </div>
+    </Container>
   );
-};
+}
 
 export default CreateJourney;
