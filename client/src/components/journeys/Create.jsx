@@ -35,8 +35,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const formReducer = (state, event) => {
-  console.log(state);
-  console.log(event);
+  console.log("state", state);
+  console.log("Event", event);
   return {
     ...state,
     // [event.target.destination]: event.target.value
@@ -50,13 +50,14 @@ function CreateJourney() {
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (e) => {
-    console.log("-----6-----");
+    console.log("submit", e);
     e.preventDefault();
     setSubmitting(true);
-    console.log(e.key);
-    if (e.code === "Enter" || e.code === "NumpadEnter") return;
-    alert("submitting form");
-    console.log(e);
+
+
+
+    // Submit form
+
 
     setTimeout(() => {
       setSubmitting(false);
@@ -66,9 +67,10 @@ function CreateJourney() {
   const handleChange = event => {
     const isCheckbox = event.target.type === 'checkbox';
     console.log("-----3-----");
+
     setFormData({
       name: event.target.name,
-      value: isCheckbox ? event.target.checked : event.target.value,
+      value: isCheckbox ? event.target.checked : (event.detail && event.detail.location) || event.target.value,
       // value: event.target.value,
     });
     console.log("-----4-----");
@@ -145,6 +147,7 @@ function CreateJourney() {
               <FormControlLabel
                 control={<Checkbox value="editable" color="primary" />}
                 label="I want to allow other members of the journey to update it."
+                name="editable"
                 onChange={handleChange}
               />
             </Grid>
