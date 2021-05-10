@@ -5,10 +5,11 @@ const authMiddleware = require("../firebase/authenticateToken");
 const journeysController = require("../controllers/journeysController");
 const usersController = require("../controllers/usersController");
 
+// Journey's routes
 router.get("/", journeysController.index);
-router.post("/createJourney", authMiddleware, journeysController.create);
-router.get("/journey/:id", journeysController.getJourney);
-router.post("/editJourney", authMiddleware, journeysController.editJourney);
+router.get("/journey/:id", journeysController.show);
+router.post("/journeys", authMiddleware, journeysController.create);
+router.put("/journeys/:id", authMiddleware, journeysController.edit);
 
 // user's routes
 router.get("/users", usersController.index);
