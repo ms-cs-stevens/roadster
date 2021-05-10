@@ -9,6 +9,7 @@ import Copyright from "./components/Copyright";
 import SignIn from "./components/user/SignIn";
 import SignUp from "./components/user/SignUp";
 import Account from "./components/user/Account";
+import JourneyShow  from "./components/journeys/Show";
 import { AuthProvider } from "./firebase/Auth";
 
 const loadScript = (url, setLoaded) => {
@@ -30,7 +31,6 @@ function App() {
   useEffect(() => {
     if(loaded) return;
 
-    // TODO: Load when current user is present
     loadScript(
       `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
       setLoaded
@@ -49,6 +49,7 @@ function App() {
               <Route exact path="/register" component={SignUp} />
               <Route exact path="/account" component={Account} />
               <Route exact path="/journeys/new" component={CreateJourney} />
+              <Route exact path="/journeys/:id" component={JourneyShow} />
             </Switch>
           </div>
           <Box mt={5}>

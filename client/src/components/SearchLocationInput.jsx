@@ -19,7 +19,7 @@ async function handlePlaceSelect(updateQuery, autoCompleteRef) {
   const query = place.formatted_address;
   updateQuery(query);
 
-  const location2 = {};
+  const locationDetails = {};
   let address1 = "";
   let postcode = "";
 
@@ -47,31 +47,34 @@ async function handlePlaceSelect(updateQuery, autoCompleteRef) {
         break;
       }
       case "locality":
-        location2.locality = component.long_name;
+        locationDetails.locality = component.long_name;
         break;
 
       case "administrative_area_level_1": {
-        location2.state = component.short_name;
+        locationDetails.state = component.short_name;
         break;
       }
       case "country":
-        location2.country = component.long_name;
+        locationDetails.country = component.long_name;
         break;
       default:
     }
   }
 
-  location2.address = address1;
-  location2.postcode = postcode;
-  location2.place_id = place.place_id
-  location2.geometry = place.geometry.location;
+  locationDetails.address = address1;
+  locationDetails.postcode = postcode;
+  locationDetails.place_id = place.place_id;
+  locationDetails.lat = place.geometry.location.lat();
+  locationDetails.lng = place.geometry.location.lng();
 
-  let event = new CustomEvent("hello", {
+  console.log("location", locationDetails);
+  let event = new CustomEvent("setFormData", {
     detail: {
-      location: location2
+      location: locationDetails
     }
   });
 
+  // Trigger custom hook when location is set
   autoCompleteRef.current.dispatchEvent(event);
 }
 
@@ -89,7 +92,6 @@ function handleScriptLoad(updateQuery, autoCompleteRef) {
     autoCompleteRef.current,
     options
   );
-  autoCompleteRef.current.focus();
   autoComplete.addListener('place_changed', () => handlePlaceSelect(updateQuery, autoCompleteRef));
 }
 
@@ -100,14 +102,16 @@ function SearchLocationInput({ name, label, placeholder, icon, id, setLocation }
   icon = icon || <RoomIcon color="action" />;
 
   useEffect(() => {
+    // TODO: FormData doesn't reset on deleting location from input field
+    // TODO: Check issue with exceeding rate limit
     if(autoCompleteRef.current.value.length > 5)
       handleScriptLoad(setQuery, autoCompleteRef);
   }, [query]);
 
 
   useEffect(() => {
-    autoCompleteRef.current.addEventListener("hello", function(event) {
-      console.log("Details", event.detail);
+    // Custom hook to set location value in the form
+    autoCompleteRef.current.addEventListener("setFormData", function(event) {
       setLocation(event);
     });
   }, []);

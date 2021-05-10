@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,6 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import SearchLocationInput from '../SearchLocationInput';
+import journeyService from "../../services/apiService";
+import { AuthContext } from "../../firebase/Auth";
+import { apiUrl } from "../../config";
+import { Redirect, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,28 +39,44 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const formReducer = (state, event) => {
-  console.log("state", state);
-  console.log("Event", event);
   return {
     ...state,
-    // [event.target.destination]: event.target.value
     [event.name]: event.value
   }
  }
 
 function CreateJourney() {
+  const history = useHistory();
   const classes = useStyles();
-  const [formData, setFormData] = useReducer(formReducer, {});
+  const [formData, setFormData] = useReducer(formReducer, { editable: false });
   const [submitting, setSubmitting] = useState(false);
+  const { currentUser } = useContext(AuthContext);
 
-  const handleSubmit = (e) => {
-    console.log("submit", e);
+  if (!currentUser) {
+    return <Redirect to="/login" />;
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // TODO: Fix below condition for form submission and set form error
+    if(!formData || !formData.origin || !formData.destination ||
+      formData.budget.length === 0 || formData.occupancy.length === 0 ||
+      formData.name.length === 0  )
+      return;
+
+
     setSubmitting(true);
 
-
-
-    // Submit form
+    try {
+      const journey = await journeyService.createResource(`${apiUrl}/journeys`, formData)
+      history.push(`/journeys/${journey._id}`);
+    } catch (e) {
+      console.log(e);
+      // TODO: set error on form
+      alert('Provide correct values');
+      setSubmitting(false);
+    }
 
 
     setTimeout(() => {
@@ -66,14 +86,11 @@ function CreateJourney() {
 
   const handleChange = event => {
     const isCheckbox = event.target.type === 'checkbox';
-    console.log("-----3-----");
 
     setFormData({
       name: event.target.name,
       value: isCheckbox ? event.target.checked : (event.detail && event.detail.location) || event.target.value,
-      // value: event.target.value,
     });
-    console.log("-----4-----");
   }
 
   return (
@@ -141,6 +158,18 @@ function CreateJourney() {
                 label="Tentative Budget"
                 name="budget"
                 autoComplete="budget"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                onChange={handleChange}
+                variant="outlined"
+                required
+                fullWidth
+                id="journey-name"
+                label="Roadtrip name"
+                name="name"
+                autoComplete="name"
               />
             </Grid>
             <Grid item xs={12}>

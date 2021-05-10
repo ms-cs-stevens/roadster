@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Button, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
+import { useParams } from 'react-router-dom';
 
-const Journey = ({ id }) => {
+const Journey = (props) => {
   const [source, SetSource] = useState('');
   const [destination, setDestination] = useState('');
   const [occupancy, setOccupancy] = useState(0);
   const [stopCities, setStopCities] = useState([]);
+  let { id } = useParams();
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,7 +56,7 @@ const Journey = ({ id }) => {
       try {
         const { data } = await axios.get(`http://localhost:4000/journey/${id}`);
         console.log(data);
-        SetSource(data.source);
+        SetSource(data.origin);
         setDestination(data.destination);
         setOccupancy(data.occupancy);
       } catch (e) {
@@ -140,10 +141,6 @@ const Journey = ({ id }) => {
       </form>
     </div>
   );
-};
-
-Journey.propTypes = {
-  id: PropTypes.string.isRequired,
 };
 
 export default Journey;
