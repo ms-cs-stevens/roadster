@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -50,6 +50,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+  const [error, setError] = useState("");
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z-]+(?:\.[a-zA-Z-]+)*$/;
+
+  const firstNameError = (error === 'First name is required!') && 'First name is required!';
+  const lastNameError = (error === 'Last name is required!') && 'Last name is required!';
+  const emailError = (error === 'Email is Invalid!') && 'Email is Invalid!';
+  const passError = (error === 'Passwords did not match!') && 'Passwords did not match!';
 
   const { currentUser } = useContext(AuthContext);
 
@@ -63,9 +70,20 @@ export default function SignInSide() {
         password,
         passwordConfirmation,
       } = event.target.elements;
-      if (password.value !== passwordConfirmation.value) {
-        throw new Error("Passwords didn't match");
+
+      if(!firstName.value.trim()) {
+        throw new Error("First name is required!");
       }
+      if(!lastName.value.trim()) {
+        throw new Error("Last name is required!");
+      }
+      if (!emailRegex.test(email.value)) {
+        throw new Error("Email is Invalid!");
+      }
+      if (password.value !== passwordConfirmation.value) {
+        throw new Error("Passwords did not match!");
+      }
+
       await createUserWithEmailPass(
         email.value,
         password.value,
@@ -73,7 +91,7 @@ export default function SignInSide() {
         lastName.value,
       );
     } catch (error) {
-      alert(error);
+      setError(error);
     }
   };
 
@@ -94,12 +112,15 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Register
           </Typography>
+
           <form className={classes.form} onSubmit={handleSignUp}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="fname"
                   name="firstName"
+                  error={lastNameError}
+                  helperText={lastNameError}
                   variant="outlined"
                   required
                   fullWidth
@@ -113,6 +134,8 @@ export default function SignInSide() {
                   variant="outlined"
                   required
                   fullWidth
+                  error={firstNameError}
+                  helperText={firstNameError}
                   id="lastName"
                   label="Last Name"
                   name="lastName"
@@ -122,6 +145,8 @@ export default function SignInSide() {
               <Grid item xs={12}>
                 <TextField
                   variant="outlined"
+                  error={emailError}
+                  helperText={emailError}
                   required
                   fullWidth
                   id="email"
@@ -138,6 +163,8 @@ export default function SignInSide() {
                   name="password"
                   label="Password"
                   type="password"
+                  helperText={passError}
+                  error={passError}
                   id="password"
                   autoComplete="current-password"
                 />
@@ -150,6 +177,8 @@ export default function SignInSide() {
                   name="passwordConfirmation"
                   label="Password Confirmation"
                   type="password"
+                  helperText={passError}
+                  error={passError}
                   id="passwordConfirmation"
                   autoComplete="passwordConfirmation"
                 />
