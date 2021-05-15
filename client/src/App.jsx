@@ -9,27 +9,28 @@ import Copyright from "./components/Copyright";
 import SignIn from "./components/user/SignIn";
 import SignUp from "./components/user/SignUp";
 import Account from "./components/user/Account";
-import JourneyShow  from "./components/journeys/Show";
+import JourneyShow from "./components/journeys/Show";
+import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./firebase/Auth";
 
 const loadScript = (url, setLoaded) => {
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
+  const script = document.createElement("script");
+  script.type = "text/javascript";
 
-  script.addEventListener('load', () => {
+  script.addEventListener("load", () => {
     setLoaded(true);
     window.loaded = true;
   });
 
   script.src = url;
-  document.getElementsByTagName('head')[0].appendChild(script);
+  document.getElementsByTagName("head")[0].appendChild(script);
 };
 
 function App() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if(loaded) return;
+    if (loaded) return;
 
     loadScript(
       `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
@@ -47,8 +48,8 @@ function App() {
               <Route exact path="/" component={Landing} />
               <Route exact path="/login" component={SignIn} />
               <Route exact path="/register" component={SignUp} />
-              <Route exact path="/account" component={Account} />
-              <Route exact path="/journeys/new" component={CreateJourney} />
+              <PrivateRoute exact path="/account" component={Account} />
+              <PrivateRoute path="/journeys/new" component={CreateJourney} />
               <Route exact path="/journeys/:id" component={JourneyShow} />
             </Switch>
           </div>

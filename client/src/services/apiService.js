@@ -5,10 +5,10 @@ async function getHeaders() {
   const token = await createToken();
   const payloadHeader = {
     headers: {
-      "Content-Type":"application/json",
-      Authorization: `Bearer ${token}`
-    }
-  }
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
   return payloadHeader;
 }
 
@@ -28,10 +28,30 @@ const exportedFunctions = {
     try {
       const res = await axios.get(url, payloadHeader);
       return res.data;
-    } catch(e){
+    } catch (e) {
       console.error(e);
     }
-  }
-}
+  },
+
+  async editResource(url, payload) {
+    const payloadHeader = await getHeaders();
+    try {
+      const res = await axios.patch(url, payload, payloadHeader);
+      return res.data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+
+  async deleteResource(url, payload) {
+    const payloadHeader = await getHeaders();
+    try {
+      const res = await axios.delete(url, payload, payloadHeader);
+      return res.data;
+    } catch (e) {
+      console.error(e);
+    }
+  },
+};
 
 export default exportedFunctions;
