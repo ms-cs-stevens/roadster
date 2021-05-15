@@ -8,7 +8,11 @@ const Navigation = () => {
   const { currentUser } = useContext(AuthContext);
   return (
     <header className="App-header">
-      Roadster
+      <Button color="inherit">
+        <NavLink exact activeClassName="active" className="App-link" to="/">
+          Roadster
+        </NavLink>
+      </Button>
       {currentUser ? <Authenticated /> : <NonAuthenticated />}
     </header>
   );
