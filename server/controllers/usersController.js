@@ -1,4 +1,6 @@
 const userData = require("../data/user");
+const Redis = require("ioredis");
+const redis = new Redis();
 
 module.exports = {
   async index(req, res) {
@@ -25,14 +27,24 @@ module.exports = {
     // create user's journey request
   },
   async show(req, res) {
-    // User profile page
+    let id = req.params.id;
+    if (!id) {
+      res.json({ error: "Requested page is not found" });
+    }
     try {
-      let id = req.params.id;
-      if (!id) {
-        res.json({ error: "Requested page is not found" });
+      // get cached user
+      console.log(req.url);
+      const cachedUserExists = await redis.exists(req.url);
+      if (cachedUserExists) {
+        const cachedUser = await redis.hgetall(req.url);
+        return res.json(cachedUser);
+      } else {
+        const user = await userData.getUser(id);
+        // set user to cache
+        await redis.hmset(req.url, user);
+        console.log(user);
+        res.json(user);
       }
-      const user = await userData.getUser(id);
-      res.json(user);
     } catch (e) {
       console.log(e);
       res.sendStatus(500);
