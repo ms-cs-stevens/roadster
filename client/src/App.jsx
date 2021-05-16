@@ -12,6 +12,7 @@ import Account from "./components/user/Account";
 import JourneyShow from "./components/journeys/Show";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./firebase/Auth";
+import PasswordReset from "./components/user/PasswordReset";
 
 const loadScript = (url, setLoaded) => {
   const script = document.createElement("script");
@@ -50,6 +51,11 @@ function App() {
               <Route exact path="/register" component={SignUp} />
               <PrivateRoute exact path="/account" component={Account} />
               <PrivateRoute path="/journeys/new" component={CreateJourney} />
+              <PrivateRoute
+                exact
+                path="/change-password"
+                component={PasswordReset}
+              />
               <Route exact path="/journeys/:id" component={JourneyShow} />
             </Switch>
           </div>
