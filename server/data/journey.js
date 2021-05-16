@@ -9,6 +9,7 @@ journeyObject = (journey) => {
     creator_id: journey.creator_id,
     editable: journey.editable,
     budget: journey.budget,
+    checkpoints: journey.checkpoints,
   };
 };
 
