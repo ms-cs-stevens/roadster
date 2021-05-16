@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useContext } from 'react';
+import React, { useReducer, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,10 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import SearchLocationInput from '../SearchLocationInput';
-import journeyService from "../../services/apiService";
-import { AuthContext } from "../../firebase/Auth";
+import apiService from "../../services/apiService";
 import { apiUrl } from "../../config";
-import { Redirect, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -50,11 +49,6 @@ function CreateJourney() {
   const classes = useStyles();
   const [formData, setFormData] = useReducer(formReducer, { editable: false });
   const [submitting, setSubmitting] = useState(false);
-  const { currentUser } = useContext(AuthContext);
-
-  if (!currentUser) {
-    return <Redirect to="/login" />;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,7 +63,7 @@ function CreateJourney() {
     setSubmitting(true);
 
     try {
-      const journey = await journeyService.createResource(`${apiUrl}/journeys`, formData)
+      const journey = await apiService.createResource(`${apiUrl}/journeys`, formData)
       history.push(`/journeys/${journey._id}`);
     } catch (e) {
       console.log(e);

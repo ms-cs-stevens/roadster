@@ -61,9 +61,10 @@ async function handlePlaceSelect(updateQuery, autoCompleteRef) {
     }
   }
 
+  locationDetails.formattedAddress = query;
   locationDetails.address = address1;
   locationDetails.postcode = postcode;
-  locationDetails.place_id = place.place_id;
+  locationDetails.placeId = place.place_id;
   locationDetails.lat = place.geometry.location.lat();
   locationDetails.lng = place.geometry.location.lng();
 

@@ -6,8 +6,8 @@ const journeysController = require("../controllers/journeysController");
 const usersController = require("../controllers/usersController");
 
 // Journey's routes
-router.get("/", journeysController.index);
-router.get("/journey/:id", journeysController.show);
+router.get("/journeys", authMiddleware, journeysController.index);
+router.get("/journey/:id", authMiddleware, journeysController.show);
 router.post("/journeys", authMiddleware, journeysController.create);
 router.put("/journeys/:id", authMiddleware, journeysController.edit);
 

@@ -4,9 +4,10 @@ import { Button, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { makeStyles } from '@material-ui/core/styles';
 import { useParams } from 'react-router-dom';
+import { apiUrl } from "../../config";
 
 const Journey = (props) => {
-  const [source, SetSource] = useState('');
+  const [origin, SetOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [occupancy, setOccupancy] = useState(0);
   const [stopCities, setStopCities] = useState([]);
@@ -54,9 +55,9 @@ const Journey = (props) => {
     async function fetchData() {
       console.log(`test111 ${id}`);
       try {
-        const { data } = await axios.get(`http://localhost:4000/journey/${id}`);
+        const { data } = await axios.get(`${apiUrl}/journey/${id}`);
         console.log(data);
-        SetSource(data.origin);
+        SetOrigin(data.origin);
         setDestination(data.destination);
         setOccupancy(data.occupancy);
       } catch (e) {
@@ -78,7 +79,7 @@ const Journey = (props) => {
 
         <TextField
           required
-          value={source}
+          value={origin}
           id="source"
           name="source"
           label="Source"
