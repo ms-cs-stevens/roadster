@@ -16,6 +16,7 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
+import { deepPurple } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  large: {
+  avatar: {
+    backgroundColor: deepPurple[800],
+    fontSize: "3em",
     width: theme.spacing(15),
     height: theme.spacing(15),
   },
@@ -209,10 +212,12 @@ function Account() {
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar
-            alt={user && user.firstName}
-            src={user && user.profileImage}
-            className={classes.large}
-          />
+            alt={user.firstName}
+            src={user.profileImage}
+            className={classes.avatar}
+          >
+            {user.firstName[0] + user.lastName[0]}
+          </Avatar>
           <br />
           <Typography component="h1" variant="h5">
             {user ? user.firstName + " " + user.lastName : ""}'s Profile

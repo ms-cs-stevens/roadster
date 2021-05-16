@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../firebase/Auth";
 import { changePassword } from "../../firebase/firebaseFunctions";
+import { NavLink } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import {
   Button,
@@ -150,6 +151,11 @@ function PasswordReset() {
               Change Password
             </Button>
           </form>
+          <Button className="btn-right-margin">
+            <NavLink exact to="/user/account" activeClassName="active">
+              My Account
+            </NavLink>
+          </Button>
         </div>
       </Container>
     );
@@ -172,6 +178,11 @@ function PasswordReset() {
             <br />
             You cannot change your password.
           </Typography>
+          <Button className="btn-right-margin">
+            <NavLink exact to="/user/account" activeClassName="active">
+              My Account
+            </NavLink>
+          </Button>
         </div>
       </Container>
     );
