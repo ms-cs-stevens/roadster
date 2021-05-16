@@ -3,14 +3,8 @@ import apiService from "../services/apiService";
 import { apiUrl } from "../config";
 
 const createToken = async () => {
-  let authToken = localStorage.getItem("@token");
-  if (!authToken) {
-    const user = await firebase.auth().currentUser;
-    const authToken = user && (await user.getIdToken());
-    if (authToken) {
-      localStorage.setItem("@token", authToken);
-    }
-  }
+  const user = await firebase.auth().currentUser;
+  const authToken = user && (await user.getIdToken());
   return authToken;
 };
 
