@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Button, TextField } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { makeStyles } from '@material-ui/core/styles';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Button, TextField } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { makeStyles } from "@material-ui/core/styles";
+import { useParams } from "react-router-dom";
 
 const Journey = (props) => {
-  const [source, SetSource] = useState('');
-  const [destination, setDestination] = useState('');
+  const [origin, SetOrigin] = useState("");
+  const [destination, setDestination] = useState("");
   const [occupancy, setOccupancy] = useState(0);
   const [stopCities, setStopCities] = useState([]);
   let { id } = useParams();
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      '& .MuiTextField-root': {
+      "& .MuiTextField-root": {
         margin: theme.spacing(1),
-        width: '25ch',
+        width: "25ch",
       },
     },
   }));
@@ -24,7 +24,7 @@ const Journey = (props) => {
   const classes = useStyles();
 
   const stopDataSet = () => {
-    setStopCities([{ place: 'Jersey City' }, { place: 'Hoboken' }]);
+    setStopCities([{ place: "Jersey City" }, { place: "Hoboken" }]);
   };
 
   const EditJourney = async (event) => {
@@ -37,16 +37,20 @@ const Journey = (props) => {
     };
 
     try {
-      const { data } = await axios.post('http://localhost:4000/editJourney', journey, {
-        headers: { Accept: 'application/json' },
-      });
+      const { data } = await axios.post(
+        "http://localhost:4000/editJourney",
+        journey,
+        {
+          headers: { Accept: "application/json" },
+        }
+      );
 
       console.log(data);
 
-      alert('Stop Added');
+      alert("Stop Added");
       // event.target.elements.stop.value = '';
     } catch (e) {
-      alert('Provide correct values');
+      alert("Provide correct values");
     }
   };
 
@@ -54,13 +58,13 @@ const Journey = (props) => {
     async function fetchData() {
       console.log(`test111 ${id}`);
       try {
-        const { data } = await axios.get(`http://localhost:4000/journey/${id}`);
+        const { data } = await axios.get(`journey/${id}`);
         console.log(data);
-        SetSource(data.origin);
+        SetOrigin(data.origin);
         setDestination(data.destination);
         setOccupancy(data.occupancy);
       } catch (e) {
-        console.log('Not Found');
+        console.log("Not Found");
       }
     }
     fetchData();
@@ -75,10 +79,9 @@ const Journey = (props) => {
         method="POST"
         onSubmit={EditJourney}
       >
-
         <TextField
           required
-          value={source}
+          value={origin}
           id="source"
           name="source"
           label="Source"
@@ -125,12 +128,15 @@ const Journey = (props) => {
           getOptionLabel={(option) => option.place}
           style={{ width: 300 }}
           name="stop"
-          renderInput={
-            (params) => {
-              console.log(params);
-                <TextField required label="Stop" variant="outlined" onChange={stopDataSet} />;
-            }
-          }
+          renderInput={(params) => {
+            console.log(params);
+            <TextField
+              required
+              label="Stop"
+              variant="outlined"
+              onChange={stopDataSet}
+            />;
+          }}
           // renderInput={(params) => <TextField required {...params}
           // label="Stop" variant="outlined" onChange={stopDataSet} />}
         />

@@ -1,36 +1,34 @@
-import React, { useReducer, useState, useContext } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import Explore from '@material-ui/icons/Explore';
-import TripOriginIcon from '@material-ui/icons/TripOrigin';
-import RoomIcon from '@material-ui/icons/Room';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import SearchLocationInput from '../SearchLocationInput';
-import journeyService from "../../services/apiService";
-import { AuthContext } from "../../firebase/Auth";
-import { apiUrl } from "../../config";
-import { Redirect, useHistory } from 'react-router-dom';
+import React, { useReducer, useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
+import Explore from "@material-ui/icons/Explore";
+import TripOriginIcon from "@material-ui/icons/TripOrigin";
+import RoomIcon from "@material-ui/icons/Room";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import SearchLocationInput from "../SearchLocationInput";
+import apiService from "../../services/apiService";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
@@ -41,57 +39,57 @@ const useStyles = makeStyles((theme) => ({
 const formReducer = (state, event) => {
   return {
     ...state,
-    [event.name]: event.value
-  }
- }
+    [event.name]: event.value,
+  };
+};
 
 function CreateJourney() {
   const history = useHistory();
   const classes = useStyles();
   const [formData, setFormData] = useReducer(formReducer, { editable: false });
   const [submitting, setSubmitting] = useState(false);
-  const { currentUser } = useContext(AuthContext);
-
-  if (!currentUser) {
-    return <Redirect to="/login" />;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // TODO: Fix below condition for form submission and set form error
-    if(!formData || !formData.origin || !formData.destination ||
-      formData.budget.length === 0 || formData.occupancy.length === 0 ||
-      formData.name.length === 0  )
+    if (
+      !formData ||
+      !formData.origin ||
+      !formData.destination ||
+      formData.budget.length === 0 ||
+      formData.occupancy.length === 0 ||
+      formData.name.length === 0
+    )
       return;
-
 
     setSubmitting(true);
 
     try {
-      const journey = await journeyService.createResource(`${apiUrl}/journeys`, formData)
+      const journey = await apiService.createResource("journeys", formData);
       history.push(`/journeys/${journey._id}`);
     } catch (e) {
       console.log(e);
       // TODO: set error on form
-      alert('Provide correct values');
+      alert("Provide correct values");
       setSubmitting(false);
     }
 
-
     setTimeout(() => {
       setSubmitting(false);
-    }, 3000)
-  }
+    }, 3000);
+  };
 
-  const handleChange = event => {
-    const isCheckbox = event.target.type === 'checkbox';
+  const handleChange = (event) => {
+    const isCheckbox = event.target.type === "checkbox";
 
     setFormData({
       name: event.target.name,
-      value: isCheckbox ? event.target.checked : (event.detail && event.detail.location) || event.target.value,
+      value: isCheckbox
+        ? event.target.checked
+        : (event.detail && event.detail.location) || event.target.value,
     });
-  }
+  };
 
   return (
     <Container component="main" maxWidth="sm">
@@ -103,33 +101,35 @@ function CreateJourney() {
         <Typography component="h1" variant="h5">
           Plan Your Journey
         </Typography>
-        {submitting &&
+        {submitting && (
           <div>
             You are submitting the following:
             <ul>
               {Object.entries(formData).map(([name, value]) => (
-                <li key={name}><strong>{name}</strong>:{value.toString()}</li>
+                <li key={name}>
+                  <strong>{name}</strong>:{value.toString()}
+                </li>
               ))}
             </ul>
           </div>
-        }
+        )}
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <SearchLocationInput
-              name = "origin"
-              label = "Origin"
+              name="origin"
+              label="Origin"
               setLocation={handleChange}
-              placeholder = "New York, NY"
-              id = "origin"
-              icon = {<TripOriginIcon color="action" fontSize="small" />}
+              placeholder="New York, NY"
+              id="origin"
+              icon={<TripOriginIcon color="action" fontSize="small" />}
             />
             <SearchLocationInput
-              name = "destination"
+              name="destination"
               setLocation={handleChange}
-              label = "Destination"
-              placeholder = "Destination"
-              icon = {<RoomIcon color="action" />}
-              id = "destination"
+              label="Destination"
+              placeholder="Destination"
+              icon={<RoomIcon color="action" />}
+              id="destination"
             />
             <Grid item xs={12} sm={6}>
               <TextField

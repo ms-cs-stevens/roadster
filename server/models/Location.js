@@ -12,9 +12,10 @@ const locationSchema = new Schema({
   country: String,
   address: String,
   postcode: String,
-  place_id: String,
+  placeId: String,
   lat: Number,
   lng: Number,
+  formattedAddress: String,
 });
 
 module.exports = locationSchema;

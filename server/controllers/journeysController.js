@@ -1,4 +1,5 @@
 const journey = require("../data/journey");
+const userData = require("../data/user");
 
 validateJourneyInfo = (journey) => {
   if (!journey) throw "Provide journey details";
@@ -9,9 +10,22 @@ validateJourneyInfo = (journey) => {
   if (!journey.name) throw "Provide journey name";
 };
 
+getJourneyWithCreator = async (journey) => {
+  const user = await userData.getUser(journey.creatorId);
+  journey.creator = `${user.firstName} ${user.lastName}`;
+  return journey;
+};
+
 module.exports = {
   async index(req, res) {
-    res.json({ message: "Welcome to roadster API" });
+    try {
+      const data = await journey.getAllUserJourneys(req.currentUser.uid);
+      const journeys = data.map((journey) => getJourneyWithCreator(journey));
+      res.json({ journeys: await Promise.all(journeys) });
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(500);
+    }
   },
 
   async create(req, res) {
@@ -23,7 +37,8 @@ module.exports = {
         budget: parseInt(req.body.budget),
         occupancy: parseInt(req.body.occupancy),
         editable: req.body.editable,
-        creator_id: req.currentUser.uid,
+        creatorId: req.currentUser.uid,
+        name: req.body.name,
       };
 
       const journeyData = await journey.createJourney(journeyInfo);

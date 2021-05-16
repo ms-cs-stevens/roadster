@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../firebase/Auth";
-import PasswordReset from "./PasswordReset";
 import apiService from "../../services/apiService";
-import { apiUrl } from "../../config";
-import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
+import { updateUserName } from "../../firebase/firebaseFunctions";
+import { useForm, Controller } from "react-hook-form";
 
 import {
   Avatar,
@@ -16,6 +15,7 @@ import {
   Grid,
   makeStyles,
 } from "@material-ui/core";
+import { deepPurple } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,7 +37,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  large: {
+  avatar: {
+    backgroundColor: deepPurple[800],
+    fontSize: "3em",
     width: theme.spacing(15),
     height: theme.spacing(15),
   },
@@ -47,98 +49,142 @@ function Account() {
   const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
   const [user, setUser] = useState(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => {
-    data.preventDefault();
-    console.log(data);
-  };
-
-  const changePassword = () => {
-    if (currentUser.providerData[0].providerId === "password") {
-      return (
-        <Button className="btn-right-margin">
-          <NavLink exact to="/change-password" activeClassName="active">
-            Change password
-          </NavLink>
-        </Button>
-      );
-    } else {
-      return null;
-    }
-  };
+  const [socialUser, setSocialUser] = useState(false);
+  const { handleSubmit, control } = useForm();
 
   useEffect(() => {
     async function fetchUser() {
       if (currentUser) {
-        const user = await apiService.getResource(
-          `${apiUrl}/users/${currentUser.uid}`
-        );
-        console.log(user);
+        const user = await apiService.getResource(`users/${currentUser.uid}`);
+        setSocialUser(currentUser.providerData[0].providerId !== "password");
         setUser(user);
       }
     }
     fetchUser();
   }, [currentUser]);
 
-  return (
-    <Container component="main" maxWidth="sm">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar
-          alt={user && user.firstName}
-          src={user && user.profileImage}
-          className={classes.large}
-        />
-        <br />
-        <Typography component="h1" variant="h5">
-          {user ? user.firstName + " " + user.lastName : ""}'s Profile
-        </Typography>
-        <br />
+  const onSubmit = async (data) => {
+    if (socialUser) {
+      return false;
+    }
+    if (data.firstName !== user.firstName || data.lastName !== user.lastName) {
+      try {
+        let updatedUser = await updateUserName(user._id, data);
+        console.log(updatedUser);
+        setUser(updatedUser);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  const userDetails = () => {
+    if (socialUser) {
+      return (
+        <Grid container spacing={5}>
+          <Grid item xs={6}>
+            <TextField
+              id="firstName"
+              label="First Name"
+              name="firstName"
+              variant="outlined"
+              InputProps={{
+                readOnly: true,
+              }}
+              fullWidth
+              defaultValue={user.firstName}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              id="lastName"
+              label="Last Name"
+              name="lastName"
+              variant="outlined"
+              InputProps={{
+                readOnly: true,
+              }}
+              fullWidth
+              defaultValue={user.lastName}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="email"
+              label="Email"
+              name="email"
+              variant="outlined"
+              fullWidth
+              InputProps={{
+                readOnly: true,
+              }}
+              defaultValue={user.email}
+            />
+          </Grid>
+        </Grid>
+      );
+    } else {
+      return (
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
             <Grid item xs={6}>
-              <TextField
-                autoComplete="fname"
+              <Controller
                 name="firstName"
-                InputProps={{ ...register("firstName", { required: true }) }}
-                error={!!errors.firstName}
-                helperText={errors.firstName && "First name is required."}
-                variant="outlined"
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
+                control={control}
+                defaultValue={user.firstName}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    label="First Name"
+                    id="firstName"
+                    variant="outlined"
+                    value={value}
+                    fullWidth
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{ required: "First name required" }}
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                variant="outlined"
-                InputProps={{ ...register("lastName", { required: true }) }}
-                error={!!errors.lastName}
-                helperText={errors.lastName && "Last name is required."}
-                fullWidth
-                id="lastName"
-                label="Last Name"
+              <Controller
                 name="lastName"
-                autoComplete="lname"
+                control={control}
+                defaultValue={user.lastName}
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    label="Last Name"
+                    id="lastName"
+                    variant="outlined"
+                    value={value}
+                    fullWidth
+                    onChange={onChange}
+                    error={!!error}
+                    helperText={error ? error.message : null}
+                  />
+                )}
+                rules={{ required: "Last name required" }}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                InputProps={{ disabled: true }}
                 helperText={"Email is not editable."}
                 fullWidth
                 id="email"
+                InputProps={{
+                  readOnly: true,
+                }}
                 label="Email"
-                variant="outlined"
                 name="email"
-                value={(user && user.email) || ""}
-                autoComplete="lname"
+                defaultValue={user.email}
+                variant="outlined"
               />
             </Grid>
             <Grid item xs={12}>
@@ -153,81 +199,46 @@ function Account() {
             </Grid>
           </Grid>
         </form>
-        {changePassword()}
-        {/* <Grid item xs={10}>
-          <PasswordReset />
-        </Grid> */}
-        <br />
-      </div>
-    </Container>
-  );
+      );
+    }
+  };
+
+  if (user) {
+    return (
+      <Container component="main" maxWidth="sm">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar
+            alt={user.firstName}
+            src={user.profileImage}
+            className={classes.avatar}
+          >
+            {user.firstName[0] + user.lastName[0]}
+          </Avatar>
+          <br />
+          <Typography component="h1" variant="h5">
+            {user ? user.firstName + " " + user.lastName : ""}'s Profile
+          </Typography>
+          <br />
+          {userDetails()}
+          {!socialUser && (
+            <Button className="btn-right-margin">
+              <NavLink
+                exact
+                to="/user/change-password"
+                activeClassName="active"
+              >
+                Change password
+              </NavLink>
+            </Button>
+          )}
+          <br />
+        </div>
+      </Container>
+    );
+  } else {
+    return "Loading";
+  }
 }
 
 export default Account;
-
-{
-  /* <div className={classes.root}>
-      <Grid container direction="row" justify="center" alignItems="center">
-        <Grid item xs={12} sm={8} component={Paper} elevation={6}>
-          <h1>{user ? user.firstName + " " + user.lastName : ""}'s Profile</h1>
-          <Avatar
-            alt={user && user.firstName}
-            src={user && user.profileImage}
-            className={classes.large}
-          />
-          <br />
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={5}>
-              <Grid item xs={6}>
-                <TextField
-                  autoComplete="fname"
-                  name="firstName"
-                  InputProps={{ ...register("firstName", { required: true }) }}
-                  error={!!errors.firstName}
-                  helperText={errors.firstName && "First name is required."}
-                  variant="outlined"
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  variant="outlined"
-                  InputProps={{ ...register("lastName", { required: true }) }}
-                  error={!!errors.lastName}
-                  helperText={errors.lastName && "Last name is required."}
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="lname"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  InputProps={{ disabled: true }}
-                  helperText={"Email is not editable."}
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  variant="outlined"
-                  name="email"
-                  value={(user && user.email) || ""}
-                  autoComplete="lname"
-                />
-              </Grid>
-              <Grid item xs={10}>
-                <PasswordReset />
-              </Grid>
-            </Grid>
-            <br />
-            <Button type="submit" fullWidth variant="contained" color="primary">
-              Update profile
-            </Button>
-          </form>
-        </Grid>
-      </Grid>
-    </div> */
-}
