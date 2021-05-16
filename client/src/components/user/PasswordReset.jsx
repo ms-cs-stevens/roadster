@@ -1,14 +1,44 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../firebase/Auth";
 import { changePassword } from "../../firebase/firebaseFunctions";
-import { Typography, Form, Input, Button } from "antd";
+import {
+  Button,
+  TextField,
+  Container,
+  CssBaseline,
+  Typography,
+  Grid,
+  makeStyles,
+} from "@material-ui/core";
 import "../../css/App.css";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    height: "100vh",
+  },
+  paper: {
+    margin: theme.spacing(8, 4),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
+
 function PasswordReset() {
+  const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
   const [pwMatch, setPwMatch] = useState("");
-
-  const { Title } = Typography;
 
   const submitForm = async (values) => {
     const { currentPassword, newPasswordOne, newPasswordTwo } = values;
@@ -28,56 +58,60 @@ function PasswordReset() {
 
   if (currentUser.providerData[0].providerId === "password") {
     return (
-      <div>
-        {pwMatch && <h4 className="error">{pwMatch}</h4>}
-        <Title>Change password</Title>
-        <Form name="login" onFinish={submitForm} layout={"vertical"}>
-          <Form.Item
-            label="Current password"
-            name="currentPassword"
-            id="currentPassword"
-            rules={[
-              {
-                required: true,
-                message: "Please input your current password.",
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item
-            label="New password"
-            name="newPasswordOne"
-            id="newPasswordOne"
-            rules={[
-              { required: true, message: "Please input your new password." },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item
-            label="Confirm password"
-            name="newPasswordTwo"
-            id="newPasswordTwo"
-            rules={[
-              { required: true, message: "Please confirm your new password." },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Change password
+      <Container component="main" maxWidth="sm">
+        <CssBaseline />
+        <div>
+          {pwMatch && <h4 className="error">{pwMatch}</h4>}
+          <h1>Change password</h1>
+          <form onSubmit={submitForm}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="newPass"
+                  label="New Password"
+                  type="password"
+                  id="newPass"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="passwordConfirmation"
+                  label="Password Confirmation"
+                  type="password"
+                  id="passwordConfirmation"
+                  autoComplete="passwordConfirmation"
+                />
+              </Grid>
+            </Grid>
+            <br />
+            <Button type="submit" fullWidth variant="contained" color="primary">
+              Change Password
             </Button>
-          </Form.Item>
-        </Form>
-      </div>
+          </form>
+        </div>
+      </Container>
     );
   } else {
     return (
       <div>
-        <Title>Change password</Title>
+        <h1>Change password</h1>
         <span className="sub-info">
           You are signed in using a Social Media Provider, you cannot change
           your password.

@@ -4,14 +4,13 @@ import PasswordReset from "./PasswordReset";
 import apiService from "../../services/apiService";
 import { apiUrl } from "../../config";
 import { useForm } from "react-hook-form";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { NavLink } from "react-router-dom";
+
 import {
   Avatar,
   Button,
   TextField,
   Container,
-  Paper,
   CssBaseline,
   Typography,
   Grid,
@@ -38,11 +37,6 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  // paper: {
-  //   padding: theme.spacing(1),
-  //   textAlign: "center",
-  //   color: theme.palette.text.secondary,
-  // },
   large: {
     width: theme.spacing(15),
     height: theme.spacing(15),
@@ -64,6 +58,20 @@ function Account() {
     console.log(data);
   };
 
+  const changePassword = () => {
+    if (currentUser.providerData[0].providerId === "password") {
+      return (
+        <Button className="btn-right-margin">
+          <NavLink exact to="/change-password" activeClassName="active">
+            Change password
+          </NavLink>
+        </Button>
+      );
+    } else {
+      return null;
+    }
+  };
+
   useEffect(() => {
     async function fetchUser() {
       if (currentUser) {
@@ -78,7 +86,7 @@ function Account() {
   }, [currentUser]);
 
   return (
-    <Container component="main" maxWidth="md">
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar
@@ -133,15 +141,23 @@ function Account() {
                 autoComplete="lname"
               />
             </Grid>
-            <Grid item xs={10}>
-              <PasswordReset />
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+              >
+                Update profile
+              </Button>
             </Grid>
           </Grid>
-          <br />
-          <Button type="submit" fullWidth variant="contained" color="primary">
-            Update profile
-          </Button>
         </form>
+        {changePassword()}
+        {/* <Grid item xs={10}>
+          <PasswordReset />
+        </Grid> */}
+        <br />
       </div>
     </Container>
   );
