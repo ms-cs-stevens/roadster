@@ -53,9 +53,9 @@ function App() {
               <Route exact path="/journeys/:id" component={JourneyShow} />
             </Switch>
           </div>
-          <Box mt={5}>
+          {/* <Box mt={5}>
             <Copyright />
-          </Box>
+          </Box> */}
         </div>
       </Router>
     </AuthProvider>
