@@ -16,6 +16,7 @@ import { AuthContext } from "../../firebase/Auth";
 import { createUserWithEmailPass } from "../../firebase/firebaseFunctions";
 import SocialSignIn from "./SocialSignIn";
 import banner from "../../images/sign-up-page.jpeg";
+import { useForm, Controller } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,10 +33,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: "center",
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(4, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  error: {
+    color: "red",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -52,47 +56,31 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
-  const [error, setError] = useState("");
+  const [addlError, setAddlError] = useState("");
+  const { handleSubmit, control } = useForm();
   const emailRegex =
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z-]+(?:\.[a-zA-Z-]+)*$/;
 
-  const firstNameError =
-    error === "First name is required!" && "First name is required!";
-  const lastNameError =
-    error === "Last name is required!" && "Last name is required!";
-  const emailError = error === "Email is Invalid!" && "Email is Invalid!";
-  const passError =
-    error === "Passwords did not match!" && "Passwords did not match!";
-
   const { currentUser } = useContext(AuthContext);
 
-  const handleSignUp = async (event) => {
-    event.preventDefault();
+  const handleSignUp = async (values) => {
     try {
       const { firstName, lastName, email, password, passwordConfirmation } =
-        event.target.elements;
+        values;
 
-      if (!firstName.value.trim()) {
-        throw new Error("First name is required!");
-      }
-      if (!lastName.value.trim()) {
-        throw new Error("Last name is required!");
-      }
-      if (!emailRegex.test(email.value)) {
+      if (!emailRegex.test(email)) {
         throw new Error("Email is Invalid!");
       }
-      if (password.value !== passwordConfirmation.value) {
+      if (password.length < 8) {
+        throw new Error("Passwords should be atleast 8 characters");
+      }
+      if (password !== passwordConfirmation) {
         throw new Error("Passwords did not match!");
       }
 
-      await createUserWithEmailPass(
-        email.value,
-        password.value,
-        firstName.value,
-        lastName.value
-      );
+      await createUserWithEmailPass(email, password, firstName, lastName);
     } catch (error) {
-      setError(error);
+      setAddlError(error.message);
     }
   };
 
@@ -113,80 +101,123 @@ export default function SignInSide() {
           <Typography component="h1" variant="h5">
             Register
           </Typography>
-
-          <form className={classes.form} onSubmit={handleSignUp}>
+          <br />
+          <span className={classes.error}>{addlError && addlError}</span>
+          <form className={classes.form} onSubmit={handleSubmit(handleSignUp)}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="fname"
+                <Controller
                   name="firstName"
-                  error={lastNameError}
-                  helperText={lastNameError}
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="First Name"
+                      id="firstName"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "First name is required" }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  error={firstNameError}
-                  helperText={firstNameError}
-                  id="lastName"
-                  label="Last Name"
+                <Controller
                   name="lastName"
-                  autoComplete="lname"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="Last Name"
+                      id="lastName"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "Last name is required" }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  error={emailError}
-                  helperText={emailError}
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
+                <Controller
                   name="email"
-                  autoComplete="email"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="Email"
+                      id="email"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "Email is required" }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
+                <Controller
                   name="password"
-                  label="Password"
-                  type="password"
-                  helperText={passError}
-                  error={passError}
-                  id="password"
-                  autoComplete="current-password"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="Password"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      type="password"
+                      id="password"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "Password is required" }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
+                <Controller
                   name="passwordConfirmation"
-                  label="Password Confirmation"
-                  type="password"
-                  helperText={passError}
-                  error={passError}
-                  id="passwordConfirmation"
-                  autoComplete="passwordConfirmation"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="Password Confirmation"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      type="password"
+                      id="passwordConfirmation"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "Password confirmation is required" }}
                 />
               </Grid>
             </Grid>
-            <br />
-            <SocialSignIn />
             <Button
               type="submit"
               fullWidth
@@ -196,14 +227,18 @@ export default function SignInSide() {
             >
               Sign Up
             </Button>
-            <Grid container justify="flex-end">
+
+            <Grid container justify="flex-start">
               <Grid item>
-                <Link href="/login" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+                <Link href="/login">Already have an account? Sign in</Link>
               </Grid>
             </Grid>
           </form>
+          <br />
+          OR
+          <br />
+          <br />
+          <SocialSignIn />
         </div>
       </Grid>
     </Grid>
