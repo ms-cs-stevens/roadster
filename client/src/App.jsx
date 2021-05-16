@@ -49,11 +49,11 @@ function App() {
               <Route exact path="/" component={Landing} />
               <Route exact path="/login" component={SignIn} />
               <Route exact path="/register" component={SignUp} />
-              <PrivateRoute exact path="/account" component={Account} />
+              <PrivateRoute exact path="/user/account" component={Account} />
               <PrivateRoute path="/journeys/new" component={CreateJourney} />
               <PrivateRoute
                 exact
-                path="/change-password"
+                path="/user/change-password"
                 component={PasswordReset}
               />
               <Route exact path="/journeys/:id" component={JourneyShow} />
