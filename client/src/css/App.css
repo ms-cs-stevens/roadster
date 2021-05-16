@@ -20,3 +20,14 @@ body {
 .App-link {
   color: #61dafb;
 }
+
+.journey{
+  text-align: center;
+}
+
+.title {
+	font-weight: bolder;
+	color: #101544;
+	font-size: large;
+}
+
