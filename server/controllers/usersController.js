@@ -28,26 +28,40 @@ module.exports = {
   },
   async show(req, res) {
     let id = req.params.id;
-    if (!id) {
-      res.json({ error: "Requested page is not found" });
-    }
-    try {
-      // get cached user
-      console.log(req.url);
-      const cachedUserExists = await redis.exists(req.url);
-      if (cachedUserExists) {
-        const cachedUser = await redis.hgetall(req.url);
-        return res.json(cachedUser);
-      } else {
-        const user = await userData.getUser(id);
-        // set user to cache
-        await redis.hmset(req.url, user);
-        console.log(user);
-        res.json(user);
+    if (id && id.trim().length) {
+      try {
+        // get cached user
+        const cachedUserExists = await redis.exists(`/users/${id}`);
+        if (cachedUserExists) {
+          const cachedUser = await redis.get(`/users/${id}`);
+          return res.json(JSON.parse(cachedUser));
+        } else {
+          const user = await userData.getUser(id);
+          // set user to cache
+          await redis.set(`/users/${id}`, JSON.stringify(user));
+          res.json(user);
+        }
+      } catch (e) {
+        res.status(422).json({ error: e.message });
       }
-    } catch (e) {
-      console.log(e);
-      res.sendStatus(500);
+    } else {
+      res.status(404).json({ error: "User not found" });
+    }
+  },
+
+  async update(req, res) {
+    let id = req.params.id;
+    if (id && id.trim().length) {
+      try {
+        let user = await userData.updateUser(id, req.body);
+        await redis.set(`/users/${id}`, JSON.stringify(user));
+        return res.json(user);
+      } catch (e) {
+        console.log(e);
+        res.status(422).json({ error: e.message });
+      }
+    } else {
+      res.status(404).json({ error: "User not found" });
     }
   },
 };

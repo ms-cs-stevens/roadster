@@ -33,17 +33,38 @@ async function createUser(userInfo) {
     profileImage: userInfo.profileImage,
   });
 
-  if (!user) throw "Trouble signing you up";
+  if (!user) throw new Error("Trouble signing you up");
   return userObject(user);
 }
 
 async function getUser(id) {
+  if (!id) throw new Error("Id must be supplied");
   let user = await User.findById(id);
+  if (!user) throw new Error("User not found!");
   return userObject(user);
+}
+
+async function updateUser(id, userPayload) {
+  try {
+    let user = await getUser(id);
+    if (
+      user.firstName === userPayload.firstName &&
+      user.lastName === userPayload.lastName
+    ) {
+      throw new Error("Nothing to update");
+    }
+    let updatedUser = await User.findByIdAndUpdate(id, userPayload, {
+      new: true,
+    });
+    return updatedUser;
+  } catch (e) {
+    throw e;
+  }
 }
 
 module.exports = {
   createUser,
   getUser,
   getAllUsers,
+  updateUser,
 };

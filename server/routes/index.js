@@ -12,9 +12,10 @@ router.post("/journeys", authMiddleware, journeysController.create);
 router.put("/journeys/:id", authMiddleware, journeysController.edit);
 
 // user's routes
-router.get("/users", usersController.index);
-router.get("/users/:id", usersController.show);
+router.get("/users", authMiddleware, usersController.index);
+router.get("/users/:id", authMiddleware, usersController.show);
 router.post("/users", authMiddleware, usersController.create);
+router.patch("/users/:id/update", authMiddleware, usersController.update);
 router.post("/users/:id/request", authMiddleware, usersController.request);
 
 router.get("*", async (req, res) => {
