@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar() {
+export default function Navigation() {
   const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
   const [anchorEl, setAnchorEl] = useState(null);

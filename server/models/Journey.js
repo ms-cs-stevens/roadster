@@ -10,6 +10,10 @@ const journeySchema = new Schema(
       type: String,
       default: () => nanoid(),
     },
+    name: {
+      type: String,
+      required: true,
+    },
     origin: locationSchema,
     destination: locationSchema,
     budget: {
@@ -22,14 +26,14 @@ const journeySchema = new Schema(
       // required: [true, 'You must provide number people occupying you on journey'],
       default: 1,
     },
-    start_date: {
+    startDate: {
       type: Date,
       default: Date.now,
     },
-    end_date: {
+    endDate: {
       type: Date,
     },
-    creator_id: {
+    creatorId: {
       type: String,
       ref: "User",
       required: true,
@@ -37,7 +41,7 @@ const journeySchema = new Schema(
     editable: {
       type: Boolean,
     },
-    modified_by: {
+    modifiedBy: {
       type: String,
       ref: "User",
       required: true,
