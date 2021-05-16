@@ -8,6 +8,18 @@ const createToken = async () => {
   return authToken;
 };
 
+async function updateUserName(id, data) {
+  let currentUser = await firebase.auth().currentUser;
+  await currentUser.updateProfile({
+    displayName: `${data.firstName} ${data.lastName}`,
+  });
+  let updatedUser = await apiService.editResource(`users/${id}/update`, {
+    firstName: data.firstName,
+    lastName: data.lastName,
+  });
+  return updatedUser;
+}
+
 async function createUserWithEmailPass(email, password, firstName, lastName) {
   await firebase.auth().createUserWithEmailAndPassword(email, password);
   let currentUser = await firebase.auth().currentUser;
@@ -98,4 +110,5 @@ export {
   passwordUpdate,
   signout,
   changePassword,
+  updateUserName,
 };

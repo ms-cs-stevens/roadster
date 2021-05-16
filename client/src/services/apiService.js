@@ -1,4 +1,5 @@
 import { createToken } from "../firebase/firebaseFunctions";
+import { apiUrl } from "../config";
 import axios from "axios";
 
 async function getHeaders() {
@@ -36,7 +37,7 @@ const exportedFunctions = {
   async editResource(url, payload) {
     const payloadHeader = await getHeaders();
     try {
-      const res = await axios.patch(url, payload, payloadHeader);
+      const res = await axios.patch(`${apiUrl}/${url}`, payload, payloadHeader);
       return res.data;
     } catch (e) {
       console.error(e);

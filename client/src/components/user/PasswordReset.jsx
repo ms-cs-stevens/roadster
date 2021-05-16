@@ -1,15 +1,19 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../firebase/Auth";
 import { changePassword } from "../../firebase/firebaseFunctions";
+import { NavLink } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
 import {
   Button,
   TextField,
   Container,
   CssBaseline,
   Typography,
+  Avatar,
   Grid,
   makeStyles,
 } from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import "../../css/App.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,18 +42,18 @@ const useStyles = makeStyles((theme) => ({
 function PasswordReset() {
   const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
-  const [pwMatch, setPwMatch] = useState("");
+  const { handleSubmit, control } = useForm();
+  const [passwordError, setPasswordError] = useState("");
 
   const submitForm = async (values) => {
-    const { currentPassword, newPasswordOne, newPasswordTwo } = values;
-
-    if (newPasswordOne !== newPasswordTwo) {
-      setPwMatch("New passwords do not match, please try again");
+    const { password, newPass, passwordConfirmation } = values;
+    if (newPass !== passwordConfirmation) {
+      setPasswordError("New passwords do not match, please try again");
       return false;
     }
 
     try {
-      await changePassword(currentUser.email, currentPassword, newPasswordOne);
+      await changePassword(currentUser.email, password, newPass);
       alert("Password has been changed, you will now be logged out");
     } catch (error) {
       alert(error);
@@ -60,43 +64,85 @@ function PasswordReset() {
     return (
       <Container component="main" maxWidth="sm">
         <CssBaseline />
-        <div>
-          {pwMatch && <h4 className="error">{pwMatch}</h4>}
-          <h1>Change password</h1>
-          <form onSubmit={submitForm}>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Change Password
+          </Typography>
+          <Typography component="body">{passwordError}</Typography>
+          <br />
+          <br />
+          <form onSubmit={handleSubmit(submitForm)}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
+                <Controller
                   name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="Current Password"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      type="password"
+                      id="newPass"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "Current password is required" }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
+                <Controller
                   name="newPass"
-                  label="New Password"
-                  type="password"
-                  id="newPass"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="New Password"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      type="password"
+                      id="newPass"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "New password is required" }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
+                <Controller
                   name="passwordConfirmation"
-                  label="Password Confirmation"
-                  type="password"
-                  id="passwordConfirmation"
-                  autoComplete="passwordConfirmation"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="Password Confirmation"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      type="password"
+                      id="passwordConfirmation"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "New password confirmation is required" }}
                 />
               </Grid>
             </Grid>
@@ -105,18 +151,40 @@ function PasswordReset() {
               Change Password
             </Button>
           </form>
+          <Button className="btn-right-margin">
+            <NavLink exact to="/user/account" activeClassName="active">
+              My Account
+            </NavLink>
+          </Button>
         </div>
       </Container>
     );
   } else {
     return (
-      <div>
-        <h1>Change password</h1>
-        <span className="sub-info">
-          You are signed in using a Social Media Provider, you cannot change
-          your password.
-        </span>
-      </div>
+      <Container component="main" maxWidth="sm">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          {passwordError && <h4 className="error">{passwordError}</h4>}
+          <Typography component="h1" variant="h5">
+            Change Password
+          </Typography>
+          <br />
+          <br />
+          <Typography component="body1">
+            You are signed in using a Social Media Provider.
+            <br />
+            You cannot change your password.
+          </Typography>
+          <Button className="btn-right-margin">
+            <NavLink exact to="/user/account" activeClassName="active">
+              My Account
+            </NavLink>
+          </Button>
+        </div>
+      </Container>
     );
   }
 }
