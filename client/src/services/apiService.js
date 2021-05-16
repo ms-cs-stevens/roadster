@@ -17,7 +17,7 @@ const exportedFunctions = {
   async createResource(url, payload) {
     const payloadHeader = await getHeaders();
     try {
-      const res = await axios.post(url, payload, payloadHeader);
+      const res = await axios.post(`${apiUrl}/${url}`, payload, payloadHeader);
       return res.data;
     } catch (e) {
       console.error(e);
@@ -27,7 +27,7 @@ const exportedFunctions = {
   async getResource(url) {
     const payloadHeader = await getHeaders();
     try {
-      const res = await axios.get(url, payloadHeader);
+      const res = await axios.get(`${apiUrl}/${url}`, payloadHeader);
       return res.data;
     } catch (e) {
       console.error(e);
@@ -47,7 +47,11 @@ const exportedFunctions = {
   async deleteResource(url, payload) {
     const payloadHeader = await getHeaders();
     try {
-      const res = await axios.delete(url, payload, payloadHeader);
+      const res = await axios.delete(
+        `${apiUrl}/${url}`,
+        payload,
+        payloadHeader
+      );
       return res.data;
     } catch (e) {
       console.error(e);

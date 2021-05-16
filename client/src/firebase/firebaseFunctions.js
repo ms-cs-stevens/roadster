@@ -1,6 +1,5 @@
 import firebase from "firebase/app";
 import apiService from "../services/apiService";
-import { apiUrl } from "../config";
 
 const createToken = async () => {
   const user = await firebase.auth().currentUser;
@@ -24,19 +23,21 @@ async function createUserWithEmailPass(email, password, firstName, lastName) {
   await firebase.auth().createUserWithEmailAndPassword(email, password);
   let currentUser = await firebase.auth().currentUser;
   await currentUser.updateProfile({ displayName: `${firstName} ${lastName}` });
-  await createToken();
   // create user on server, store on mongo
-  await apiService.createResource(`${apiUrl}/users`, {
-    email,
-    firstName,
-    lastName,
-    uid: currentUser.uid,
-  });
+  try {
+    await apiService.createResource("users", {
+      email,
+      firstName,
+      lastName,
+      uid: currentUser.uid,
+    });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 async function signout() {
   await firebase.auth().signOut();
-  localStorage.removeItem("@token");
 }
 
 async function changePassword(email, oldPassword, newPassword) {
@@ -51,7 +52,6 @@ async function changePassword(email, oldPassword, newPassword) {
 
 async function emailSignIn(email, password) {
   await firebase.auth().signInWithEmailAndPassword(email, password);
-  await createToken();
 }
 
 async function socialSignIn(provider) {
@@ -62,11 +62,9 @@ async function socialSignIn(provider) {
     socialProvider = new firebase.auth.FacebookAuthProvider();
   }
   const currentUser = await firebase.auth().signInWithPopup(socialProvider);
-  await createToken();
 
   if (currentUser) {
     let userData;
-    console.log(currentUser);
     const isNewUser = currentUser.additionalUserInfo.isNewUser;
     const userProfile = currentUser.additionalUserInfo.profile;
     if (isNewUser) {
@@ -87,8 +85,11 @@ async function socialSignIn(provider) {
           uid: currentUser.user.uid,
         };
       }
-
-      await apiService.createResource(`${apiUrl}/users`, userData);
+      try {
+        await apiService.createResource("users", userData);
+      } catch (e) {
+        console.log(e);
+      }
     }
   }
 }
