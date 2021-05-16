@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../firebase/Auth";
 import apiService from "../../services/apiService";
-import { apiUrl } from "../../config";
 import { NavLink } from "react-router-dom";
 import { updateUserName } from "../../firebase/firebaseFunctions";
 import { useForm, Controller } from "react-hook-form";
@@ -56,9 +55,7 @@ function Account() {
   useEffect(() => {
     async function fetchUser() {
       if (currentUser) {
-        const user = await apiService.getResource(
-          `${apiUrl}/users/${currentUser.uid}`
-        );
+        const user = await apiService.getResource(`users/${currentUser.uid}`);
         setSocialUser(currentUser.providerData[0].providerId !== "password");
         setUser(user);
       }
