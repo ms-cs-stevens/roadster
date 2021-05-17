@@ -5,11 +5,9 @@ import "./css/App.css";
 import { Helmet } from "react-helmet";
 import Landing from "./components/Landing";
 import Navigation from "./components/Navigation";
-import Copyright from "./components/Copyright";
 import SignIn from "./components/user/SignIn";
 import SignUp from "./components/user/SignUp";
 import Account from "./components/user/Account";
-// import JourneyShow from "./components/journeys/Show";
 import UserJourneys from "./components/journeys/UserJourneys";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./firebase/Auth";
@@ -40,7 +38,7 @@ function App() {
       `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
       setLoaded
     );
-  }, []);
+  }, [loaded]);
 
   return (
     <AuthProvider>
@@ -71,9 +69,6 @@ function App() {
               <Route component={NotFound} />
             </Switch>
           </div>
-          {/* <Box mt={5}>
-            <Copyright />
-          </Box> */}
         </div>
       </Router>
     </AuthProvider>

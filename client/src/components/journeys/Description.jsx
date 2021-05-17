@@ -4,20 +4,8 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  makeStyles,
   Typography,
 } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  root: {
-    maxWidth: 345,
-  },
-}));
 
 const InfoCard = ({ journey }) => {
   if (journey) {

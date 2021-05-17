@@ -52,7 +52,6 @@ const Map = (props) => {
         travelMode: window.google.maps.TravelMode.DRIVING,
       },
       (result, status) => {
-        console.log(result);
         if (status === window.google.maps.DirectionsStatus.OK) {
           setDirection(result);
           computeTotalDistance(result);
