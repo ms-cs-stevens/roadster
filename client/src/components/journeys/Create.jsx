@@ -16,6 +16,7 @@ import Container from "@material-ui/core/Container";
 import SearchLocationInput from "../SearchLocationInput";
 import apiService from "../../services/apiService";
 import { useHistory } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
 import Map from "./Map";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,12 +51,13 @@ function CreateJourney() {
   const classes = useStyles();
   const [formData, setFormData] = useReducer(formReducer, { editable: false, checkpoints: [] });
   const [submitting, setSubmitting] = useState(false);
+  const { handleSubmit, control } = useForm();
 
   const setDistanceTime = (data) => {
     console.log(data);
   };
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     // TODO: Fix below condition for form submission and set form error
@@ -127,7 +129,7 @@ function CreateJourney() {
                 </ul>
               </div>
             )}
-            <form className={classes.form} onSubmit={handleSubmit}>
+            <form className={classes.form} onSubmit={handleSubmit(handleFormSubmit)}>
               <Grid container spacing={2}>
                 <SearchLocationInput
                   name="origin"
@@ -146,45 +148,67 @@ function CreateJourney() {
                   id="destination"
                 />
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="Members"
-                    name="occupancy"
-                    type="number"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    onChange={handleChange}
-                    id="members"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    InputProps={{ inputProps: { min: 0, max: 10 } }}
-                    label="Group Members"
-                  />
+                <Controller
+                  name="occupancy"
+                  control={control}
+                  defaultValue={1}
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      label="Group Members"
+                      variant="outlined"
+                      value={value}
+                      type="number"
+                      fullWidth
+                      onChange={onChange}
+                      error={!!error}
+                      InputProps={{ inputProps: { min: 1, max: 10 } }}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: 'Group Members required',
+                            min: {value: 1, message: "1-10 Group Members"},
+                            max: {value: 10, message: "1-10 Group Members"}}}
+                />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    onChange={handleChange}
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="budget"
-                    label="Tentative Budget"
+                  <Controller
                     name="budget"
-                    autoComplete="budget"
-                  />
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                      <TextField
+                        label="Tentative Budget"
+                        variant="outlined"
+                        required
+                        value={value}
+                        type="number"
+                        fullWidth
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                      />
+                    )}
+                    rules={{ required: 'Budget required'}}
+                    />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                    onChange={handleChange}
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="journey-name"
-                    label="Roadtrip name"
-                    name="name"
-                    autoComplete="name"
-                  />
+                <Controller
+                  name="name"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    <TextField
+                      label="Roadtrip name"
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: 'Roadtrip name required' }}
+                />
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel
