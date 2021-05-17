@@ -1,41 +1,57 @@
 import React, { useEffect } from "react";
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-  InfoWindow,
-} from "@react-google-maps/api";
+import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 import { useState } from "react";
 
 const Map = (props) => {
-  const [places, setPlaces] = useState([]);
-
   const journey = props.journey;
-
+  const [directions, setDirection] = useState(null);
   useEffect(() => {
     let origin = journey.origin;
     let end = journey.destination;
-    let checkpoints = journey.checkpoints;
-    const allPlaces = [origin, ...checkpoints, end];
-    console.log(allPlaces);
-    const markers = [];
-    allPlaces.forEach((place) => {
-      console.log(place);
-      markers.push({
-        name: place.locality,
-        location: {
-          lat: place.lat,
-          lng: place.lng,
-        },
-      });
-    });
-    setPlaces(markers);
-  }, [journey]);
-  const [selected, setSelected] = useState({});
+    let checkpoints = [
+      {
+        location: "Rockleigh, New Jersey 07647",
+        stopover: true,
+      },
+    ];
 
-  const onSelect = (item) => {
-    setSelected(item);
-  };
+    function computeTotalDistance(result) {
+      var totalDist = 0;
+      var totalTime = 0;
+      var myroute = result.routes[0];
+      for (var i = 0; i < myroute.legs.length; i++) {
+        totalDist += myroute.legs[i].distance.value;
+        totalTime += myroute.legs[i].duration.value;
+      }
+      totalDist = totalDist / 1609.34;
+      props.setDistanceTime({
+        totalDist: Math.round(totalDist, 2) + " miles",
+        totalTime: totalTime,
+      });
+    }
+
+    const DirectionsService = new window.google.maps.DirectionsService();
+
+    DirectionsService.route(
+      {
+        origin: origin,
+        destination: end,
+        waypoints: checkpoints,
+        optimizeWaypoints: true,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        console.log(result);
+        if (status === window.google.maps.DirectionsStatus.OK) {
+          setDirection(result);
+          computeTotalDistance(result);
+        } else {
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
+  }, [journey]);
+
   const mapStyles = {
     height: "100vh",
     width: "100%",
@@ -49,24 +65,7 @@ const Map = (props) => {
   return (
     <div>
       <GoogleMap mapContainerStyle={mapStyles} zoom={6} center={defaultCenter}>
-        {places.map((item) => {
-          return (
-            <Marker
-              key={item.name}
-              position={item.location}
-              onClick={() => onSelect(item)}
-            />
-          );
-        })}
-        {selected.location && (
-          <InfoWindow
-            position={selected.location}
-            clickable={true}
-            onCloseClick={() => setSelected({})}
-          >
-            <p>{selected.name}</p>
-          </InfoWindow>
-        )}
+        {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
     </div>
   );
