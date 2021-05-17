@@ -94,7 +94,6 @@ export default function SignInSide() {
       <Helmet>
         <title>Roadster | Register</title>
       </Helmet>
-      ;
       <CssBaseline />
       <Grid item xs={false} sm={4} md={8} className={classes.image} />
       <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
