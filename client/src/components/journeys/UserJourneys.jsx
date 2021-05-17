@@ -5,6 +5,7 @@ import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import CardItem from "./CardItem";
+import { NavLink } from "react-router-dom";
 
 const UserJourneys = () => {
   const [journeys, setJourneys] = useState([]);
@@ -28,7 +29,12 @@ const UserJourneys = () => {
       journeys.map((journey) => {
         return (
           <Grid container item xs={12} sm={6} md={3} xl={2} key={journey._id}>
-            <CardItem journey={journey} />
+            <NavLink
+              style={{ textDecoration: "none" }}
+              to={`/journeys/${journey._id}`}
+            >
+              <CardItem journey={journey} />
+            </NavLink>
           </Grid>
         );
       });
