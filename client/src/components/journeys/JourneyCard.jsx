@@ -19,32 +19,20 @@ import TimelineSeparator from "@material-ui/lab/TimelineSeparator";
 import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import TimelineOppositeContent from "@material-ui/lab/TimelineOppositeContent";
+import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(3),
     flexDirection: "column",
     alignItems: "center",
-  },
-  root: {
-    maxWidth: 345,
   },
   media: {
     height: 0,
     paddingTop: "56.25%", // 16:9
   },
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: "rotate(180deg)",
-  },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: red[800],
   },
   oppositeContent: {
     flex: 0,
@@ -71,42 +59,58 @@ function CardItem({ journey }) {
         }
         action={
           showEditIcon() && (
-            <IconButton aria-label="edit-joutney">
-              <EditIcon />
-            </IconButton>
+            <NavLink
+              style={{ textDecoration: "none" }}
+              to={`/journeys/${journey._id}/edit`}
+            >
+              <IconButton aria-label="edit-joutney">
+                <EditIcon />
+              </IconButton>
+            </NavLink>
           )
         }
         title={journey.name || "Roadtrip"}
         subheader={<Moment format="MMM D, YYYY">{journey.startDate}</Moment>}
       />
-      <CardMedia className={classes.media} image={banner} title="Paella dish" />
-      <CardContent>
-        <Timeline>
-          <TimelineItem style={{ minHeight: "55px" }}>
-            <TimelineOppositeContent
-              className={classes.oppositeContent}
-              color="textSecondary"
-            ></TimelineOppositeContent>
-            <TimelineSeparator>
-              <TripOriginIcon color="action" fontSize="small" />
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>{journey.origin.formattedAddress}</TimelineContent>
-          </TimelineItem>
-          <TimelineItem style={{ minHeight: "50px" }}>
-            <TimelineOppositeContent
-              className={classes.oppositeContent}
-              color="textSecondary"
-            ></TimelineOppositeContent>
-            <TimelineSeparator>
-              <RoomIcon color="action" />
-            </TimelineSeparator>
-            <TimelineContent>
-              {journey.destination.formattedAddress}
-            </TimelineContent>
-          </TimelineItem>
-        </Timeline>
-      </CardContent>
+      <NavLink
+        to={`/journeys/${journey._id}`}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <CardMedia
+          className={classes.media}
+          image={banner}
+          title="Paella dish"
+        />
+        <CardContent>
+          <Timeline>
+            <TimelineItem style={{ minHeight: "55px" }}>
+              <TimelineOppositeContent
+                className={classes.oppositeContent}
+                color="textSecondary"
+              ></TimelineOppositeContent>
+              <TimelineSeparator>
+                <TripOriginIcon color="action" fontSize="small" />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                {journey.origin.formattedAddress}
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem style={{ minHeight: "50px" }}>
+              <TimelineOppositeContent
+                className={classes.oppositeContent}
+                color="textSecondary"
+              ></TimelineOppositeContent>
+              <TimelineSeparator>
+                <RoomIcon color="action" />
+              </TimelineSeparator>
+              <TimelineContent>
+                {journey.destination.formattedAddress}
+              </TimelineContent>
+            </TimelineItem>
+          </Timeline>
+        </CardContent>
+      </NavLink>
     </Card>
   );
 }

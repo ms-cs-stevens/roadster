@@ -3,6 +3,7 @@
   "editor.fontSize": 12,
   "editor.tabSize": 2,
   "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
   "editor.wordWrap": "on",
   "editor.formatOnPaste": true,
   "html.format.enable": true,
