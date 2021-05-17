@@ -1,0 +1,12 @@
+{
+    "type": "service_account",
+    "project_id": "roadster-sans",
+    "private_key_id": "c751477154173f91af4771b31b449258927ce4fd",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCIoxy08XxNmTWV\neOiUXV6RIsDaq5nP9scfads3a4GN8Z4gcMzLWPlqRt80aFJmsKfKertL+fBEWokw\nAlN2gjPZRjYKxsaW08qtuz6rxjyLqtJXCNVBnC75FKVJyCplwtzl1ckbKDvTaRVQ\n/V24tqdrnnBl4+m8qrTPjTlevwxbPxWVv7kVvrCsVmZki3hkv6c1Ear+Cpaimvy5\nnoYHMveEUywaCbOSe6CDdbXr6ERB+ued3EvxrMg461sPW53se/6xSom7L1g8NOtW\nMiQyfLsm61vtQcenOAnVxNYpvKNXwdfjo15EIzAC9Zc3duakOxT1bCbHDl/E2T7X\nd/+cWXgbAgMBAAECggEACR5FfKe+4VjPlB2A++GtPWdB0nXwKkowKJ8CU5T3jNbq\ndATDDfDumBKJs7Agi5zPXbpKBHx19cHK9Oq60iZHOoEuexKfzxHsLSLZQFJW2QU5\nyzgaLyoykkm37BAREEBsSGQ3avoI4Adbtk9qMTjzPEHTA2Gtx/rmXRFyGioKs44N\ntslsuXy4euhRY00rTgUPdglrselLMiaFPX/0ZI/6RUiu6X1WLxjrLTYVve64kpqp\nSdPN5t9dNOnMXamj25VyzzABbM8xADSFNm1XEKftw5AdRqdr72eoZuOxTYeWyUqO\nnyM8dx0sqSiE3dqNqf6nx2Htebym2rvSo+jJt0UUSQKBgQC7+zetR3l2y3Q8dM81\nAusASO/iIy+bses9/cjlYn+IpRyL/h4GuEtZRQsA0VU9u2jlsMKg4pwuXhx/GW/C\nC2u457GS8qZriNDIboDdaVQEOxGzqa1vGK3aU68ojsVUUiruLVPPFOGt0hYb//tH\na4WlWkHFNfIIhOI1ZJ5Y8x19UwKBgQC6E91yc22lXooNZNv7jKgMy7X64eFTLxnJ\nU8c7/hcn+LUxynwZO4Z0P8buWXFAOLS5hRRMg/i+XSnsHk9HP1CyJ+g+AE+wapo6\nFnVWeSSXsZYeOWmF1+C9bAL+kxl5aGAZweit3YikF5NbHjrhxbMFIUFzs+5i0S2o\nJqSGFVR5GQKBgQCEitgyDGBfW4rkibQD+7+43rSNLSQHUoa8mfGJk067CTg8mPuQ\n32b5VY4xkGfa9AY9VcmVaNKYevD6yPOczTKyGGODaiXfUoNrn0arVvXPWdrcY/oO\niEck1rZ9EVWfY6QzdbBPJbkON0Axk+cX7383HJGdPLEgQpnA7eYcb6bOUwKBgCmx\nIcDvE/YlhJETtCZckZqsWg3oZnAY8ZImb1GF0PJny1FoqP2OVMXfNFdbOwDEs9mN\nc8rhFu6wOSBqeiDgktgYEPUzZKeGex/gwFGruwMyCwyimH4grH5EoTchBmgpdr7O\nr6+lH2SE08Nqto63mTDhDqU5/4OskqpGXj6csNyhAoGAfNtJg6EdmyynXdwu+exQ\njEm+BOqJacKivGbB7od9qb4Qu42jk+47MkMCocw1XW4VSVXtQ8bfllzu97dXMNem\nFYnnKg110SWB+W07jp8hb2lPQ6s3xzP0min8RelBhaLrPaCqBOU6HqY9Lw0L+TlY\n5yO/VQdMzwTzQJBUIyom3Ns=\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-udikd@roadster-sans.iam.gserviceaccount.com",
+    "client_id": "110422314812447491021",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-udikd%40roadster-sans.iam.gserviceaccount.com"
+  }
