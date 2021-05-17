@@ -79,7 +79,7 @@ export default function Navigation() {
               component={NavLink}
               to={"/journeys"}
             >
-              My Journeys
+              Journeys
             </Button>
           )}
           {currentUser && (
