@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Box from "@material-ui/core/Box";
 import CreateJourney from "./components/journeys/Create";
+import CommentsBox from "./components/journeys/CommentsBox";
 import "./css/App.css";
 import Landing from "./components/Landing";
 import Navigation from "./components/Navigation";
@@ -50,6 +51,7 @@ function App() {
               <Route exact path="/" component={Landing} />
               <Route exact path="/login" component={SignIn} />
               <Route exact path="/register" component={SignUp} />
+              <Route exact path="/comments" component={CommentsBox}/>
               <PrivateRoute exact path="/user/account" component={Account} />
               <PrivateRoute exact path="/user/change-password" component={PasswordReset} />
               <PrivateRoute exact path="/journeys/new" component={CreateJourney} />

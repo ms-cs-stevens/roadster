@@ -1,3 +1,4 @@
+import React from 'react';
 import { formatRelative } from 'date-fns';
 
 const formatDate = date => {
@@ -9,21 +10,30 @@ const formatDate = date => {
   return formattedDate;
 };
 
-const Message = ({
+const Comment = ({
   timestamp = null,
   content = '',
   userName = '',
-  flagged = false,
 }) => {
   if (!content) return null;
 
-return (
-  <div>
-    {userName ? <p>{userName}</p> : null}
-    {timestamp?.seconds ? (
-      <span>{formatDate(new Date(createdAt.seconds * 1000))}</span>
-    ) : null}
-    <p>{content}</p>
-  </div>
-);
+  return (
+    <div>
+      <div>
+        <div>
+          {userName ? (
+            <p>{userName}</p>
+          ) : null}
+          {timestamp?.seconds ? (
+            <span>
+              {formatDate(new Date(timestamp.seconds * 1000))}
+            </span>
+          ) : null}
+        </div>
+        <p>{content}</p>
+      </div>
+    </div>
+  );
 };
+
+export default Comment;
