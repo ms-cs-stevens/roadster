@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CreateJourney from "./components/journeys/Create";
+import CommentsBox from "./components/journeys/CommentsBox";
 import "./css/App.css";
 import { Helmet } from "react-helmet";
 import Landing from "./components/Landing";
@@ -53,6 +54,7 @@ function App() {
               <Route exact path="/" component={Landing} />
               <Route exact path="/login" component={SignIn} />
               <Route exact path="/register" component={SignUp} />
+              <Route exact path="/comments" component={CommentsBox}/>
               <PrivateRoute exact path="/user/account" component={Account} />
               <PrivateRoute
                 exact
