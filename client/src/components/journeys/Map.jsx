@@ -4,13 +4,25 @@ import { useState } from "react";
 
 const Map = (props) => {
   const journey = props.journey;
-  const [directions, setDirection] = useState(null);
+  const [directions, setDirection] = useState();
   useEffect(() => {
     let origin = journey.origin;
     let end = journey.destination;
     let checkpoints = [
       {
         location: "Rockleigh, New Jersey 07647",
+        stopover: true,
+      },
+      {
+        location: "West new york",
+        stopover: true,
+      },
+      {
+        location: "Hoboken",
+        stopover: true,
+      },
+      {
+        location: "Newark",
         stopover: true,
       },
     ];
@@ -23,10 +35,9 @@ const Map = (props) => {
         totalDist += myroute.legs[i].distance.value;
         totalTime += myroute.legs[i].duration.value;
       }
-      totalDist = totalDist / 1609.34;
       props.setDistanceTime({
-        totalDist: Math.round(totalDist, 2) + " miles",
-        totalTime: totalTime,
+        totalDist: Math.round(totalDist / 1609.34) + " miles",
+        totalTime: Math.round(totalTime / 3600) + " hrs",
       });
     }
 
@@ -50,7 +61,7 @@ const Map = (props) => {
         }
       }
     );
-  }, [journey]);
+  }, [props, journey]);
 
   const mapStyles = {
     height: "90vh",

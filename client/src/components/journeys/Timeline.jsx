@@ -53,7 +53,13 @@ const JourneyTimeline = (props) => {
   const classes = useStyles();
   const journey = props.journey;
 
-  const checkPoints = ["New york", "Long Island", "Buffalo"];
+  const checkPoints = [
+    "New york",
+    "Long Island",
+    "Buffalo",
+    "New york",
+    "Long Island",
+  ];
 
   const buildTimeline = () => {
     let timeline =
@@ -78,7 +84,7 @@ const JourneyTimeline = (props) => {
   };
 
   return (
-    <Card {...props}>
+    <Card style={{ "min-height": "100vh" }}>
       <CardHeader title="Timeline" />
       <Divider />
       <CardContent>
