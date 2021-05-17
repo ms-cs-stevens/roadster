@@ -1,10 +1,11 @@
-import React from 'react';
-import { Grid, makeStyles } from '@material-ui/core';
+import Helmet from "react-helmet";
+import React from "react";
+import { Grid, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-    padding: '0 5em',
+    padding: "0 5em",
   },
 }));
 
@@ -12,6 +13,10 @@ const Landing = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
+      <Helmet>
+        <title>Roadster | Home</title>
+      </Helmet>
+      ;
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <h1>Welcome to Roadster</h1>

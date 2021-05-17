@@ -37,7 +37,7 @@ const Map = (props) => {
     setSelected(item);
   };
   const mapStyles = {
-    height: "80vh",
+    height: "100vh",
     width: "100%",
   };
 
@@ -48,14 +48,6 @@ const Map = (props) => {
 
   return (
     <div>
-      <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-        <GoogleMap
-          mapContainerStyle={mapStyles}
-          zoom={8}
-          center={defaultCenter}
-        />
-      </LoadScript>
-
       <GoogleMap mapContainerStyle={mapStyles} zoom={6} center={defaultCenter}>
         {places.map((item) => {
           return (

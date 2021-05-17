@@ -1,3 +1,4 @@
+import Helmet from "react-helmet";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../firebase/Auth";
 import { changePassword } from "../../firebase/firebaseFunctions";
@@ -63,6 +64,9 @@ function PasswordReset() {
   if (currentUser.providerData[0].providerId === "password") {
     return (
       <Container component="main" maxWidth="sm">
+        <Helmet>
+          <title>Roadster | Password Reset</title>
+        </Helmet>
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>

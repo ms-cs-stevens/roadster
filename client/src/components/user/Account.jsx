@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import Helmet from "react-helmet";
 import { AuthContext } from "../../firebase/Auth";
 import apiService from "../../services/apiService";
 import { NavLink } from "react-router-dom";
@@ -206,6 +207,9 @@ function Account() {
   if (user) {
     return (
       <Container component="main" maxWidth="sm">
+        <Helmet>
+          <title>Roadster | My Account</title>
+        </Helmet>
         <CssBaseline />
         <div className={classes.paper}>
           <Avatar

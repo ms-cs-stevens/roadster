@@ -4,8 +4,9 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import CardItem from "./CardItem";
+import JourneyCard from "./JourneyCard";
 import { NavLink } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const UserJourneys = () => {
   const [journeys, setJourneys] = useState([]);
@@ -33,7 +34,7 @@ const UserJourneys = () => {
               style={{ textDecoration: "none" }}
               to={`/journeys/${journey._id}`}
             >
-              <CardItem journey={journey} />
+              <JourneyCard journey={journey} />
             </NavLink>
           </Grid>
         );
@@ -47,13 +48,19 @@ const UserJourneys = () => {
   };
 
   return (
-    <Container component="main" maxWidth="lg">
-      <CssBaseline />
-      <Typography component="h1" variant="h5">
-        My Journeys
-      </Typography>
-      {buildCards()}
-    </Container>
+    <>
+      <Helmet>
+        <title>Roadster | Journeys</title>
+      </Helmet>
+      ;
+      <Container component="main" maxWidth="lg">
+        <CssBaseline />
+        <Typography component="h1" variant="h5">
+          My Journeys
+        </Typography>
+        {buildCards()}
+      </Container>
+    </>
   );
 };
 
