@@ -15,6 +15,7 @@ const Dashboard = () => {
   const { id } = useParams();
   const [journey, setJourney] = useState(undefined);
   const [loading, setLoading] = useState(true);
+  const [routeProperty, setRouteProperty] = useState({});
 
   useEffect(() => {
     async function fetchJourney() {
@@ -24,6 +25,10 @@ const Dashboard = () => {
     }
     fetchJourney();
   }, [id]);
+
+  const setDistanceTime = (data) => {
+    setRouteProperty(data);
+  };
 
   const generatePdf = () => {
     html2canvas(document.getElementById("root"), {
@@ -62,10 +67,13 @@ const Dashboard = () => {
             </Typography>
             <Grid container spacing={3}>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <InfoCard title="Start Point" value={journey.budget} />
+                <InfoCard
+                  title="Total Distance"
+                  value={routeProperty.totalDist}
+                />
               </Grid>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <InfoCard title="End Point" value={journey.budget} />
+                <InfoCard title="Total Time" value={routeProperty.totalTime} />
               </Grid>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
                 <InfoCard title="Occupancy" value={journey.budget} />
@@ -74,7 +82,7 @@ const Dashboard = () => {
                 <InfoCard title="Tentative Budget" value={journey.budget} />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
-                <Map journey={journey} />
+                <Map journey={journey} setDistanceTime={setDistanceTime} />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
                 <TimeLine journey={journey} />
