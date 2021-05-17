@@ -53,22 +53,13 @@ const JourneyListing = () => {
       journeys.length > 0 &&
       journeys.map((journey) => {
         return (
-          <Grid container item xs={12} sm={6} md={3} xl={2} key={journey._id}>
-            <NavLink
-              to={`/journeys/${journey._id}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <JourneyCard journey={journey} />
-            </NavLink>
+          <Grid item md={4} xl={3} xs={12} key={journey._id}>
+            <JourneyCard journey={journey} />
           </Grid>
         );
       });
 
-    return (
-      <Grid container spacing={2}>
-        {cards}
-      </Grid>
-    );
+    return cards;
   };
 
   return (
@@ -108,7 +99,9 @@ const JourneyListing = () => {
             </FormControl>
           </Grid>
         </Grid>
-        {buildCards()}
+        <Grid container spacing={5}>
+          {buildCards()}
+        </Grid>
       </Container>
     </>
   );

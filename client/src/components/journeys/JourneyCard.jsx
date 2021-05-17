@@ -23,29 +23,16 @@ import { NavLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(3),
     flexDirection: "column",
     alignItems: "center",
-  },
-  root: {
-    maxWidth: 345,
   },
   media: {
     height: 0,
     paddingTop: "56.25%", // 16:9
   },
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: "rotate(180deg)",
-  },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: red[800],
   },
   oppositeContent: {
     flex: 0,
@@ -63,7 +50,7 @@ function CardItem({ journey }) {
   };
 
   return (
-    <Card className={classes.paper} fullWidth={true}>
+    <Card className={classes.paper}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
@@ -85,34 +72,45 @@ function CardItem({ journey }) {
         title={journey.name || "Roadtrip"}
         subheader={<Moment format="MMM D, YYYY">{journey.startDate}</Moment>}
       />
-      <CardMedia className={classes.media} image={banner} title="Paella dish" />
-      <CardContent>
-        <Timeline>
-          <TimelineItem style={{ minHeight: "55px" }}>
-            <TimelineOppositeContent
-              className={classes.oppositeContent}
-              color="textSecondary"
-            ></TimelineOppositeContent>
-            <TimelineSeparator>
-              <TripOriginIcon color="action" fontSize="small" />
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent>{journey.origin.formattedAddress}</TimelineContent>
-          </TimelineItem>
-          <TimelineItem style={{ minHeight: "50px" }}>
-            <TimelineOppositeContent
-              className={classes.oppositeContent}
-              color="textSecondary"
-            ></TimelineOppositeContent>
-            <TimelineSeparator>
-              <RoomIcon color="action" />
-            </TimelineSeparator>
-            <TimelineContent>
-              {journey.destination.formattedAddress}
-            </TimelineContent>
-          </TimelineItem>
-        </Timeline>
-      </CardContent>
+      <NavLink
+        to={`/journeys/${journey._id}`}
+        style={{ textDecoration: "none", color: "inherit" }}
+      >
+        <CardMedia
+          className={classes.media}
+          image={banner}
+          title="Paella dish"
+        />
+        <CardContent>
+          <Timeline>
+            <TimelineItem style={{ minHeight: "55px" }}>
+              <TimelineOppositeContent
+                className={classes.oppositeContent}
+                color="textSecondary"
+              ></TimelineOppositeContent>
+              <TimelineSeparator>
+                <TripOriginIcon color="action" fontSize="small" />
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent>
+                {journey.origin.formattedAddress}
+              </TimelineContent>
+            </TimelineItem>
+            <TimelineItem style={{ minHeight: "50px" }}>
+              <TimelineOppositeContent
+                className={classes.oppositeContent}
+                color="textSecondary"
+              ></TimelineOppositeContent>
+              <TimelineSeparator>
+                <RoomIcon color="action" />
+              </TimelineSeparator>
+              <TimelineContent>
+                {journey.destination.formattedAddress}
+              </TimelineContent>
+            </TimelineItem>
+          </Timeline>
+        </CardContent>
+      </NavLink>
     </Card>
   );
 }
