@@ -53,7 +53,7 @@ const Map = (props) => {
   }, [journey]);
 
   const mapStyles = {
-    height: "100vh",
+    height: "90vh",
     width: "100%",
   };
 

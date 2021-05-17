@@ -49,7 +49,6 @@ const Dashboard = () => {
     return "Loading";
   } else {
     return (
-      // <div id="journey" className="journey">
       <>
         <Helmet>
           <title>Roadster | Journey Dashboard</title>
@@ -61,7 +60,7 @@ const Dashboard = () => {
             py: 3,
           }}
         >
-          <Container maxWidth={false}>
+          <Container maxWidth="lg">
             <Typography component="h2" variant="h5">
               Journey Dashboard
             </Typography>
@@ -76,7 +75,7 @@ const Dashboard = () => {
                 <InfoCard title="Total Time" value={routeProperty.totalTime} />
               </Grid>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <InfoCard title="Occupancy" value={journey.budget} />
+                <InfoCard title="Members" value={journey.occupancy} />
               </Grid>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
                 <InfoCard title="Tentative Budget" value={journey.budget} />
