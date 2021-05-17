@@ -62,7 +62,7 @@ function CardItem({ journey }) {
   };
 
   return (
-    <Card className={classes.paper}>
+    <Card className={classes.paper} fullWidth={true}>
       <CardHeader
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>

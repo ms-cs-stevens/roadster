@@ -14,6 +14,7 @@ import { AuthProvider } from "./firebase/Auth";
 import PasswordReset from "./components/user/PasswordReset";
 import Dashboard from "./components/journeys/Dashboard";
 import NotFound from "./components/NotFound";
+import EditJourney from "./components/journeys/Edit";
 
 const loadScript = (url, setLoaded) => {
   const script = document.createElement("script");
@@ -66,6 +67,7 @@ function App() {
               />
               <PrivateRoute exact path="/journeys" component={UserJourneys} />
               <PrivateRoute exact path="/journeys/:id" component={Dashboard} />
+              <PrivateRoute exact path="/journeys/:id/edit" component={EditJourney} />
               <Route component={NotFound} />
             </Switch>
           </div>
