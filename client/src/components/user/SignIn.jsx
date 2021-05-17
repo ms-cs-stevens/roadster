@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import React, { useContext } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -83,6 +84,9 @@ export default function SignInSide() {
 
   return (
     <Grid container component="main" className={classes.root}>
+      <Helmet>
+        <title>Roadster | Login</title>
+      </Helmet>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={8} className={classes.image} />
       <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>

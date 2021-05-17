@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Box from "@material-ui/core/Box";
 import CreateJourney from "./components/journeys/Create";
 import "./css/App.css";
+import { Helmet } from "react-helmet";
 import Landing from "./components/Landing";
 import Navigation from "./components/Navigation";
 import Copyright from "./components/Copyright";
 import SignIn from "./components/user/SignIn";
 import SignUp from "./components/user/SignUp";
 import Account from "./components/user/Account";
-import JourneyShow from "./components/journeys/Show";
+// import JourneyShow from "./components/journeys/Show";
 import UserJourneys from "./components/journeys/UserJourneys";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./firebase/Auth";
 import PasswordReset from "./components/user/PasswordReset";
 import Dashboard from "./components/journeys/Dashboard";
+import NotFound from "./components/NotFound";
 
 const loadScript = (url, setLoaded) => {
   const script = document.createElement("script");
@@ -43,6 +44,9 @@ function App() {
 
   return (
     <AuthProvider>
+      <Helmet>
+        <title>Roadster</title>
+      </Helmet>
       <Router>
         <div className="App">
           <Navigation />
@@ -64,6 +68,7 @@ function App() {
               />
               <PrivateRoute exact path="/journeys" component={UserJourneys} />
               <PrivateRoute exact path="/journeys/:id" component={Dashboard} />
+              <Route component={NotFound} />
             </Switch>
           </div>
           {/* <Box mt={5}>

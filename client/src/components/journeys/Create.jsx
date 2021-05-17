@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import React, { useReducer, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -92,107 +93,112 @@ function CreateJourney() {
   };
 
   return (
-    <Container component="main" maxWidth="sm">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <Explore />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Plan Your Journey
-        </Typography>
-        {submitting && (
-          <div>
-            You are submitting the following:
-            <ul>
-              {Object.entries(formData).map(([name, value]) => (
-                <li key={name}>
-                  <strong>{name}</strong>:{value.toString()}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <SearchLocationInput
-              name="origin"
-              label="Origin"
-              setLocation={handleChange}
-              placeholder="New York, NY"
-              id="origin"
-              icon={<TripOriginIcon color="action" fontSize="small" />}
-            />
-            <SearchLocationInput
-              name="destination"
-              setLocation={handleChange}
-              label="Destination"
-              placeholder="Destination"
-              icon={<RoomIcon color="action" />}
-              id="destination"
-            />
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="Members"
-                name="occupancy"
-                type="number"
-                variant="outlined"
-                required
-                fullWidth
-                onChange={handleChange}
-                id="members"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{ inputProps: { min: 0, max: 10 } }}
-                label="Group Members"
+    <>
+      <Helmet>
+        <title>Roadster | Plan Your Journey</title>
+      </Helmet>
+      <Container component="main" maxWidth="sm">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <Explore />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Plan Your Journey
+          </Typography>
+          {submitting && (
+            <div>
+              You are submitting the following:
+              <ul>
+                {Object.entries(formData).map(([name, value]) => (
+                  <li key={name}>
+                    <strong>{name}</strong>:{value.toString()}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <SearchLocationInput
+                name="origin"
+                label="Origin"
+                setLocation={handleChange}
+                placeholder="New York, NY"
+                id="origin"
+                icon={<TripOriginIcon color="action" fontSize="small" />}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                onChange={handleChange}
-                variant="outlined"
-                required
-                fullWidth
-                id="budget"
-                label="Tentative Budget"
-                name="budget"
-                autoComplete="budget"
+              <SearchLocationInput
+                name="destination"
+                setLocation={handleChange}
+                label="Destination"
+                placeholder="Destination"
+                icon={<RoomIcon color="action" />}
+                id="destination"
               />
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="Members"
+                  name="occupancy"
+                  type="number"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  onChange={handleChange}
+                  id="members"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  InputProps={{ inputProps: { min: 0, max: 10 } }}
+                  label="Group Members"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  onChange={handleChange}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="budget"
+                  label="Tentative Budget"
+                  name="budget"
+                  autoComplete="budget"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  onChange={handleChange}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="journey-name"
+                  label="Roadtrip name"
+                  name="name"
+                  autoComplete="name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox value="editable" color="primary" />}
+                  label="I want to allow other members of the journey to update it."
+                  name="editable"
+                  onChange={handleChange}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                onChange={handleChange}
-                variant="outlined"
-                required
-                fullWidth
-                id="journey-name"
-                label="Roadtrip name"
-                name="name"
-                autoComplete="name"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="editable" color="primary" />}
-                label="I want to allow other members of the journey to update it."
-                name="editable"
-                onChange={handleChange}
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Plan your Journey
-          </Button>
-        </form>
-      </div>
-    </Container>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Plan your Journey
+            </Button>
+          </form>
+        </div>
+      </Container>
+    </>
   );
 }
 

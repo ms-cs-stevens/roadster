@@ -1,6 +1,8 @@
-import { Box, Container, Grid, Typography } from "@material-ui/core";
-import Budget from "./Budget.jsx";
+import { Helmet } from "react-helmet";
+import { Box, Container, Grid, Typography, Button } from "@material-ui/core";
+import InfoCard from "./InfoCard.jsx";
 import Members from "./Members";
+import Details from "./Details";
 import Map from "./Map.jsx";
 import TimeLine from "./Timeline.jsx";
 import { useEffect, useState } from "react";
@@ -23,12 +25,30 @@ const Dashboard = () => {
     fetchJourney();
   }, [id]);
 
+  const generatePdf = () => {
+    html2canvas(document.getElementById("root"), {
+      proxy: "server.js",
+      useCORS: true,
+    }).then(function (canvas) {
+      let doc;
+      var imgData = canvas.toDataURL("image/jpeg");
+      var w = document.getElementById("root").offsetWidth;
+      var h = document.getElementById("root").offsetHeight;
+      doc = new jsPDF("l", "mm", [canvas.height, canvas.width]);
+      doc.addImage(imgData, "JPEG", 0, 0, w, h);
+      doc.save("Journey_" + id + ".pdf");
+    });
+  };
+
   if (loading) {
-    return "Loading!!";
+    return "Loading";
   } else {
     return (
+      // <div id="journey" className="journey">
       <>
-        <br />
+        <Helmet>
+          <title>Roadster | Journey Dashboard</title>
+        </Helmet>
         <Box
           sx={{
             backgroundColor: "background.default",
@@ -42,16 +62,16 @@ const Dashboard = () => {
             </Typography>
             <Grid container spacing={3}>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <Budget />
+                <InfoCard title="Start Point" value={journey.budget} />
               </Grid>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <Budget />
+                <InfoCard title="End Point" value={journey.budget} />
               </Grid>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <Budget />
+                <InfoCard title="Occupancy" value={journey.budget} />
               </Grid>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
-                <Budget />
+                <InfoCard title="Tentative Budget" value={journey.budget} />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
                 <Map journey={journey} />
@@ -63,9 +83,17 @@ const Dashboard = () => {
                 <Members journey={journey} />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
-                Show journey details here, description etc.
+                <Details journey={journey} />
               </Grid>
             </Grid>
+            <Button
+              data-html2canvas-ignore="true"
+              onClick={generatePdf}
+              variant="contained"
+              color="primary"
+            >
+              Download Trip Details
+            </Button>
           </Container>
         </Box>
       </>
