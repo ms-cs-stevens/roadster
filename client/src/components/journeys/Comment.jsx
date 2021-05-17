@@ -1,5 +1,14 @@
 import React from 'react';
 import { formatRelative } from 'date-fns';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Typography,
+} from "@material-ui/core";
+
 
 const formatDate = date => {
   let formattedDate = '';
@@ -13,25 +22,29 @@ const formatDate = date => {
 const Comment = ({
   timestamp = null,
   content = '',
-  userName = '',
+  username = '',
 }) => {
   if (!content) return null;
 
   return (
     <div>
-      <div>
-        <div>
-          {userName ? (
-            <p>{userName}</p>
-          ) : null}
-          {timestamp?.seconds ? (
-            <span>
-              {formatDate(new Date(timestamp.seconds * 1000))}
-            </span>
-          ) : null}
-        </div>
-        <p>{content}</p>
-      </div>
+      <Card>
+          <CardHeader title={username} />
+          <Divider />
+          <CardContent>
+            <Box
+              sx={{
+                position: "relative",
+              }}
+            >
+              <Typography>
+                {content}
+              </Typography>
+              {formatDate(new Date(timestamp))}
+            </Box>
+          </CardContent>
+      </Card>
+      <br/>
     </div>
   );
 };
