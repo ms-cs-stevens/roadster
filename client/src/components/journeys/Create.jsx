@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const formReducer = (state, event) => {
+const journeyReducer = (state, event) => {
   return {
     ...state,
     [event.name]: event.value,
@@ -49,7 +49,7 @@ const formReducer = (state, event) => {
 function CreateJourney() {
   const history = useHistory();
   const classes = useStyles();
-  const [formData, setFormData] = useReducer(formReducer, { editable: false });
+  const [journey, setJourney] = useReducer(journeyReducer, {checkpoints: []});
   const [submitting, setSubmitting] = useState(false);
   const { handleSubmit, control } = useForm();
 
@@ -57,21 +57,13 @@ function CreateJourney() {
     console.log(data);
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleFormSubmit = async (data) => {
     // TODO: Fix below condition for form submission and set form error
-    if (
-      !formData ||
-      !formData.origin ||
-      !formData.destination ||
-      formData.budget.length === 0 ||
-      formData.occupancy.length === 0 ||
-      formData.name.length === 0
-    )
+    if ( !journey || !journey.origin || !journey.destination )
       return;
 
     setSubmitting(true);
+    const formData = {...journey, ...data};
 
     try {
       const journey = await apiService.createResource("journeys", formData);
@@ -89,13 +81,9 @@ function CreateJourney() {
   };
 
   const handleChange = (event) => {
-    const isCheckbox = event.target.type === "checkbox";
-
-    setFormData({
+    setJourney({
       name: event.target.name,
-      value: isCheckbox
-        ? event.target.checked
-        : (event.detail && event.detail.location) || event.target.value,
+      value: (event.detail && event.detail.location) || event.target.value,
     });
   };
 
@@ -107,7 +95,7 @@ function CreateJourney() {
       <CssBaseline />
       <Grid container spacing={4}>
         <Grid item md={7} xs={12}>
-          <Map journey={{origin: formData.origin, destination: formData.destination, checkpoints: []}} setDistanceTime={setDistanceTime} />
+          <Map journey={journey} setDistanceTime={setDistanceTime} />
         </Grid>
         <Grid item md={5} xs={12}>
           <div className={classes.paper}>
@@ -119,14 +107,7 @@ function CreateJourney() {
             </Typography>
             {submitting && (
               <div>
-                You are submitting the following:
-                <ul>
-                  {Object.entries(formData).map(([name, value]) => (
-                    <li key={name}>
-                      <strong>{name}</strong>:{value.toString()}
-                    </li>
-                  ))}
-                </ul>
+                Please wait while we create your Roadtrip!
               </div>
             )}
             <form className={classes.form} onSubmit={handleSubmit(handleFormSubmit)}>
@@ -211,12 +192,22 @@ function CreateJourney() {
                 />
                 </Grid>
                 <Grid item xs={12}>
-                  <FormControlLabel
-                    control={<Checkbox value="editable" color="primary" />}
-                    label="I want to allow other members of the journey to update it."
-                    name="editable"
-                    onChange={handleChange}
-                  />
+                    <section id="input-checkbox">
+                      <label>
+                      <Controller
+                        name="editable"
+                        control={control}
+                        defaultValue={false}
+                        render={({ field: props }) => (
+                          <Checkbox
+                            {...props}
+                            onChange={(e) => props.onChange(e.target.checked)}
+                          />
+                        )}
+                      />
+                      I want to allow other members of the journey to update it.
+                      </label>
+                    </section>
                 </Grid>
               </Grid>
               <Button
