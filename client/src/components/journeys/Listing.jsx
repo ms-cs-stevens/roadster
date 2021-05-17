@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import apiService from "../../services/apiService";
 import JourneyCard from "./JourneyCard";
 import { Helmet } from "react-helmet";
+import { NavLink } from "react-router-dom";
 import {
   Grid,
   makeStyles,
@@ -53,7 +54,12 @@ const JourneyListing = () => {
       journeys.map((journey) => {
         return (
           <Grid container item xs={12} sm={6} md={3} xl={2} key={journey._id}>
-            <JourneyCard journey={journey} />
+            <NavLink
+              to={`/journeys/${journey._id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <JourneyCard journey={journey} />
+            </NavLink>
           </Grid>
         );
       });
@@ -70,31 +76,38 @@ const JourneyListing = () => {
       <Helmet>
         <title>Roadster | Journeys</title>
       </Helmet>
-      ;
       <Container component="main" maxWidth="lg">
         <CssBaseline />
-        <Typography component="h1" variant="h5">
-          My Journeys
-        </Typography>
-        <FormControl className={classes.formControl}>
-          <InputLabel
-            id="demo-simple-select-label"
-            className={classes.formControl}
-            shrink
-          >
-            Filter
-          </InputLabel>
+        <br />
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Typography component="h1" variant="h5">
+              Journeys
+            </Typography>
+          </Grid>
+          <Grid item xs={2}></Grid>
+          <Grid item container justify="flex-end" xs={4}>
+            <FormControl className={classes.formControl}>
+              <InputLabel
+                id="demo-simple-select-label"
+                className={classes.formControl}
+                shrink
+              >
+                Filter
+              </InputLabel>
 
-          <Select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className={classes.selectEmpty}
-          >
-            <MenuItem value="user"> My Journeys </MenuItem>
-            <MenuItem value="all"> All Journeys </MenuItem>
-            <MenuItem value="pending">Pending</MenuItem>
-          </Select>
-        </FormControl>
+              <Select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className={classes.selectEmpty}
+              >
+                <MenuItem value="user"> My Journeys </MenuItem>
+                <MenuItem value="all"> All Journeys </MenuItem>
+                <MenuItem value="pending">Pending</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
         {buildCards()}
       </Container>
     </>
