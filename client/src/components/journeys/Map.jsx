@@ -26,15 +26,7 @@ const Map = ({ journey, setDistanceTime }) => {
     let destination = journey.destination;
     let checkpoints = [
       {
-        location: "Rockleigh, New Jersey 07647",
-        stopover: true,
-      },
-      {
-        location: "West new york",
-        stopover: true,
-      },
-      {
-        location: "Hoboken",
+        location: "Rochester",
         stopover: true,
       },
       {
@@ -43,7 +35,7 @@ const Map = ({ journey, setDistanceTime }) => {
       },
     ];
 
-    if(origin && destination) {
+    if (origin && destination) {
       DirectionsService.route(
         {
           origin: origin,

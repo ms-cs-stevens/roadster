@@ -19,12 +19,28 @@ getJourneyWithCreator = async (journey) => {
 module.exports = {
   async index(req, res) {
     try {
-      const data = await journey.getAllUserJourneys(req.currentUser.uid);
+      const journeysFilter = req.query.filter;
+      let data;
+      switch (journeysFilter) {
+        case "user":
+          data = await journey.getAllUserJourneys(req.currentUser.uid);
+          break;
+        case "all":
+          data = await journey.getAllJourneys();
+          break;
+        case "pending":
+          data = await journey.getAllJourneys();
+          break;
+        default:
+          throw new Error(
+            "Invalid Journey filter. Filter should be either 'user', 'all' or 'pending'"
+          );
+      }
+
       const journeys = data.map((journey) => getJourneyWithCreator(journey));
       res.json({ journeys: await Promise.all(journeys) });
     } catch (e) {
-      console.log(e);
-      res.sendStatus(500);
+      res.sendStatus(422).json({ error: e.message });
     }
   },
 

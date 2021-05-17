@@ -60,9 +60,21 @@ async function getAllUserJourneys(userId) {
   return journeys.map((journey) => journeyObject(journey));
 }
 
+async function getAllJourneys() {
+  const journeys = await Journey.find({});
+  return journeys.map((journey) => journeyObject(journey));
+}
+
+async function getPendingJourneys() {
+  const journeys = await Journey.find({});
+  return journeys.map((journey) => journeyObject(journey));
+}
+
 module.exports = {
   createJourney,
   getJourney,
   editJourney,
   getAllUserJourneys,
+  getPendingJourneys,
+  getAllJourneys,
 };

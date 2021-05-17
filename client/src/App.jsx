@@ -8,7 +8,7 @@ import Navigation from "./components/Navigation";
 import SignIn from "./components/user/SignIn";
 import SignUp from "./components/user/SignUp";
 import Account from "./components/user/Account";
-import UserJourneys from "./components/journeys/UserJourneys";
+import JourneyListing from "./components/journeys/Listing";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./firebase/Auth";
 import PasswordReset from "./components/user/PasswordReset";
@@ -65,9 +65,13 @@ function App() {
                 path="/journeys/new"
                 component={CreateJourney}
               />
-              <PrivateRoute exact path="/journeys" component={UserJourneys} />
+              <PrivateRoute exact path="/journeys" component={JourneyListing} />
               <PrivateRoute exact path="/journeys/:id" component={Dashboard} />
-              <PrivateRoute exact path="/journeys/:id/edit" component={EditJourney} />
+              <PrivateRoute
+                exact
+                path="/journeys/:id/edit"
+                component={EditJourney}
+              />
               <Route component={NotFound} />
             </Switch>
           </div>
