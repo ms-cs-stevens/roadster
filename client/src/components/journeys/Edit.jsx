@@ -3,7 +3,6 @@ import React, { useEffect, useState, useReducer } from "react";
 import { Box, Container, Grid, Typography, Button } from "@material-ui/core";
 import InfoCard from "./InfoCard.jsx";
 import Members from "./Members";
-import Details from "./Details";
 import Map from "./Map.jsx";
 import TimeLine from "./Timeline.jsx";
 import { useParams } from "react-router-dom";
@@ -110,7 +109,7 @@ const EditJourney = () => {
                 <Members journey={journey} />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
-                <Details journey={journey} />
+                {/* <Details journey={journey} /> */}
               </Grid>
             </Grid>
           </Container>
