@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { GoogleMap, DirectionsRenderer } from "@react-google-maps/api";
 import { useState } from "react";
 
-const Map = (props) => {
-  const journey = props.journey;
-  const [directions, setDirection] = useState();
+const Map = ({ journey, setDistanceTime }) => {
+  const [directions, setDirection] = useState(null);
+
   useEffect(() => {
     let origin = journey.origin;
     let end = journey.destination;
@@ -35,7 +35,7 @@ const Map = (props) => {
         totalDist += myroute.legs[i].distance.value;
         totalTime += myroute.legs[i].duration.value;
       }
-      props.setDistanceTime({
+      setDistanceTime({
         totalDist: Math.round(totalDist / 1609.34) + " miles",
         totalTime: Math.round(totalTime / 3600) + " hrs",
       });
@@ -60,21 +60,21 @@ const Map = (props) => {
         }
       }
     );
-  }, [props, journey]);
+  }, [journey]);
 
   const mapStyles = {
     height: "90vh",
     width: "100%",
   };
 
-  const defaultCenter = {
-    lat: journey.origin.lat,
-    lng: journey.origin.lng,
+  const jerseyCity = {
+    lat: 40.72816,
+    lng: -74.07764,
   };
 
   return (
     <div>
-      <GoogleMap mapContainerStyle={mapStyles} zoom={6} center={defaultCenter}>
+      <GoogleMap mapContainerStyle={mapStyles} zoom={6} center={jerseyCity}>
         {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
     </div>

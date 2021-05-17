@@ -16,6 +16,7 @@ import Container from "@material-ui/core/Container";
 import SearchLocationInput from "../SearchLocationInput";
 import apiService from "../../services/apiService";
 import { useHistory } from "react-router-dom";
+import Map from "./Map";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -47,8 +48,12 @@ const formReducer = (state, event) => {
 function CreateJourney() {
   const history = useHistory();
   const classes = useStyles();
-  const [formData, setFormData] = useReducer(formReducer, { editable: false });
+  const [formData, setFormData] = useReducer(formReducer, { editable: false, checkpoints: [] });
   const [submitting, setSubmitting] = useState(false);
+
+  const setDistanceTime = (data) => {
+    console.log(data);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,112 +98,117 @@ function CreateJourney() {
   };
 
   return (
-    <>
-      <Helmet>
-        <title>Roadster | Plan Your Journey</title>
-      </Helmet>
-      <Container component="main" maxWidth="sm">
-        <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <Explore />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Plan Your Journey
-          </Typography>
-          {submitting && (
-            <div>
-              You are submitting the following:
-              <ul>
-                {Object.entries(formData).map(([name, value]) => (
-                  <li key={name}>
-                    <strong>{name}</strong>:{value.toString()}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <form className={classes.form} onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <SearchLocationInput
-                name="origin"
-                label="Origin"
-                setLocation={handleChange}
-                placeholder="New York, NY"
-                id="origin"
-                icon={<TripOriginIcon color="action" fontSize="small" />}
-              />
-              <SearchLocationInput
-                name="destination"
-                setLocation={handleChange}
-                label="Destination"
-                placeholder="Destination"
-                icon={<RoomIcon color="action" />}
-                id="destination"
-              />
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="Members"
-                  name="occupancy"
-                  type="number"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  onChange={handleChange}
-                  id="members"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  InputProps={{ inputProps: { min: 0, max: 10 } }}
-                  label="Group Members"
+    <Container component="main" maxWidth="lg">
+    <Helmet>
+      <title>Roadster | Plan Your Journey</title>
+    </Helmet>
+      <CssBaseline />
+      <Grid container spacing={4}>
+        <Grid item md={7} xs={12}>
+          <Map journey={formData} setDistanceTime={setDistanceTime} />
+        </Grid>
+        <Grid item md={5} xs={12}>
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <Explore />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Plan Your Journey
+            </Typography>
+            {submitting && (
+              <div>
+                You are submitting the following:
+                <ul>
+                  {Object.entries(formData).map(([name, value]) => (
+                    <li key={name}>
+                      <strong>{name}</strong>:{value.toString()}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <form className={classes.form} onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <SearchLocationInput
+                  name="origin"
+                  label="Origin"
+                  setLocation={handleChange}
+                  placeholder="New York, NY"
+                  id="origin"
+                  icon={<TripOriginIcon color="action" fontSize="small" />}
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  onChange={handleChange}
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="budget"
-                  label="Tentative Budget"
-                  name="budget"
-                  autoComplete="budget"
+                <SearchLocationInput
+                  name="destination"
+                  setLocation={handleChange}
+                  label="Destination"
+                  placeholder="Destination"
+                  icon={<RoomIcon color="action" />}
+                  id="destination"
                 />
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    autoComplete="Members"
+                    name="occupancy"
+                    type="number"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    onChange={handleChange}
+                    id="members"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    InputProps={{ inputProps: { min: 0, max: 10 } }}
+                    label="Group Members"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    onChange={handleChange}
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="budget"
+                    label="Tentative Budget"
+                    name="budget"
+                    autoComplete="budget"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    onChange={handleChange}
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="journey-name"
+                    label="Roadtrip name"
+                    name="name"
+                    autoComplete="name"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={<Checkbox value="editable" color="primary" />}
+                    label="I want to allow other members of the journey to update it."
+                    name="editable"
+                    onChange={handleChange}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  onChange={handleChange}
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="journey-name"
-                  label="Roadtrip name"
-                  name="name"
-                  autoComplete="name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="editable" color="primary" />}
-                  label="I want to allow other members of the journey to update it."
-                  name="editable"
-                  onChange={handleChange}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Plan your Journey
-            </Button>
-          </form>
-        </div>
-      </Container>
-    </>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Plan your Journey
+              </Button>
+            </form>
+          </div>
+      </Grid>
+      </Grid>
+    </Container>
   );
 }
 
