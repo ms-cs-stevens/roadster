@@ -49,7 +49,7 @@ const formReducer = (state, event) => {
 function CreateJourney() {
   const history = useHistory();
   const classes = useStyles();
-  const [formData, setFormData] = useReducer(formReducer, { editable: false, checkpoints: [] });
+  const [formData, setFormData] = useReducer(formReducer, { editable: false });
   const [submitting, setSubmitting] = useState(false);
   const { handleSubmit, control } = useForm();
 
@@ -107,7 +107,7 @@ function CreateJourney() {
       <CssBaseline />
       <Grid container spacing={4}>
         <Grid item md={7} xs={12}>
-          <Map journey={formData} setDistanceTime={setDistanceTime} />
+          <Map journey={{origin: formData.origin, destination: formData.destination, checkpoints: []}} setDistanceTime={setDistanceTime} />
         </Grid>
         <Grid item md={5} xs={12}>
           <div className={classes.paper}>

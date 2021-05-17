@@ -5,9 +5,25 @@ import { useState } from "react";
 const Map = ({ journey, setDistanceTime }) => {
   const [directions, setDirection] = useState(null);
 
+  function computeTotalDistance(result) {
+    var totalDist = 0;
+    var totalTime = 0;
+    var myroute = result.routes[0];
+    for (var i = 0; i < myroute.legs.length; i++) {
+      totalDist += myroute.legs[i].distance.value;
+      totalTime += myroute.legs[i].duration.value;
+    }
+    setDistanceTime({
+      totalDist: Math.round(totalDist / 1609.34) + " miles",
+      totalTime: Math.round(totalTime / 3600) + " hrs",
+    });
+  }
+
+  const DirectionsService = new window.google.maps.DirectionsService();
+
   useEffect(() => {
     let origin = journey.origin;
-    let end = journey.destination;
+    let destination = journey.destination;
     let checkpoints = [
       {
         location: "Rockleigh, New Jersey 07647",
@@ -27,39 +43,25 @@ const Map = ({ journey, setDistanceTime }) => {
       },
     ];
 
-    function computeTotalDistance(result) {
-      var totalDist = 0;
-      var totalTime = 0;
-      var myroute = result.routes[0];
-      for (var i = 0; i < myroute.legs.length; i++) {
-        totalDist += myroute.legs[i].distance.value;
-        totalTime += myroute.legs[i].duration.value;
-      }
-      setDistanceTime({
-        totalDist: Math.round(totalDist / 1609.34) + " miles",
-        totalTime: Math.round(totalTime / 3600) + " hrs",
-      });
-    }
-
-    const DirectionsService = new window.google.maps.DirectionsService();
-
-    DirectionsService.route(
-      {
-        origin: origin,
-        destination: end,
-        waypoints: checkpoints,
-        optimizeWaypoints: true,
-        travelMode: window.google.maps.TravelMode.DRIVING,
-      },
-      (result, status) => {
-        if (status === window.google.maps.DirectionsStatus.OK) {
-          setDirection(result);
-          computeTotalDistance(result);
-        } else {
-          console.error(`error fetching directions ${result}`);
+    if(origin && destination) {
+      DirectionsService.route(
+        {
+          origin: origin,
+          destination: destination,
+          waypoints: checkpoints,
+          optimizeWaypoints: true,
+          travelMode: window.google.maps.TravelMode.DRIVING,
+        },
+        (result, status) => {
+          if (status === window.google.maps.DirectionsStatus.OK) {
+            setDirection(result);
+            computeTotalDistance(result);
+          } else {
+            console.error(`error fetching directions ${result}`);
+          }
         }
-      }
-    );
+      );
+    }
   }, [journey]);
 
   const mapStyles = {
