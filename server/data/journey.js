@@ -50,6 +50,15 @@ async function editJourney(journeyData) {
   return journeyObject(updateInfo);
 }
 
+async function addCheckpoints(id, checkpoints) {
+  let updateInfo = await Journey.findOneAndUpdate(
+    { _id: id },
+    { $addToSet: { checkpoints: { $each: checkpoints } } }
+  );
+
+  return journeyObject(updateInfo);
+}
+
 async function getAllUserJourneys(userId) {
   const journeys = await Journey.find()
     .or([{ creatorId: userId }, { users: { $all: [userId] } }])
@@ -61,7 +70,9 @@ async function getAllUserJourneys(userId) {
 }
 
 async function getAllJourneys() {
-  const journeys = await Journey.find({});
+  const journeys = await Journey.find({}).sort({
+    createdAt: "desc",
+  });
   return journeys.map((journey) => journeyObject(journey));
 }
 
@@ -87,4 +98,5 @@ module.exports = {
   getPendingJourneys,
   getAllJourneys,
   updateImage,
+  addCheckpoints,
 };

@@ -49,22 +49,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const JourneyTimeline = (props) => {
+const JourneyTimeline = ({ journey }) => {
   const classes = useStyles();
-  const journey = props.journey;
-
-  const checkPoints = [
-    "New york",
-    "Long Island",
-    "Buffalo",
-    "New york",
-    "Long Island",
-  ];
 
   const buildTimeline = () => {
     let timeline =
-      checkPoints.length > 0 &&
-      checkPoints.map((checkpoint, i) => {
+      journey.checkpoints.length > 0 &&
+      journey.checkpoints.map((checkpoint, i) => {
         return (
           <TimelineItem key={checkpoint + i} style={{ minHeight: "50px" }}>
             <TimelineOppositeContent
@@ -75,7 +66,7 @@ const JourneyTimeline = (props) => {
               <TripOriginIcon color="action" fontSize="small" />
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>{checkpoint}</TimelineContent>
+            <TimelineContent>{checkpoint.formattedAddress}</TimelineContent>
           </TimelineItem>
         );
       });

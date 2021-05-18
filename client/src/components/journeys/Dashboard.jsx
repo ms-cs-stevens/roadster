@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -23,12 +23,13 @@ import InfoCard from "./InfoCard.jsx";
 import Members from "./Members";
 import Description from "./Description";
 import Map from "./Map.jsx";
-import TimeLine from "./Timeline.jsx";
+import Checkpoints from "./ShowCheckpoints.jsx";
 import apiService from "../../services/apiService";
 import Chat from "./Chat";
 
 const Dashboard = () => {
   const { id } = useParams();
+  const history = useHistory();
   const [journey, setJourney] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [routeProperty, setRouteProperty] = useState({
@@ -64,6 +65,10 @@ const Dashboard = () => {
     });
   };
 
+  const goToEdit = () => {
+    history.push(`/journeys/${journey._id}/edit`);
+  }
+
   if (loading) {
     return "Loading";
   } else {
@@ -93,7 +98,7 @@ const Dashboard = () => {
                   aria-label="text primary button group"
                 >
                   <Button
-                    onClick={generatePdf}
+                    onClick={goToEdit}
                     color="primary"
                     variant="outlined"
                   >
@@ -155,7 +160,7 @@ const Dashboard = () => {
                 <Map journey={journey} setDistanceTime={setDistanceTime} />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
-                <TimeLine journey={journey} />
+                <Checkpoints journey={journey} />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
                 <Members journey={journey} />
