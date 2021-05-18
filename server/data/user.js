@@ -49,7 +49,8 @@ async function updateUser(id, userPayload) {
     let user = await getUser(id);
     if (
       user.firstName === userPayload.firstName &&
-      user.lastName === userPayload.lastName
+      user.lastName === userPayload.lastName &&
+      user.profileImage === userPayload.profileImage
     ) {
       throw new Error("Nothing to update");
     }

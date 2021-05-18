@@ -15,6 +15,7 @@ async function updateUserName(id, data) {
   let updatedUser = await apiService.editResource(`users/${id}/update`, {
     firstName: data.firstName,
     lastName: data.lastName,
+    profileImage:data.profileImage
   });
   return updatedUser;
 }
