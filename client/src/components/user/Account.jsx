@@ -96,7 +96,7 @@ function Account() {
     if (socialUser) {
       return false;
     }
-    if (data.firstName !== user.firstName || data.lastName !== user.lastName) {
+    if (data.firstName !== user.firstName || data.lastName !== user.lastName || images!==user.profileImage) {
       data.profileImage=images;
       console.log(data);
       try {
@@ -244,17 +244,17 @@ function Account() {
         </Helmet>
         <CssBaseline />
         <div className={classes.paper}>
+        <CloudinaryContext cloudName="dhpq62sqc">
           <Avatar
             alt={user.firstName}
             src={user.profileImage}
             className={classes.avatar}
           >
             {user.firstName[0] + user.lastName[0]}
-
-            <CloudinaryContext cloudName="dhpq62sqc">
             
-            <button onClick={() => beginUpload()}>Choose Images</button>
-            <section>
+
+            
+                   
             <Image
               key={images}
               publicId={images}
@@ -262,10 +262,9 @@ function Account() {
               quality="auto"
             />
             
-            </section>
-            
-          </CloudinaryContext>
           </Avatar>
+          <button onClick={() => beginUpload()}>Choose Profile Pic</button>
+          </CloudinaryContext>
           <br />
           <Typography component="h1" variant="h5">
             {user ? user.firstName + " " + user.lastName : ""}'s Profile

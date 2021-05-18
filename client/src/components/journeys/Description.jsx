@@ -13,6 +13,7 @@ import apiService from "../../services/apiService";
 
 const InfoCard = ({ journey }) => {
   const [images, setImages] = useState([]);
+  const [journeyImages, setJourneyImages] = useState(null);
   
 
   const beginUpload = tag => {
@@ -39,6 +40,8 @@ const InfoCard = ({ journey }) => {
 
   const saveImages =async ()=>{
   
+  
+
     try {
       const data = await apiService.editResource("journey/updateImage/PYt1uhPaZrjSI87Zk-FuF", {
         imageArray:images
@@ -49,13 +52,19 @@ const InfoCard = ({ journey }) => {
     }
 }
 
-  useEffect( () => {
+  useEffect(() =>{
     fetchPhotos("image", setImages);
-    console.log("images -->");
-    for(let arr of images){
-      console.log("arr-0" + arr);
+  },[]);
+
+  useEffect( () => {
+  async function fetchJourney() {
+      let data = await apiService.getResource(`journeys/PYt1uhPaZrjSI87Zk-FuF`);
+      setImages(data.images);
+      setJourneyImages(data.images);
     }
-  }, [])
+    fetchJourney();
+    
+  }, [journey])
 
   if (journey) {
     return (
