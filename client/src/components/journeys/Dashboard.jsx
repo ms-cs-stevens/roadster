@@ -23,7 +23,7 @@ import InfoCard from "./InfoCard.jsx";
 import Members from "./Members";
 import Description from "./Description";
 import Map from "./Map.jsx";
-import TimeLine from "./Timeline.jsx";
+import Checkpoints from "./ShowCheckpoints.jsx";
 import apiService from "../../services/apiService";
 import Chat from "./Chat";
 
@@ -160,7 +160,7 @@ const Dashboard = () => {
                 <Map journey={journey} setDistanceTime={setDistanceTime} />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
-                <TimeLine journey={journey} />
+                <Checkpoints journey={journey} />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
                 <Members journey={journey} />

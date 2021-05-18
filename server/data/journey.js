@@ -70,7 +70,9 @@ async function getAllUserJourneys(userId) {
 }
 
 async function getAllJourneys() {
-  const journeys = await Journey.find({});
+  const journeys = await Journey.find({}).sort({
+    createdAt: "desc",
+  });
   return journeys.map((journey) => journeyObject(journey));
 }
 
