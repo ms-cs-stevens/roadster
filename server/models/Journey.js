@@ -66,8 +66,7 @@ const journeySchema = new Schema(
     ],
     checkpoints: [
       {
-        type: String,
-        ref: "Checkpoint",
+        type: locationSchema,
       },
     ],
   },

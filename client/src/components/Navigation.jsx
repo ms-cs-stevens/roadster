@@ -77,18 +77,18 @@ export default function Navigation() {
             <Button
               style={{ color: "#fff" }}
               component={NavLink}
-              to={"/journeys"}
+              to="/journeys/new"
             >
-              Journeys
+              Plan Your Journey
             </Button>
           )}
           {currentUser && (
             <Button
               style={{ color: "#fff" }}
               component={NavLink}
-              to="/journeys/new"
+              to={"/journeys"}
             >
-              Plan Your Journey
+              Journeys
             </Button>
           )}
           {currentUser && (

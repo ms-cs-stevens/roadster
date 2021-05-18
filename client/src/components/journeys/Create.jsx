@@ -72,12 +72,8 @@ function CreateJourney() {
       console.log(e);
       // TODO: set error on form
       alert("Provide correct values");
-      setSubmitting(false);
     }
-
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 3000);
+    setSubmitting(false);
   };
 
   const handleChange = (event) => {
@@ -112,6 +108,7 @@ function CreateJourney() {
             )}
             <form className={classes.form} onSubmit={handleSubmit(handleFormSubmit)}>
               <Grid container spacing={2}>
+              <Grid item xs={12}>
                 <SearchLocationInput
                   name="origin"
                   label="Origin"
@@ -120,6 +117,8 @@ function CreateJourney() {
                   id="origin"
                   icon={<TripOriginIcon color="action" fontSize="small" />}
                 />
+                </Grid>
+                <Grid item xs={12}>
                 <SearchLocationInput
                   name="destination"
                   setLocation={handleChange}
@@ -128,6 +127,7 @@ function CreateJourney() {
                   icon={<RoomIcon color="action" />}
                   id="destination"
                 />
+                </Grid>
                 <Grid item xs={12} sm={6}>
                 <Controller
                   name="occupancy"

@@ -24,23 +24,18 @@ const Map = ({ journey, setDistanceTime }) => {
   useEffect(() => {
     let origin = journey.origin;
     let destination = journey.destination;
-    let checkpoints = [
-      {
-        location: "Rochester",
-        stopover: true,
-      },
-      {
-        location: "Newark",
-        stopover: true,
-      },
-    ];
+    let waypoints = [];
+    journey.checkpoints.map((cp) => waypoints.push({
+      location: (new window.google.maps.LatLng(cp.lat,cp.lng)),
+      stopover: true
+    }))
 
     if (origin && destination) {
       DirectionsService.route(
         {
           origin: origin,
           destination: destination,
-          waypoints: checkpoints,
+          waypoints: waypoints,
           optimizeWaypoints: true,
           travelMode: window.google.maps.TravelMode.DRIVING,
         },
@@ -56,8 +51,8 @@ const Map = ({ journey, setDistanceTime }) => {
     }
   }, [journey]);
 
-  const mapStyles = {
-    height: "90vh",
+  const mapContainerStyles = {
+    height: "100vh",
     width: "100%",
   };
 
@@ -68,7 +63,7 @@ const Map = ({ journey, setDistanceTime }) => {
 
   return (
     <div>
-      <GoogleMap mapContainerStyle={mapStyles} zoom={6} center={jerseyCity}>
+      <GoogleMap mapContainerStyle={mapContainerStyles} zoom={6} center={jerseyCity}>
         {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
     </div>
