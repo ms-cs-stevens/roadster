@@ -2,7 +2,7 @@ import React, {useContext} from "react";
 
 import { AuthContext } from "../firebase/Auth";
 import CreateJourney from "./journeys/Create";
-import Login from "./users/Login";
+import Login from "./user/SignIn";
 
 const Landing = () => {
   const { currentUser } = useContext(AuthContext);
