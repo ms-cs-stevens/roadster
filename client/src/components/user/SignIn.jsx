@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,6 +15,7 @@ import { AuthContext } from "../../firebase/Auth";
 import { emailSignIn, passwordReset } from "../../firebase/firebaseFunctions";
 import SocialSignIn from "./SocialSignIn";
 import banner from "../../images/sign-in-page.jpg";
+import { useForm, Controller } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,20 +48,41 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  warningStyles: {
+    "& .MuiFormLabel-root.Mui-error": {
+      color: "#e72400 !important",
+    },
+    "& .MuiInput-underline.Mui-error:after": {
+      borderBottomColor: "#e72400 !important",
+    },
+    "& .MuiFormHelperText-root.Mui-error": {
+      color: "#e72400 !important",
+    },
+  },
 }));
 
 export default function SignInSide() {
   const classes = useStyles();
+  const [additionalError, setAdditionalError] = useState("");
+  const { handleSubmit, control } = useForm();
 
   const { currentUser } = useContext(AuthContext);
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    const { email, password } = event.target.elements;
-
+  const handleLogin = async (values) => {
+    const { email, password } = values;
     try {
-      await emailSignIn(email.value, password.value);
-    } catch (error) {
-      alert("Invalid Email or Password");
+      await emailSignIn(email, password);
+    } catch (additionalError) {
+      if (
+        [
+          "auth/wrong-password",
+          "auth/invalid-email",
+          "auth/user-not-found",
+        ].includes(additionalError.code)
+      ) {
+        setAdditionalError("Invalid email or password");
+      } else {
+        setAdditionalError(additionalError.message);
+      }
     }
   };
 
@@ -71,7 +93,7 @@ export default function SignInSide() {
       passwordReset(email);
       alert("Password reset email was sent");
     } else {
-      alert(
+      setAdditionalError(
         "Please enter an email address below before you click the forgot password link"
       );
     }
@@ -93,31 +115,72 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
+            Welcome to Roadster
+          </Typography>
+          <Typography component="h2" style={{ color: "#333" }} variant="h6">
             What&apos;s your email and password?
           </Typography>
-          <form className={classes.form} onSubmit={handleLogin} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+          <Typography
+            variant="caption"
+            style={{ color: "#ee0000" }}
+            color="secondary"
+          >
+            {additionalError}
+          </Typography>
+          <form
+            className={classes.form}
+            onSubmit={handleSubmit(handleLogin)}
+            noValidate
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="Email"
+                      id="email"
+                      className={error ? classes.warningStyles : null}
+                      variant="outlined"
+                      value={value}
+                      fullWidth
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "Email is required" }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Controller
+                  name="password"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      label="Password"
+                      variant="outlined"
+                      value={value}
+                      className={error ? classes.warningStyles : null}
+                      fullWidth
+                      type="password"
+                      id="password"
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                    />
+                  )}
+                  rules={{ required: "Password is required" }}
+                />
+              </Grid>
+            </Grid>
 
             <Button
               type="submit"

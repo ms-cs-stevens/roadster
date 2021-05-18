@@ -53,6 +53,17 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  warningStyles: {
+    "& .MuiFormLabel-root.Mui-error": {
+      color: "#e72400 !important",
+    },
+    "& .MuiInput-underline.Mui-error:after": {
+      borderBottomColor: "#e72400 !important",
+    },
+    "& .MuiFormHelperText-root.Mui-error": {
+      color: "#e72400 !important",
+    },
+  },
 }));
 
 export default function SignInSide() {
@@ -121,6 +132,7 @@ export default function SignInSide() {
                       label="First Name"
                       id="firstName"
                       variant="outlined"
+                      className={error ? classes.warningStyles : null}
                       value={value}
                       fullWidth
                       onChange={onChange}
@@ -143,6 +155,7 @@ export default function SignInSide() {
                       label="Last Name"
                       id="lastName"
                       variant="outlined"
+                      className={error ? classes.warningStyles : null}
                       value={value}
                       fullWidth
                       onChange={onChange}
@@ -165,6 +178,7 @@ export default function SignInSide() {
                       label="Email"
                       id="email"
                       variant="outlined"
+                      className={error ? classes.warningStyles : null}
                       value={value}
                       fullWidth
                       onChange={onChange}
@@ -186,6 +200,7 @@ export default function SignInSide() {
                     <TextField
                       label="Password"
                       variant="outlined"
+                      className={error ? classes.warningStyles : null}
                       value={value}
                       fullWidth
                       type="password"
@@ -209,6 +224,7 @@ export default function SignInSide() {
                     <TextField
                       label="Password Confirmation"
                       variant="outlined"
+                      className={error ? classes.warningStyles : null}
                       value={value}
                       fullWidth
                       type="password"

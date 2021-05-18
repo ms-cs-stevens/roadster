@@ -15,7 +15,7 @@ async function updateUserName(id, data) {
   let updatedUser = await apiService.editResource(`users/${id}/update`, {
     firstName: data.firstName,
     lastName: data.lastName,
-    profileImage:data.profileImage
+    profileImage: data.profileImage,
   });
   return updatedUser;
 }
@@ -52,7 +52,11 @@ async function changePassword(email, oldPassword, newPassword) {
 }
 
 async function emailSignIn(email, password) {
-  await firebase.auth().signInWithEmailAndPassword(email, password);
+  try {
+    await firebase.auth().signInWithEmailAndPassword(email, password);
+  } catch (e) {
+    throw e;
+  }
 }
 
 async function socialSignIn(provider) {
