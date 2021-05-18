@@ -84,7 +84,7 @@ async function searchUser(searchData) {
 
   if (searchData.name !== undefined) {
     vname = new RegExp(searchData.name.toLowerCase());
-    users = await User.find({ email: vemailId });
+    users = await User.find({ fullname: vname });
   } else if (searchData.email !== undefined) {
     vemailId = new RegExp(searchData.email.toLowerCase());
     users = await User.find({ email: vemailId });
