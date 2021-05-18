@@ -1,19 +1,25 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useFirestoreQuery } from "../hooks";
-import { formatRelative } from "date-fns";
-import { Divider, makeStyles, Paper, List } from "@material-ui/core";
-import "firebase/firestore";
-import firebaseApp from "../../firebase/firebaseApp";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
-import { ListItemAvatar } from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import {
+  Divider,
+  makeStyles,
+  Paper,
+  List,
+  ListItemText,
+  Avatar,
+  Grid,
+  ListItemAvatar,
+  TextField,
+  ListItem,
+  Fab,
+} from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import ChatIcon from "@material-ui/icons/Chat";
 import { deepPurple } from "@material-ui/core/colors";
+import { AuthContext } from "../../firebase/Auth";
+import { useFirestoreQuery } from "../hooks";
+import { formatRelative } from "date-fns";
+import "firebase/firestore";
+import firebaseApp from "../../firebase/firebaseApp";
 
 const useStyles = makeStyles({
   chatSection: {
@@ -34,27 +40,32 @@ const useStyles = makeStyles({
   },
 });
 
-const Chat = ({ data, db = firebaseApp.firestore() }) => {
+function Chat({ journey, db = firebaseApp.firestore() }) {
+  const { currentUser } = useContext(AuthContext);
+  let data = currentUser;
+  data.journeyId = journey._id;
   const classes = useStyles();
-  const messagesRef = db.collection("messages");
+  const messages = db.collection("messages");
   const [showChat, setShowChat] = useState(false);
-  let allComments = useFirestoreQuery(messagesRef.orderBy("createdAt", "asc"));
+  let allMessages = useFirestoreQuery(
+    messages.orderBy("createdAt", "asc").limit(100)
+  );
 
-  const comments = allComments.filter(function jId(comment) {
+  const inputRef = useRef();
+  const messagesEndRef = useRef();
+  const { displayName, journeyId } = data;
+
+  const comments = allMessages.filter(function jId(comment) {
     return comment.journeyId === data.journeyId;
   });
 
   const [newComment, setNewComment] = useState("");
 
-  const inputRef = useRef();
-  const { displayName, journeyId } = data;
-
   useEffect(() => {
-    db.collection("messages").orderBy("createdAt").limit(100);
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [inputRef, db]);
+  }, [inputRef, messages]);
 
   const handleOnChange = (e) => {
     setNewComment(e.target.value);
@@ -66,11 +77,15 @@ const Chat = ({ data, db = firebaseApp.firestore() }) => {
     if (db) {
       const trimmed = newComment.trim();
       if (trimmed) {
-        messagesRef.add({
+        messages.add({
           content: trimmed,
           username: displayName,
           journeyId: journeyId,
           createdAt: new Date(),
+        });
+        messagesEndRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
         });
         setNewComment("");
       }
@@ -150,7 +165,10 @@ const Chat = ({ data, db = firebaseApp.firestore() }) => {
           className={classes.chatSection}
         >
           <Grid item sm={12}>
-            <List className={classes.messageArea}>{renderComments()}</List>
+            <List className={classes.messageArea}>
+              {renderComments()}
+              <div ref={messagesEndRef} />
+            </List>
             <Divider />
             <Grid container style={{ padding: "20px" }}>
               <Grid item xs={11}>
@@ -175,6 +193,6 @@ const Chat = ({ data, db = firebaseApp.firestore() }) => {
       )}
     </div>
   );
-};
+}
 
 export default Chat;
