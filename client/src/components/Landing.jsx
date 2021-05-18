@@ -1,22 +1,13 @@
 import React, {useContext} from "react";
 
 import { AuthContext } from "../firebase/Auth";
-import {Redirect} from 'react-router-dom'
-//import CreateJourney from "./journeys/Create"
+import CreateJourney from "./journeys/Create";
+import Login from "./users/Login";
 
 const Landing = () => {
   const { currentUser } = useContext(AuthContext);
-  
-  if(currentUser) {
-    return(
-      <Redirect to="/journeys/new"/>
-    )
-  }
-  else{
-    return(
-      <Redirect to="/login"/>
-    )
-  }
+  if(currentUser) return  <CreateJourney />
+  else  return  <Login /> 
 };
 
 export default Landing;
