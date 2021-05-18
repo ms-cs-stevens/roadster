@@ -76,7 +76,7 @@ async function updateImage(id, imagesArray) {
     { $set: { images: imagesArray } }
   );
 
-  return getgetJourney(id);
+  return getJourney(id);
 }
 
 module.exports = {

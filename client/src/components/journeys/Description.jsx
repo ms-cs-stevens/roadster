@@ -15,45 +15,39 @@ const InfoCard = ({ journey }) => {
   const [images, setImages] = useState([]);
   
 
-  const beginUpload = async tag => {
+  const beginUpload = tag => {
     const uploadOptions = {
       cloudName: "dhpq62sqc",
       tags: [tag],
       uploadPreset: "juawc70d"
     };
   
-    let flag=false;
-    console.log(flag);
-    openUploadWidget(uploadOptions, async (error, photos) => {
+   
+    
+    openUploadWidget(uploadOptions, (error, photos) => {
       if (!error) {
         console.log("photos=" + photos);
         if(photos.event === 'success'){
          setImages([...images, photos.info.public_id])
-         flag=true;
         }
-        if(flag){
-        await setDatatoDB();
-        flag=false;
-        }
+   
       } else {
         console.log(error);
       }
     })
-    async function setDatatoDB()
-    {
+  }
+
+  const saveImages =async ()=>{
+  
     try {
       const data = await apiService.editResource("journey/updateImage/PYt1uhPaZrjSI87Zk-FuF", {
         imageArray:images
       });
-      flag=false;
     } catch (e) {
       console.log(e);
       alert("Provide correct values");
     }
-
 }
-    
-  }
 
   useEffect( () => {
     fetchPhotos("image", setImages);
@@ -102,9 +96,10 @@ const InfoCard = ({ journey }) => {
               Images
             </Typography>
             <Typography  component="h2" variant="h6">
+
             <CloudinaryContext cloudName="dhpq62sqc">
             
-            <button onClick={() => beginUpload()}>Upload Image</button>
+            <button onClick={() => beginUpload()}>Choose Images</button>
             <section>
             {images.map(i => <Image
               key={i}
@@ -115,6 +110,7 @@ const InfoCard = ({ journey }) => {
             </section>
             
           </CloudinaryContext>
+          <button onClick={saveImages}>Save Images</button>
           
               </Typography>
           </Box>
