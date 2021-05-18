@@ -15,6 +15,9 @@ const userSchema = new Schema(
       type: String,
       required: [true, "You must provide a lastname"],
     },
+    fullName: {
+      type: String,
+    },
     profileImage: {
       type: String,
     },

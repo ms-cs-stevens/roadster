@@ -64,4 +64,14 @@ module.exports = {
       res.status(404).json({ error: "User not found" });
     }
   },
+
+  async searchUser(req, res) {
+    try {
+      const users = await userData.searchUser(req.body);
+      res.json(users);
+    } catch (e) {
+      console.log(e);
+      res.status(404).json({ error: "Users not found" });
+    }
+  },
 };
