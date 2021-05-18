@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -29,6 +29,7 @@ import Chat from "./Chat";
 
 const Dashboard = () => {
   const { id } = useParams();
+  const history = useHistory();
   const [journey, setJourney] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [routeProperty, setRouteProperty] = useState({
@@ -64,6 +65,10 @@ const Dashboard = () => {
     });
   };
 
+  const goToEdit = () => {
+    history.push(`/journeys/${journey._id}/edit`);
+  }
+
   if (loading) {
     return "Loading";
   } else {
@@ -93,7 +98,7 @@ const Dashboard = () => {
                   aria-label="text primary button group"
                 >
                   <Button
-                    onClick={generatePdf}
+                    onClick={goToEdit}
                     color="primary"
                     variant="outlined"
                   >

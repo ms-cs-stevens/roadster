@@ -24,23 +24,32 @@ const Map = ({ journey, setDistanceTime }) => {
   useEffect(() => {
     let origin = journey.origin;
     let destination = journey.destination;
-    let checkpoints = [
-      {
-        location: "Rochester",
-        stopover: true,
-      },
-      {
-        location: "Newark",
-        stopover: true,
-      },
-    ];
+    console.log("map", journey.checkpoints)
+    // let checkpoints = [
+    //   {
+    //     location: "Rockleigh, New Jersey 07647",
+    //     stopover: true,
+    //   },
+    //   {
+    //     location: "West new york",
+    //     stopover: true,
+    //   },
+    //   {
+    //     location: "Hoboken",
+    //     stopover: true,
+    //   },
+    //   {
+    //     location: "Newark",
+    //     stopover: true,
+    //   },
+    // ];
 
     if (origin && destination) {
       DirectionsService.route(
         {
           origin: origin,
           destination: destination,
-          waypoints: checkpoints,
+          waypoints: journey.checkpoints,
           optimizeWaypoints: true,
           travelMode: window.google.maps.TravelMode.DRIVING,
         },
@@ -54,10 +63,10 @@ const Map = ({ journey, setDistanceTime }) => {
         }
       );
     }
-  }, [journey]);
+  }, [journey.checkpoints]);
 
-  const mapStyles = {
-    height: "90vh",
+  const mapContainerStyles = {
+    height: "100vh",
     width: "100%",
   };
 
@@ -68,7 +77,7 @@ const Map = ({ journey, setDistanceTime }) => {
 
   return (
     <div>
-      <GoogleMap mapContainerStyle={mapStyles} zoom={6} center={jerseyCity}>
+      <GoogleMap mapContainerStyle={mapContainerStyles} zoom={6} center={jerseyCity}>
         {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
     </div>

@@ -81,6 +81,7 @@ function CreateJourney() {
   };
 
   const handleChange = (event) => {
+    console.log(event.details)
     setJourney({
       name: event.target.name,
       value: (event.detail && event.detail.location) || event.target.value,
@@ -112,6 +113,7 @@ function CreateJourney() {
             )}
             <form className={classes.form} onSubmit={handleSubmit(handleFormSubmit)}>
               <Grid container spacing={2}>
+              <Grid item xs={12}>
                 <SearchLocationInput
                   name="origin"
                   label="Origin"
@@ -120,6 +122,8 @@ function CreateJourney() {
                   id="origin"
                   icon={<TripOriginIcon color="action" fontSize="small" />}
                 />
+                </Grid>
+                <Grid item xs={12}>
                 <SearchLocationInput
                   name="destination"
                   setLocation={handleChange}
@@ -128,6 +132,7 @@ function CreateJourney() {
                   icon={<RoomIcon color="action" />}
                   id="destination"
                 />
+                </Grid>
                 <Grid item xs={12} sm={6}>
                 <Controller
                   name="occupancy"
