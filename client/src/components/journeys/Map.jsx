@@ -25,8 +25,10 @@ const Map = ({ journey, setDistanceTime }) => {
     let origin = journey.origin;
     let destination = journey.destination;
     let waypoints = [];
-    console.log(journey.checkpoints)
-    journey.checkpoints.map((cp) => waypoints.push({location: (new window.google.maps.LatLng(cp.lat,cp.lng)), stopover: true}))
+    journey.checkpoints.map((cp) => waypoints.push({
+      location: (new window.google.maps.LatLng(cp.lat,cp.lng)),
+      stopover: true
+    }))
 
     if (origin && destination) {
       DirectionsService.route(

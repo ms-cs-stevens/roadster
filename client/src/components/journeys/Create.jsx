@@ -77,7 +77,6 @@ function CreateJourney() {
   };
 
   const handleChange = (event) => {
-    console.log(event.details)
     setJourney({
       name: event.target.name,
       value: (event.detail && event.detail.location) || event.target.value,
