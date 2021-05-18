@@ -6,8 +6,82 @@ import {
   Divider,
   Typography,
 } from "@material-ui/core";
+import React, {useState,useEffect} from 'react';
+import { CloudinaryContext,Image } from "cloudinary-react";
+import { fetchPhotos, openUploadWidget } from "../../services/CloudinaryService";
+import apiService from "../../services/apiService";
+import axios from "axios";
 
 const InfoCard = ({ journey }) => {
+  const [images, setImages] = useState([]);
+  const [journeyImages, setJourneyImages] = useState(null);
+  const [imageCounter, setImageCounter] = useState(0);
+  
+
+  const beginUpload = tag => {
+    console.log(tag);
+    const uploadOptions = {
+      cloudName: "dhpq62sqc",
+      tags: [tag],
+      uploadPreset: "juawc70d"
+    };
+  
+   
+    
+    openUploadWidget(uploadOptions, async (error, photos) => {
+     
+        if (!error) {
+        console.log("photos=" + photos);
+        setImageCounter(imageCounter+1);
+        /*if(photos.event === 'success'){
+         setImages([...images, photos.info.public_id])
+        }*/
+        
+   
+      } else {
+        console.log(error);
+      }
+    })
+  }
+
+  const saveImages =async ()=>{
+   
+    let arrImage=[]
+    try{
+      const data = await axios.get("https://res.cloudinary.com/dhpq62sqc/image/list/"+journey._id+".json");
+      console.log(data.data.resources);
+      for(let arr of data.data.resources){
+      arrImage.push(arr.public_id)
+      }
+      setImages(arrImage);
+    }
+      catch(e){
+        
+        console.log("No Images Found");
+      }
+
+    try {
+      const data = await apiService.editResource(`journey/updateImage/${journey._id}`, {
+        imageArray:arrImage
+      });
+      alert("Images Saved Successfully");
+    } catch (e) {
+      console.log(e);
+      alert("Provide correct values");
+    }
+  }
+
+
+  useEffect( () => {
+  async function fetchJourney() {
+      let data = await apiService.getResource(`journeys/${journey._id}`);
+      setImages(data.images);
+      setJourneyImages(data.images);
+    }
+    fetchJourney();
+    
+  }, [journey])
+
   if (journey) {
     return (
       <Card>
@@ -46,7 +120,25 @@ const InfoCard = ({ journey }) => {
             <Typography component="h2" variant="h6">
               Images
             </Typography>
-            <Typography>Show images here ....</Typography>
+            <Typography  component="h2" variant="h6">
+
+            <CloudinaryContext cloudName="dhpq62sqc">
+            
+            <button onClick={() => beginUpload(journey._id)}>Choose Images</button>
+            <button onClick={saveImages}>Save Images</button>
+            <section>
+            {images.map(i => <Image
+              key={i}
+              publicId={i}
+              fetch-format="auto"
+              quality="auto"
+            />)}
+            </section>
+            
+          </CloudinaryContext>
+          
+          
+              </Typography>
           </Box>
         </CardContent>
       </Card>

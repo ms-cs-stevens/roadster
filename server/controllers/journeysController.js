@@ -84,4 +84,17 @@ module.exports = {
       res.sendStatus(500);
     }
   },
+
+  async updateImage(req, res) {
+    try {
+      const journeyData = await journey.updateImage(
+        req.params.id,
+        req.body.imageArray
+      );
+      res.json(journeyData);
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(500);
+    }
+  },
 };

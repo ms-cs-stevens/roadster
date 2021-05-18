@@ -10,6 +10,11 @@ router.get("/journeys", authMiddleware, journeysController.index);
 router.get("/journeys/:id", authMiddleware, journeysController.show);
 router.post("/journeys", authMiddleware, journeysController.create);
 router.put("/journeys/:id", authMiddleware, journeysController.edit);
+router.patch(
+  "/journey/updateImage/:id",
+  authMiddleware,
+  journeysController.updateImage
+);
 
 // user's routes
 router.get("/users", authMiddleware, usersController.index);

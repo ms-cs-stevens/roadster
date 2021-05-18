@@ -70,6 +70,15 @@ async function getPendingJourneys() {
   return journeys.map((journey) => journeyObject(journey));
 }
 
+async function updateImage(id, imagesArray) {
+  let updateInfo = await Journey.findOneAndUpdate(
+    { _id: id },
+    { $set: { images: imagesArray } }
+  );
+
+  return getJourney(id);
+}
+
 module.exports = {
   createJourney,
   getJourney,
@@ -77,4 +86,5 @@ module.exports = {
   getAllUserJourneys,
   getPendingJourneys,
   getAllJourneys,
+  updateImage,
 };

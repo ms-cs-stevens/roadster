@@ -5,6 +5,9 @@ import apiService from "../../services/apiService";
 import { NavLink } from "react-router-dom";
 import { updateUserName } from "../../firebase/firebaseFunctions";
 import { useForm, Controller } from "react-hook-form";
+import { CloudinaryContext,Image } from "cloudinary-react";
+import { fetchPhotos, openUploadWidget } from "../../services/CloudinaryService";
+
 
 import {
   Avatar,
@@ -52,13 +55,41 @@ function Account() {
   const [user, setUser] = useState(null);
   const [socialUser, setSocialUser] = useState(false);
   const { handleSubmit, control } = useForm();
+  const [images, setImages] = useState("");
 
+  const beginUpload = tag => {
+    const uploadOptions = {
+      cloudName: "dhpq62sqc",
+      tags: [tag],
+      uploadPreset: "juawc70d"
+    };
+  
+   
+    
+    openUploadWidget(uploadOptions, (error, photos) => {
+      if (!error) {
+        console.log("photos=" + photos);
+        if(photos.event === 'success'){
+         setImages(photos.info.public_id)
+        }
+   
+      } else {
+        console.log(error);
+      }
+    })
+  }
+
+  useEffect(() =>{
+    fetchPhotos("image", setImages);
+  },[]);
+  
   useEffect(() => {
     async function fetchUser() {
       if (currentUser) {
         const user = await apiService.getResource(`users/${currentUser.uid}`);
         setSocialUser(currentUser.providerData[0].providerId !== "password");
         setUser(user);
+        setImages(user.profileImage);
       }
     }
     fetchUser();
@@ -68,7 +99,9 @@ function Account() {
     if (socialUser) {
       return false;
     }
-    if (data.firstName !== user.firstName || data.lastName !== user.lastName) {
+    if (data.firstName !== user.firstName || data.lastName !== user.lastName || images!==user.profileImage) {
+      data.profileImage=images;
+      console.log(data);
       try {
         let updatedUser = await updateUserName(user._id, data);
         console.log(updatedUser);
@@ -84,6 +117,7 @@ function Account() {
       return (
         <Grid container spacing={5}>
           <Grid item xs={6}>
+            
             <TextField
               id="firstName"
               label="First Name"
@@ -129,6 +163,7 @@ function Account() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={5}>
             <Grid item xs={6}>
+
               <Controller
                 name="firstName"
                 control={control}
@@ -212,13 +247,27 @@ function Account() {
         </Helmet>
         <CssBaseline />
         <div className={classes.paper}>
+        <CloudinaryContext cloudName="dhpq62sqc">
           <Avatar
             alt={user.firstName}
             src={user.profileImage}
             className={classes.avatar}
           >
             {user.firstName[0] + user.lastName[0]}
+            
+
+            
+                   
+            <Image
+              key={images}
+              publicId={images}
+              fetch-format="auto"
+              quality="auto"
+            />
+            
           </Avatar>
+          <button onClick={() => beginUpload()}>Choose Profile Pic</button>
+          </CloudinaryContext>
           <br />
           <Typography component="h1" variant="h5">
             {user ? user.firstName + " " + user.lastName : ""}'s Profile
