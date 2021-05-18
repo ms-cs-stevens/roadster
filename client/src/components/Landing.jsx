@@ -1,32 +1,22 @@
-import Helmet from "react-helmet";
-import React from "react";
-import { Grid, makeStyles } from "@material-ui/core";
+import React, {useContext} from "react";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    flexGrow: 1,
-    padding: "0 5em",
-  },
-}));
+import { AuthContext } from "../firebase/Auth";
+import {Redirect} from 'react-router-dom'
+//import CreateJourney from "./journeys/Create"
 
 const Landing = () => {
-  const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <Helmet>
-        <title>Roadster | Home</title>
-      </Helmet>
-      ;
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <h1>Welcome to Roadster</h1>
-        </Grid>
-        <Grid item xs={6}>
-          <h2>Welcome to the landing page. It will be fun. Enjoy your life</h2>
-        </Grid>
-      </Grid>
-    </div>
-  );
+  const { currentUser } = useContext(AuthContext);
+  
+  if(currentUser) {
+    return(
+      <Redirect to="/journeys/new"/>
+    )
+  }
+  else{
+    return(
+      <Redirect to="/login"/>
+    )
+  }
 };
 
 export default Landing;
