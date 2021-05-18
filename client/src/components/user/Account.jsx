@@ -5,11 +5,10 @@ import apiService from "../../services/apiService";
 import { NavLink } from "react-router-dom";
 import { updateUserName } from "../../firebase/firebaseFunctions";
 import { useForm, Controller } from "react-hook-form";
-import { CloudinaryContext, Image } from "cloudinary-react";
-import {
-  fetchPhotos,
-  openUploadWidget,
-} from "../../services/CloudinaryService";
+import { CloudinaryContext } from "cloudinary-react";
+import IconButton from "@material-ui/core/IconButton";
+import PhotoCamera from "@material-ui/icons/PhotoCamera";
+import { openUploadWidget } from "../../services/CloudinaryService";
 
 import {
   Avatar,
@@ -75,23 +74,22 @@ function Account() {
       cloudName: "dhpq62sqc",
       tags: [tag],
       uploadPreset: "juawc70d",
+      cropping: true,
     };
 
     openUploadWidget(uploadOptions, (error, photos) => {
       if (!error) {
         console.log("photos=" + photos);
         if (photos.event === "success") {
-          setImages(photos.info.public_id);
+          setImages(
+            `https://res.cloudinary.com/dhpq62sqc/image/upload/v1621366240/${photos.info.public_id}`
+          );
         }
       } else {
         console.log(error);
       }
     });
   };
-
-  useEffect(() => {
-    fetchPhotos("image", setImages);
-  }, []);
 
   useEffect(() => {
     async function fetchUser() {
@@ -261,23 +259,23 @@ function Account() {
         </Helmet>
         <CssBaseline />
         <div className={classes.paper}>
-          <CloudinaryContext cloudName="dhpq62sqc">
-            <Avatar
-              alt={user.firstName}
-              src={user.profileImage}
-              className={classes.avatar}
+          <Avatar
+            alt={user.firstName}
+            src={user.profileImage}
+            className={classes.avatar}
+          >
+            {user.firstName[0] + user.lastName[0]}
+          </Avatar>
+          {!socialUser && (
+            <IconButton
+              onClick={() => beginUpload()}
+              color="primary"
+              aria-label="upload profile picture picture"
+              component="span"
             >
-              {user.firstName[0] + user.lastName[0]}
-
-              <Image
-                key={images}
-                publicId={images}
-                fetch-format="auto"
-                quality="auto"
-              />
-            </Avatar>
-            <button onClick={() => beginUpload()}>Choose Profile Pic</button>
-          </CloudinaryContext>
+              <PhotoCamera />
+            </IconButton>
+          )}
           <br />
           <Typography component="h1" variant="h5">
             {user ? user.firstName + " " + user.lastName : ""}'s Profile
