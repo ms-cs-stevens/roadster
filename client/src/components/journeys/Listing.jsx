@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import apiService from "../../services/apiService";
 import JourneyCard from "./JourneyCard";
 import { Helmet } from "react-helmet";
-import { NavLink } from "react-router-dom";
 import {
   Grid,
   makeStyles,

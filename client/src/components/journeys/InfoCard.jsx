@@ -13,7 +13,7 @@ const InfoCard = (props) => (
           >
             {props.title}
           </Typography>
-          <Typography color="textPrimary" variant="body">
+          <Typography color="textPrimary" variant="body2">
             {props.value}
           </Typography>
         </Grid>

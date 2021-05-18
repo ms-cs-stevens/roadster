@@ -38,6 +38,17 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  warningStyles: {
+    "& .MuiFormLabel-root.Mui-error": {
+      color: "#e72400 !important",
+    },
+    "& .MuiInput-underline.Mui-error:after": {
+      borderBottomColor: "#e72400 !important",
+    },
+    "& .MuiFormHelperText-root.Mui-error": {
+      color: "#e72400 !important",
+    },
+  },
 }));
 
 function PasswordReset() {
@@ -92,6 +103,7 @@ function PasswordReset() {
                       label="Current Password"
                       variant="outlined"
                       value={value}
+                      className={error ? classes.warningStyles : null}
                       fullWidth
                       type="password"
                       id="newPass"
@@ -115,6 +127,7 @@ function PasswordReset() {
                       label="New Password"
                       variant="outlined"
                       value={value}
+                      className={error ? classes.warningStyles : null}
                       fullWidth
                       type="password"
                       id="newPass"
@@ -138,6 +151,7 @@ function PasswordReset() {
                       label="Password Confirmation"
                       variant="outlined"
                       value={value}
+                      className={error ? classes.warningStyles : null}
                       fullWidth
                       type="password"
                       id="passwordConfirmation"
