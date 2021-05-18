@@ -30,8 +30,7 @@ async function createUser(userInfo) {
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
     email: userInfo.email,
-    fullName:
-      userInfo.firstName.toLowerCase() + userInfo.lastName.toLowerCase(),
+    fullName: userInfo.firstName + userInfo.lastName,
     profileImage: userInfo.profileImage,
   });
 
@@ -58,15 +57,11 @@ async function updateUser(id, userPayload) {
     }
 
     if (userPayload.firstName && userPayload.lastName)
-      userPayload.fullName =
-        userPayload.firstName.toLowerCase() +
-        userPayload.lastName.toLowerCase();
+      userPayload.fullName = userPayload.firstName + userPayload.lastName;
     else if (userPayload.firstName)
-      userPayload.fullName =
-        userPayload.firstName.toLowerCase() + user.lastName.toLowerCase();
+      userPayload.fullName = userPayload.firstName + user.lastName;
     else if (userPayload.lastName)
-      userPayload.lastName =
-        user.firstName.toLowerCase() + userPayload.lastName.toLowerCase();
+      userPayload.lastName = user.firstName + userPayload.lastName;
 
     let updatedUser = await User.findByIdAndUpdate(id, userPayload, {
       new: true,

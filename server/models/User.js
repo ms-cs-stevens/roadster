@@ -18,6 +18,7 @@ const userSchema = new Schema(
     fullName: {
       type: String,
       lowercase: true,
+      index: true,
     },
     profileImage: {
       type: String,
