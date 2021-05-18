@@ -9,7 +9,7 @@ function CommentsBox({ journey }) {
   data.journeyId = journey._id;
 
   const renderContent = () => {
-    if (currentUser) return <Section data={data}/>;
+    if (currentUser) return <Section data={data} />;
 
     return (
       <div>
