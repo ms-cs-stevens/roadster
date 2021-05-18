@@ -79,9 +79,12 @@ function Account() {
     })
   }
 
+  useEffect(() =>{
+    fetchPhotos("image", setImages);
+  },[]);
+  
   useEffect(() => {
     async function fetchUser() {
-      fetchPhotos("image", setImages);
       if (currentUser) {
         const user = await apiService.getResource(`users/${currentUser.uid}`);
         setSocialUser(currentUser.providerData[0].providerId !== "password");
