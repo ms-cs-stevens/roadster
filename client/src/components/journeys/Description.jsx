@@ -6,8 +6,63 @@ import {
   Divider,
   Typography,
 } from "@material-ui/core";
+import React, {useState,useEffect} from 'react';
+import { CloudinaryContext,Image } from "cloudinary-react";
+import { fetchPhotos, openUploadWidget } from "../../services/CloudinaryService";
+import apiService from "../../services/apiService";
 
 const InfoCard = ({ journey }) => {
+  const [images, setImages] = useState([]);
+  
+
+  const beginUpload = async tag => {
+    const uploadOptions = {
+      cloudName: "dhpq62sqc",
+      tags: [tag],
+      uploadPreset: "juawc70d"
+    };
+  
+    let flag=false;
+    console.log(flag);
+    openUploadWidget(uploadOptions, async (error, photos) => {
+      if (!error) {
+        console.log("photos=" + photos);
+        if(photos.event === 'success'){
+         setImages([...images, photos.info.public_id])
+         flag=true;
+        }
+        if(flag){
+        await setDatatoDB();
+        flag=false;
+        }
+      } else {
+        console.log(error);
+      }
+    })
+    async function setDatatoDB()
+    {
+    try {
+      const data = await apiService.editResource("journey/updateImage/PYt1uhPaZrjSI87Zk-FuF", {
+        imageArray:images
+      });
+      flag=false;
+    } catch (e) {
+      console.log(e);
+      alert("Provide correct values");
+    }
+
+}
+    
+  }
+
+  useEffect( () => {
+    fetchPhotos("image", setImages);
+    console.log("images -->");
+    for(let arr of images){
+      console.log("arr-0" + arr);
+    }
+  }, [])
+
   if (journey) {
     return (
       <Card>
@@ -46,7 +101,22 @@ const InfoCard = ({ journey }) => {
             <Typography component="h2" variant="h6">
               Images
             </Typography>
-            <Typography>Show images here ....</Typography>
+            <Typography  component="h2" variant="h6">
+            <CloudinaryContext cloudName="dhpq62sqc">
+            
+            <button onClick={() => beginUpload()}>Upload Image</button>
+            <section>
+            {images.map(i => <Image
+              key={i}
+              publicId={i}
+              fetch-format="auto"
+              quality="auto"
+            />)}
+            </section>
+            
+          </CloudinaryContext>
+          
+              </Typography>
           </Box>
         </CardContent>
       </Card>
