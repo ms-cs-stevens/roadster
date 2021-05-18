@@ -15,6 +15,11 @@ router.patch(
   authMiddleware,
   journeysController.updateImage
 );
+router.post(
+  "/journeys/:id/checkpoints",
+  authMiddleware,
+  journeysController.addCheckpoints
+);
 
 // user's routes
 router.get("/users", authMiddleware, usersController.index);

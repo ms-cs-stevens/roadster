@@ -16,6 +16,8 @@ getJourneyWithCreator = async (journey) => {
   return journey;
 };
 
+// TODO: Add validations if required
+
 module.exports = {
   async index(req, res) {
     try {
@@ -94,6 +96,19 @@ module.exports = {
       res.json(journeyData);
     } catch (e) {
       console.log(e);
+      res.sendStatus(500);
+    }
+  },
+
+  async addCheckpoints(req, res) {
+    try {
+      const journeyData = await journey.addCheckpoints(
+        req.params.id,
+        req.body.checkpoints
+      );
+      res.json(journeyData);
+    } catch (error) {
+      console.log(error);
       res.sendStatus(500);
     }
   },

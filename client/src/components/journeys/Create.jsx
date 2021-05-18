@@ -72,12 +72,8 @@ function CreateJourney() {
       console.log(e);
       // TODO: set error on form
       alert("Provide correct values");
-      setSubmitting(false);
     }
-
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 3000);
+    setSubmitting(false);
   };
 
   const handleChange = (event) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer, useContext } from "react";
+import React, { useReducer } from "react";
 import {
   Box,
   Card,
@@ -16,10 +16,8 @@ import TimelineConnector from "@material-ui/lab/TimelineConnector";
 import RoomIcon from "@material-ui/icons/Room";
 import TimelineContent from "@material-ui/lab/TimelineContent";
 import TimelineOppositeContent from "@material-ui/lab/TimelineOppositeContent";
-import Paper from '@material-ui/core/Paper';
-import JourneyContext from "../../contexts/JourneyContext";
-import Typography from '@material-ui/core/Typography';
-import TimelineDot from '@material-ui/lab/TimelineDot';
+import Button from '@material-ui/core/Button';
+import apiService from "../../services/apiService";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -54,60 +52,78 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const journeyReducer = (state, event) => {
-  state.checkpoints.push({location: event.value, stopover: true })
+  const cps = new Set();
+  state.checkpoints.map((cp) => cps.add(cp.placeId))
+  let arr = [...cps];
+  if(event.value && arr.indexOf(event.value.placeId) === -1) {
+    state.checkpoints.push(event.value)
+  }
   return state;
 };
 
-const AddCheckpoints = () => {
+const AddCheckpoints = ({ journey, setCheckpoints}) => {
   const classes = useStyles();
-  const journey = useContext(JourneyContext);
-  const [checkpoint, setCheckpoint] = useReducer(journeyReducer, {checkpoints: []});
+  const [formData, setCP] = useReducer(journeyReducer, {checkpoints: []});
+
+  const addCheckpointToJourney = async () => {
+    try {
+      if(formData.checkpoints.length > 0) {
+        const response = await apiService.createResource(`journeys/${journey._id}/checkpoints`, formData);
+      } else {
+        let message = "Please add stops to your journey";
+      }
+    } catch (e) {
+      console.log(e);
+      // TODO: set error on form
+      alert("Provide correct values");
+    }
+  }
 
   const handleChange = (event) => {
-    setCheckpoint({
-      value: (event.detail && event.detail.location.formattedAddress),
+    console.log(event.detail)
+    setCP({
+      value: (event.detail && event.detail.location),
       name: event.target.name
     });
-    journey.checkpoints.push(checkpoint);
+    setCheckpoints(formData.checkpoints);
   };
 
-  const checkpoints = () => {
-    let checkpoint = <SearchLocationInput
-      name="origin"
-      label="Location"
-      setLocation={handleChange}
-      placeholder="New York, NY"
-      id="origin"
-    />;
+  const checkpoints = (i) => {
+    let cpList = [];
+    for(let i = 0; i < 5; i++) {
+      cpList.push(
+        <TimelineItem key={`checkpoint${i}`}>
+          <TimelineOppositeContent
+            className={classes.oppositeContent}
+            color="textSecondary"
+          ></TimelineOppositeContent>
+          <TimelineSeparator>
+              <TripOriginIcon color="action" fontSize="small" />
+            <TimelineConnector className={classes.secondaryTail} />
+          </TimelineSeparator>
+          <TimelineContent>
+            <SearchLocationInput
+              name="origin"
+              label="Checkpoint"
+              setLocation={handleChange}
+              placeholder={`Checkpoint ${i+1}`}
+              value={ (journey.checkpoints[i] && journey.checkpoints[i].formattedAddress)}
+              id={`checkpoint${i}`}
+            />
+          </TimelineContent>
+        </TimelineItem>
+      )
+    }
 
-    let i = 0;
-    return (
-      <TimelineItem>
-        <TimelineOppositeContent
-          className={classes.oppositeContent}
-          color="textSecondary"
-        ></TimelineOppositeContent>
-        <TimelineSeparator>
-            <TripOriginIcon color="action" fontSize="small" />
-          <TimelineConnector className={classes.secondaryTail} />
-        </TimelineSeparator>
-        <TimelineContent>
-          {/* <Paper elevation={3} className={classes.paper}>
-            <Typography variant="h6" component="h1">
-              Add Checkpoint
-            </Typography>
-            <br /> */}
-            {/* <Typography>Because you need rest</Typography> */}
-            {checkpoint}
-          {/* </Paper> */}
-        </TimelineContent>
-      </TimelineItem>
-    );
+    return (cpList);
   }
 
   return (
-    <Card style={{ "min-height": "100vh" }}>
+    <Card style={{ "minHeight": "100vh" }}>
       <CardHeader title="Checkpoints" />
+      <Button onClick={addCheckpointToJourney} variant="outlined">
+        Add Checkpoints
+      </Button>
       <Divider />
       <CardContent>
         <Box
@@ -132,10 +148,6 @@ const AddCheckpoints = () => {
             </TimelineItem>
 
             { checkpoints() }
-            {/* { checkpoints() }
-            { checkpoints() }
-            { checkpoints() }
-            { checkpoints() } */}
 
             <TimelineItem>
               <TimelineOppositeContent

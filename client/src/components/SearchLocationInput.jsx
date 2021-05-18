@@ -4,81 +4,80 @@ import Grid from '@material-ui/core/Grid';
 import RoomIcon from '@material-ui/icons/Room';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-function SearchLocationInput({ name, label, placeholder, icon, id, setLocation }) {
-  const [query, setQuery] = useState("");
+function SearchLocationInput({ name, label, placeholder, icon, id, value, setLocation }) {
+  const [query, setQuery] = useState(value || "");
   const autoCompleteRef = useRef(null);
   let autoComplete;
 
   async function handlePlaceSelect(updateQuery, autoCompleteRef) {
     const place = autoComplete.getPlace();
+    const locationDetails = {};
 
     if (!place || !place.geometry || !place.geometry.location) {
       // User entered the name of a Place that was not suggested and
       // pressed the Enter key, or the Place Details request failed.
       console.log("alert", "No details available for input: ");
-      return;
-    }
+      // return;
+    } else {
+      const query = place.formatted_address;
+      updateQuery(query);
 
-    const query = place.formatted_address;
-    updateQuery(query);
+      let address1 = "";
+      let postcode = "";
 
-    const locationDetails = {};
-    let address1 = "";
-    let postcode = "";
+      for (const component of place.address_components) {
+        const componentType = component.types[0];
 
-    for (const component of place.address_components) {
-      const componentType = component.types[0];
+        switch (componentType) {
+          case "street_number": {
+            address1 = `${component.long_name} ${address1}`;
+            break;
+          }
 
-      switch (componentType) {
-        case "street_number": {
-          address1 = `${component.long_name} ${address1}`;
-          break;
+          case "route": {
+            address1 += component.short_name;
+            break;
+          }
+
+          case "postal_code": {
+            postcode = `${component.long_name}${postcode}`;
+            break;
+          }
+
+          case "postal_code_suffix": {
+            postcode = `${postcode}-${component.long_name}`;
+            break;
+          }
+          case "locality":
+            locationDetails.locality = component.long_name;
+            break;
+
+          case "administrative_area_level_1": {
+            locationDetails.state = component.short_name;
+            break;
+          }
+          case "country":
+            locationDetails.country = component.long_name;
+            break;
+          default:
         }
-
-        case "route": {
-          address1 += component.short_name;
-          break;
-        }
-
-        case "postal_code": {
-          postcode = `${component.long_name}${postcode}`;
-          break;
-        }
-
-        case "postal_code_suffix": {
-          postcode = `${postcode}-${component.long_name}`;
-          break;
-        }
-        case "locality":
-          locationDetails.locality = component.long_name;
-          break;
-
-        case "administrative_area_level_1": {
-          locationDetails.state = component.short_name;
-          break;
-        }
-        case "country":
-          locationDetails.country = component.long_name;
-          break;
-        default:
       }
+
+      locationDetails.formattedAddress = query;
+      locationDetails.address = address1;
+      locationDetails.postcode = postcode;
+      locationDetails.placeId = place.place_id;
+      locationDetails.lat = place.geometry.location.lat();
+      locationDetails.lng = place.geometry.location.lng();
+      let event = new CustomEvent("setFormData", {
+        detail: {
+          location: locationDetails
+        }
+      });
+
+      // Trigger custom hook when location is set
+      autoCompleteRef.current.dispatchEvent(event);
     }
-
-    locationDetails.formattedAddress = query;
-    locationDetails.address = address1;
-    locationDetails.postcode = postcode;
-    locationDetails.placeId = place.place_id;
-    locationDetails.lat = place.geometry.location.lat();
-    locationDetails.lng = place.geometry.location.lng();
-
-    let event = new CustomEvent("setFormData", {
-      detail: {
-        location: locationDetails
-      }
-    });
-
-    // Trigger custom hook when location is set
-    autoCompleteRef.current.dispatchEvent(event);
   }
 
   function handleScriptLoad() {
