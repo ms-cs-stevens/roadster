@@ -19,11 +19,13 @@ const Section = ({ data, db = firebaseApp.firestore() }) => {
   
   //const classes = useStyles();
   const messagesRef = db.collection("messages");
-  console.log(data.journeyId);
+  //console.log(data.journeyId);
   
   let allComments = useFirestoreQuery(
     messagesRef.orderBy("createdAt", "asc")
   );
+
+  const newMessageRef = useRef();
 
   const comments = allComments.filter(function jId(comment) {
     return comment.journeyId === data.journeyId;
@@ -62,6 +64,7 @@ const Section = ({ data, db = firebaseApp.firestore() }) => {
           createdAt: new Date(),
         });
         setNewComment("");
+        newMessageRef.current.scrollIntoView({ behavior: 'smooth' });
       }
     }
   };
@@ -78,7 +81,6 @@ const Section = ({ data, db = firebaseApp.firestore() }) => {
           >
             <Paper style={{maxHeight: '15em', overflow: 'auto'}}>
               <List>
-
               {comments
                 ?.sort((first, second) =>
                   first?.timestamp?.seconds <= second?.timestamp?.seconds ? -1 : 1
@@ -89,6 +91,7 @@ const Section = ({ data, db = firebaseApp.firestore() }) => {
                   </Typography>
                 ))}
               </List>
+              <div ref={newMessageRef}></div>
             </Paper>
             <form onSubmit={handleOnSubmit}>
               <input
