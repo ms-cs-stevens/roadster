@@ -25,7 +25,7 @@ import Description from "./Description";
 import Map from "./Map.jsx";
 import TimeLine from "./Timeline.jsx";
 import apiService from "../../services/apiService";
-import CommentsBox from "./CommentsBox";
+import Chat from "./Chat";
 
 const Dashboard = () => {
   const { id } = useParams();
@@ -164,7 +164,7 @@ const Dashboard = () => {
                 <Description journey={journey} />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
-                <CommentsBox journey={journey} />
+                <Chat journey={journey} />
               </Grid>
             </Grid>
           </Container>
