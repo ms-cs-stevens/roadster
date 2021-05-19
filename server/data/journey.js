@@ -5,6 +5,7 @@ journeyObject = (journey) => {
     _id: journey._id,
     origin: journey.origin,
     destination: journey.destination,
+    description: journey.description,
     occupancy: journey.occupancy,
     creatorId: journey.creatorId,
     editable: journey.editable,
@@ -16,8 +17,47 @@ journeyObject = (journey) => {
     modifiedBy: journey.modifiedBy,
     users: journey.users,
     images: journey.images,
+    updatedAt: journey.updatedAt,
   };
 };
+
+function checkString(string, name) {
+  if (!string || string.trim().length <= 0) throw `Please provide a ${name}!`;
+}
+
+function checkNumber(num, name) {
+  if (!num || Number.isNaN(parseInt(num))) throw `Please provide valid ${name}`;
+}
+
+function validateUpdateInfo(journeyInfo, journey) {
+  let updatedObject = {};
+  checkString(journeyInfo.name, "name");
+  checkString(journeyInfo.description, "description");
+  checkNumber(journeyInfo.budget, "budget");
+  checkNumber(journeyInfo.occupancy, "members");
+
+  if (journeyInfo.name != journey.name) {
+    updatedObject.name = journeyInfo.name;
+  }
+  if (journeyInfo.description != journey.description) {
+    updatedObject.description = journeyInfo.description;
+  }
+
+  if (journeyInfo.budget != journey.budget) {
+    updatedObject.budget = journeyInfo.budget;
+  }
+
+  if (journeyInfo.occupancy != journey.occupancy) {
+    updatedObject.occupancy = journeyInfo.occupancy;
+  }
+
+  if (journeyInfo.editable != journey.editable) {
+    updatedObject.editable = journeyInfo.editable;
+  }
+
+  if (Object.keys(updatedObject).length <= 0)
+    throw `No information has been provided to update the specified journey`;
+}
 
 async function createJourney(journeyInfo) {
   let journey = await Journey.create({
@@ -41,13 +81,23 @@ async function getJourney(id) {
   return journeyObject(journey);
 }
 
-async function editJourney(journeyData) {
-  let updateInfo = await Journey.findOneAndUpdate(
-    { _id: journeyData.id },
-    { $addToSet: { checkpoints: journeyData.stop } }
+async function updateJourney(id, journeyData) {
+  const journey = await this.getJourney(id);
+
+  if (!journey) throw "Journey not found";
+
+  validateUpdateInfo(journeyData, journey);
+
+  const updateInfo = await Journey.findOneAndUpdate(
+    { _id: id },
+    { $set: journeyData },
+    { runValidators: true }
   );
 
-  return journeyObject(updateInfo);
+  if (updateInfo.errors)
+    throw "Could not find and update the specified journey!";
+
+  return await this.getJourney(id);
 }
 
 async function addCheckpoints(id, checkpoints) {
@@ -93,7 +143,7 @@ async function updateImage(id, imagesArray) {
 module.exports = {
   createJourney,
   getJourney,
-  editJourney,
+  updateJourney,
   getAllUserJourneys,
   getPendingJourneys,
   getAllJourneys,
