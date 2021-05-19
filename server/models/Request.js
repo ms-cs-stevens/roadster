@@ -14,7 +14,8 @@ const requestSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["approved", "rejected"],
+      enum: ["approved", "rejected", "PFA"],
+      default: "PFA",
     },
     journeyId: {
       type: String,

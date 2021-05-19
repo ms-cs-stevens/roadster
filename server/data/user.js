@@ -30,6 +30,7 @@ async function createUser(userInfo) {
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
     email: userInfo.email,
+    fullName: userInfo.firstName + userInfo.lastName,
     profileImage: userInfo.profileImage,
   });
 
@@ -54,6 +55,14 @@ async function updateUser(id, userPayload) {
     ) {
       throw new Error("Nothing to update");
     }
+
+    if (userPayload.firstName && userPayload.lastName)
+      userPayload.fullName = userPayload.firstName + userPayload.lastName;
+    else if (userPayload.firstName)
+      userPayload.fullName = userPayload.firstName + user.lastName;
+    else if (userPayload.lastName)
+      userPayload.lastName = user.firstName + userPayload.lastName;
+
     let updatedUser = await User.findByIdAndUpdate(id, userPayload, {
       new: true,
     });
@@ -63,9 +72,28 @@ async function updateUser(id, userPayload) {
   }
 }
 
+async function searchUser(searchData) {
+  let vname;
+  let vemailId;
+  let users = [];
+
+  if (searchData.name !== undefined) {
+    vname = new RegExp(searchData.name.toLowerCase());
+    users = await User.find({ fullname: vname });
+  } else if (searchData.email !== undefined) {
+    vemailId = new RegExp(searchData.email.toLowerCase());
+    users = await User.find({ email: vemailId });
+  } else {
+    users = await User.find({});
+  }
+
+  return users;
+}
+
 module.exports = {
   createUser,
   getUser,
   getAllUsers,
   updateUser,
+  searchUser,
 };
