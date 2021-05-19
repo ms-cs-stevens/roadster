@@ -126,11 +126,6 @@ async function getAllJourneys() {
   return journeys.map((journey) => journeyObject(journey));
 }
 
-async function getPendingJourneys() {
-  const journeys = await Journey.find({});
-  return journeys.map((journey) => journeyObject(journey));
-}
-
 async function updateImage(id, imagesArray) {
   let updateInfo = await Journey.findOneAndUpdate(
     { _id: id },
@@ -148,7 +143,6 @@ module.exports = {
   getJourney,
   updateJourney,
   getAllUserJourneys,
-  getPendingJourneys,
   getAllJourneys,
   updateImage,
   addCheckpoints,

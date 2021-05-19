@@ -11,6 +11,7 @@ async function updateUserName(id, data) {
   let currentUser = await firebase.auth().currentUser;
   await currentUser.updateProfile({
     displayName: `${data.firstName} ${data.lastName}`,
+    photoURL: data.profileImage,
   });
   let updatedUser = await apiService.editResource(`users/${id}/update`, {
     firstName: data.firstName,

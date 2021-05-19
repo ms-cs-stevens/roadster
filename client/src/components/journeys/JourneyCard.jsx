@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Moment from "react-moment";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../../firebase/Auth";
@@ -44,10 +44,20 @@ const useStyles = makeStyles((theme) => ({
 function CardItem({ journey }) {
   const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
+  const currentUserId = currentUser.uid;
+  const [showEdit, setShowEdit] = useState(false);
 
-  const showEditIcon = () => {
-    return journey.editable || journey.creatorId === currentUser.uid;
-  };
+  useEffect(() => {
+    const journeyCreator = journey.creatorId === currentUserId;
+    if (
+      journeyCreator ||
+      (journey.editable && journey.users?.includes(currentUserId))
+    ) {
+      setShowEdit(true);
+    } else {
+      setShowEdit(false);
+    }
+  }, [journey, currentUser]);
 
   return (
     <Card className={classes.paper}>
@@ -58,8 +68,9 @@ function CardItem({ journey }) {
           </Avatar>
         }
         action={
-          showEditIcon() && (
+          showEdit && (
             <NavLink
+              aria-label="journey edit link"
               style={{ textDecoration: "none" }}
               to={`/journeys/${journey._id}/edit`}
             >

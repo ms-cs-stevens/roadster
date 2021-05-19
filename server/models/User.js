@@ -10,14 +10,11 @@ const userSchema = new Schema(
     firstName: {
       type: String,
       required: [true, "You must provide a firstname"],
+      index: true,
     },
     lastName: {
       type: String,
       required: [true, "You must provide a lastname"],
-    },
-    fullName: {
-      type: String,
-      lowercase: true,
       index: true,
     },
     profileImage: {

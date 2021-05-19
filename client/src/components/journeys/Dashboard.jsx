@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet";
 import { useParams, useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
@@ -27,8 +27,10 @@ import Map from "./Map.jsx";
 import Checkpoints from "./ShowCheckpoints.jsx";
 import apiService from "../../services/apiService";
 import Chat from "./Chat";
+import { AuthContext } from "../../firebase/Auth";
 
 const Dashboard = () => {
+  const { currentUser } = useContext(AuthContext);
   const { id } = useParams();
   const history = useHistory();
   const [journey, setJourney] = useState(undefined);
@@ -37,6 +39,7 @@ const Dashboard = () => {
     totalDist: 0,
     totalTime: 0,
   });
+  const currentUserId = currentUser.uid;
 
   useEffect(() => {
     async function fetchJourney() {
@@ -46,6 +49,17 @@ const Dashboard = () => {
     }
     fetchJourney();
   }, [id]);
+
+  useEffect(() => {}, [journey]);
+
+  const joinJourney = async () => {
+    const requestPayload = {
+      journeyId: journey._id,
+      userId: journey.creatorId,
+      initiatorId: currentUserId,
+    };
+    const request = await apiService.createResource(`request`, requestPayload);
+  };
 
   const setDistanceTime = (data) => {
     setRouteProperty(data);

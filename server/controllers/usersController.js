@@ -23,9 +23,7 @@ module.exports = {
       res.sendStatus(500);
     }
   },
-  async request(req, res) {
-    // create user's journey request
-  },
+
   async show(req, res) {
     let id = req.params.id;
     if (id && id.trim().length) {

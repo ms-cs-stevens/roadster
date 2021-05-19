@@ -8,14 +8,10 @@ const requestSchema = new Schema(
       type: String,
       default: () => nanoid(),
     },
-    note: {
-      type: String,
-      required: "You must supply a description",
-    },
     status: {
       type: String,
-      enum: ["approved", "rejected", "PFA"],
-      default: "PFA",
+      enum: ["approved", "rejected", "pending"],
+      default: "pending",
     },
     journeyId: {
       type: String,
