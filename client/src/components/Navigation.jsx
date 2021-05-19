@@ -4,10 +4,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
+import Avatar from "@material-ui/core/Avatar";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import { AuthContext } from "../firebase/Auth";
 import { NavLink } from "react-router-dom";
 import { signout } from "../firebase/firebaseFunctions";
@@ -21,6 +20,14 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  avatar: {
+    backgroundColor: theme.palette.secondary.main,
+    width: theme.spacing(5),
+    border: "1px solid #fff",
+    fontSize: "1em",
+    fontWeight: "bold",
+    height: theme.spacing(5),
   },
 }));
 
@@ -95,16 +102,18 @@ export default function Navigation() {
               >
                 Journeys
               </Button>
-              <IconButton
-                edge="end"
+              <Avatar
                 aria-label="account of current user"
                 aria-controls={menuId}
                 aria-haspopup="true"
                 onClick={handleProfileMenuOpen}
                 color="inherit"
+                alt="user image"
+                src={currentUser.photoURL}
+                className={classes.avatar}
               >
-                <AccountCircle />
-              </IconButton>
+                {currentUser.displayName[0]}
+              </Avatar>
               {renderMenu}
             </>
           ) : (

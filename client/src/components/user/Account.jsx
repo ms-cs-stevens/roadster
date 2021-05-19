@@ -97,7 +97,7 @@ function Account() {
         const user = await apiService.getResource(`users/${currentUser.uid}`);
         setSocialUser(currentUser.providerData[0].providerId !== "password");
         setUser(user);
-        setImages(user.profileImage);
+        setImages(user && user.profileImage);
       }
     }
     fetchUser();
