@@ -71,6 +71,7 @@ function Account() {
 
   const beginUpload = (tag) => {
     const uploadOptions = {
+      multiple:false,
       cloudName: "dhpq62sqc",
       tags: [tag],
       uploadPreset: "juawc70d",
