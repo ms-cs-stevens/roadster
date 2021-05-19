@@ -25,22 +25,25 @@ const EditJourney = () => {
     fetchJourney();
   }, [id]);
 
-  const setCheckpoints = (checkpoints) =>{
-    setJourney({...journey, checkpoints: checkpoints});
-  }
+  const setCheckpoints = (checkpoints) => {
+    setJourney({ ...journey, checkpoints: checkpoints });
+  };
 
   const updateJourneyDetails = (updatedJourney) => {
     setJourney(updatedJourney);
-  }
+  };
 
   const setDistanceTime = (data) => {
     // setRouteProperty(data);
   };
 
   const preventCurrentUserToEdit = () => {
-    if(!journey) return false;
-    return (currentUser.uid !== journey.creatorId && (!journey.editable || !journey.users.include(currentUser.uid)) );
-  }
+    if (!journey) return false;
+    return (
+      currentUser.uid !== journey.creatorId &&
+      (!journey.editable || !journey.users.includes(currentUser.uid))
+    );
+  };
 
   if (preventCurrentUserToEdit()) {
     return <Redirect to={`/journeys/${journey._id}`} />;
@@ -76,13 +79,19 @@ const EditJourney = () => {
                 <Map journey={journey} setDistanceTime={setDistanceTime} />
               </Grid>
               <Grid item lg={5} md={6} xl={3} xs={12}>
-                <AddCheckpoints setCheckpoints={setCheckpoints} journey={journey}/>
+                <AddCheckpoints
+                  setCheckpoints={setCheckpoints}
+                  journey={journey}
+                />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
-                <Members journey={journey} />
+                <Members journeyId={journey._id} showSearch={true} />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
-                <EditJourneyDetails journey={journey} updateJourneyDetails={updateJourneyDetails}/>
+                <EditJourneyDetails
+                  journey={journey}
+                  updateJourneyDetails={updateJourneyDetails}
+                />
               </Grid>
             </Grid>
           </Container>

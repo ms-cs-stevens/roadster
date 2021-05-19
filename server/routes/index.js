@@ -21,14 +21,22 @@ router.post(
   authMiddleware,
   journeysController.addCheckpoints
 );
+router.get(
+  "/journeys/:id/members",
+  authMiddleware,
+  journeysController.getMembers
+);
+router.post(
+  "/journeys/:id/members",
+  authMiddleware,
+  journeysController.addMembers
+);
 
 // user's routes
 router.get("/users", authMiddleware, usersController.index);
 router.get("/users/:id", authMiddleware, usersController.show);
 router.post("/users", authMiddleware, usersController.create);
 router.patch("/users/:id/update", authMiddleware, usersController.update);
-// router.post("/users/:id/request", authMiddleware, usersController.request);
-// router.post("/users/search", usersController.searchUser);
 
 /*
 //request routes

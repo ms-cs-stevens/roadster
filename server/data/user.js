@@ -72,22 +72,19 @@ async function updateUser(id, userPayload) {
   }
 }
 
-async function searchUser(searchData) {
-  let vname;
-  let vemailId;
-  let users = [];
-
-  if (searchData.name !== undefined) {
-    vname = new RegExp(searchData.name.toLowerCase());
-    users = await User.find({ fullname: vname });
-  } else if (searchData.email !== undefined) {
-    vemailId = new RegExp(searchData.email.toLowerCase());
-    users = await User.find({ email: vemailId });
-  } else {
-    users = await User.find({});
+async function searchUser(searchTerm) {
+  let searchResults;
+  try {
+    searchResults = await User.find(
+      { $text: { $search: searchTerm } },
+      { score: { $meta: "textScore" } }
+    ).sort({
+      score: { $meta: "textScore" },
+    });
+  } catch (e) {
+    throw e;
   }
-
-  return users;
+  if (searchResults.length) return searchResults;
 }
 
 module.exports = {

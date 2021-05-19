@@ -38,5 +38,6 @@ const userSchema = new Schema(
   }
 );
 
+userSchema.index({ firstName: "text", lastName: "text", email: "text" });
 userSchema.plugin(uniqueValidator);
 module.exports = mongoose.model("User", userSchema);

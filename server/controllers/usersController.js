@@ -5,14 +5,21 @@ const redis = new Redis();
 module.exports = {
   async index(req, res) {
     // return all users from here, will be used later while doing user search
+    let searchTerm = req.query.searchTerm;
+    let users;
     try {
-      const users = await userData.getAllUsers();
-      res.json(users);
+      if (searchTerm && searchTerm.trim()) {
+        users = await userData.searchUser(searchTerm);
+      } else {
+        users = await userData.getAllUsers();
+      }
+      res.json({ users: users });
     } catch (e) {
       console.log(e);
       res.sendStatus(500);
     }
   },
+
   async create(req, res) {
     // create user
     try {
@@ -60,16 +67,6 @@ module.exports = {
       }
     } else {
       res.status(404).json({ error: "User not found" });
-    }
-  },
-
-  async searchUser(req, res) {
-    try {
-      const users = await userData.searchUser(req.body);
-      res.json(users);
-    } catch (e) {
-      console.log(e);
-      res.status(404).json({ error: "Users not found" });
     }
   },
 };

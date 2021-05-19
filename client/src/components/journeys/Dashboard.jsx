@@ -174,7 +174,7 @@ const Dashboard = () => {
                 <Checkpoints journey={journey} />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
-                <Members journey={journey} />
+                <Members journeyId={journey._id} />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
                 <Description journey={journey} />
