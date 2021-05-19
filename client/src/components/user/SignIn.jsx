@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignInSide() {
+export default function SignInSide({ showWelcomeMessage }) {
   const classes = useStyles();
   const [additionalError, setAdditionalError] = useState("");
   const { handleSubmit, control } = useForm();
@@ -114,12 +114,21 @@ export default function SignInSide() {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Welcome to Roadster
-          </Typography>
-          <Typography component="h2" style={{ color: "#333" }} variant="h6">
-            What&apos;s your email and password?
-          </Typography>
+          {showWelcomeMessage ? (
+            <>
+              <Typography component="h1" variant="h5">
+                Welcome to Roadster
+              </Typography>
+              <Typography component="h2" style={{ color: "#333" }} variant="h6">
+                Turn your road trip into an adventure!
+              </Typography>
+            </>
+          ) : (
+            <Typography component="h1" variant="h5">
+              What&apos;s your email and password?
+            </Typography>
+          )}
+          <br />
           <Typography
             variant="caption"
             style={{ color: "#ee0000" }}

@@ -56,7 +56,7 @@ const journeyReducer = (state, event) => {
   };
 };
 
-function CreateJourney() {
+function CreateJourney({ showWelcomeMessage }) {
   const history = useHistory();
   const classes = useStyles();
   const [journey, setJourney] = useReducer(journeyReducer, { checkpoints: [] });
@@ -107,9 +107,25 @@ function CreateJourney() {
             <Avatar className={classes.avatar}>
               <Explore />
             </Avatar>
-            <Typography component="h1" variant="h5">
-              Plan Your Journey
-            </Typography>
+            {showWelcomeMessage ? (
+              <>
+                <Typography component="h1" variant="h5">
+                  Welcome to Roadster
+                </Typography>
+                <Typography
+                  component="h2"
+                  style={{ color: "#333" }}
+                  variant="h6"
+                >
+                  Turn your road trip into an adventure!
+                </Typography>
+              </>
+            ) : (
+              <Typography component="h1" variant="h5">
+                Plan Your Journey
+              </Typography>
+            )}
+
             {submitting && (
               <div>Please wait while we create your Roadtrip!</div>
             )}

@@ -60,7 +60,11 @@ function ImageGridList({ images }) {
 
 const InfoCard = ({ journey }) => {
   const [images, setImages] = useState([]);
+  const [journeyImages, setJourneyImages] = useState(null);
   const [imageCounter, setImageCounter] = useState(0);
+
+  // const [images, setImages] = useState([]);
+  // const [imageCounter, setImageCounter] = useState(0);
   const beginUpload = (tag) => {
     console.log(tag);
     const uploadOptions = {
@@ -91,6 +95,7 @@ const InfoCard = ({ journey }) => {
       for (let arr of data.data.resources) {
         arrImage.push(arr.public_id);
       }
+      setImages(arrImage);
     } catch (e) {
       console.log("No Images Found");
     }
@@ -103,6 +108,7 @@ const InfoCard = ({ journey }) => {
         }
       );
       setImages(data.images);
+      setJourneyImages(data.images);
     } catch (e) {
       console.log(e);
       alert("Provide correct values");
@@ -113,6 +119,7 @@ const InfoCard = ({ journey }) => {
     async function fetchJourney() {
       let data = await apiService.getResource(`journeys/${journey._id}`);
       setImages(data.images);
+      setJourneyImages(data.images);
     }
     fetchJourney();
   }, [journey]);
@@ -138,39 +145,23 @@ const InfoCard = ({ journey }) => {
             <Typography component="h2" variant="h6">
               Description
             </Typography>
-            <Typography>
-              CategoriesTravel TrendsBusiness ManagementMarketingTravel
-              TechnologyDistributionTrekkSoft Tips Search How to write a tour
-              description that sells All Posts Published by Stephanie Kutschera
-              | Sep 4, 2018 | Tourism Marketing | 3 MIN READ Let's say you are a
-              tour operator who offers paragliding to travelers from all over
-              the world. You work in a busy city, so there are three other
-              similar size tour companies providing paragliding activities in
-              the same location that you run your tours. You know what makes
-              your paragliding experience different from your competitors, but
-              how can you let potential customers know?
-            </Typography>
+            <Typography>{journey.description}</Typography>
             <br />
             <br />
             <Typography component="h2" variant="h6">
               Images
             </Typography>
+
             <CloudinaryContext cloudName="dhpq62sqc">
               <ImageGridList images={images} />
               <IconButton
                 onClick={() => beginUpload(journey._id)}
                 color="primary"
                 aria-label="upload picture"
-                component="span"
               >
                 <PhotoCamera />
               </IconButton>
-              <Button
-                onClick={saveImages}
-                variant="contained"
-                color="primary"
-                component="span"
-              >
+              <Button onClick={saveImages} variant="contained" color="primary">
                 Save images
               </Button>
             </CloudinaryContext>
