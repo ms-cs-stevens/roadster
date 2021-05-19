@@ -112,7 +112,9 @@ export default function Navigation() {
                 src={currentUser.photoURL}
                 className={classes.avatar}
               >
-                {currentUser.displayName[0]}
+                {currentUser &&
+                  currentUser.displayName &&
+                  currentUser.displayName[0]}
               </Avatar>
               {renderMenu}
             </>
