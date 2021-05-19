@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import {
   Box,
   Card,
@@ -8,6 +8,7 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import SearchLocationInput from "../SearchLocationInput";
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import TripOriginIcon from "@material-ui/icons/TripOrigin";
 import Timeline from "@material-ui/lab/Timeline";
 import TimelineItem from "@material-ui/lab/TimelineItem";
@@ -18,6 +19,7 @@ import TimelineContent from "@material-ui/lab/TimelineContent";
 import TimelineOppositeContent from "@material-ui/lab/TimelineOppositeContent";
 import Button from '@material-ui/core/Button';
 import apiService from "../../services/apiService";
+import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,46 +53,81 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const journeyReducer = (state, event) => {
-  const cps = new Set();
-  state.checkpoints.map((cp) => cps.add(cp.placeId))
-  let arr = [...cps];
-  if(event.value && arr.indexOf(event.value.placeId) === -1) {
-    state.checkpoints.push(event.value)
+const journeyReducer = (state, action) => {
+  switch (action.type) {
+    case 'ADD_CHECKPOINT':
+      const cps = new Set();
+      state.checkpoints.map((cp) => cps.add(cp.placeId))
+      let arr = [...cps];
+      if(action.value && arr.indexOf(action.value.placeId) === -1) {
+        state.checkpoints.push(action.value)
+      }
+      return state;
+    case 'REMOVE_CHECKPOINT':
+      state.checkpoints = state.checkpoints.filter(c => action.value.placeId !== c.placeId);
+      return state;
+    default:
+      return state;
   }
-  return state;
-};
+}
 
 const AddCheckpoints = ({ journey, setCheckpoints}) => {
   const classes = useStyles();
+  const [message, setMessage] = useState("");
   const [formData, setCP] = useReducer(journeyReducer, {checkpoints: journey.checkpoints});
 
   const addCheckpointToJourney = async () => {
     try {
       if(formData.checkpoints.length > 0) {
         const response = await apiService.createResource(`journeys/${journey._id}/checkpoints`, formData);
+        if(response) {
+          setMessage("New stops are saved in the roadtrip!")
+        }
       } else {
-        let message = "Please add stops to your journey";
+        setMessage("Please add stops to your journey");
       }
     } catch (e) {
       console.log(e);
-      // TODO: set error on form
-      alert("Provide correct values");
     }
   }
 
   const handleChange = (event) => {
     setCP({
       value: (event.detail && event.detail.location),
-      name: event.target.name
+      type: 'ADD_CHECKPOINT'
     });
-    console.log("form data", formData)
     setCheckpoints(formData.checkpoints);
+    setMessage("Click on save button to update your stops");
   };
 
-  const checkpoints = (i) => {
-    let cpList = [];
+  const removeCheckpoint = (event, cp) => {
+    setCP({
+      value: cp,
+      type: 'REMOVE_CHECKPOINT'
+    });
+    setCheckpoints(formData.checkpoints);
+    setMessage("Click on save button to update your stops");
+  }
+
+  const checkpoints = () => {
+    let cpList = [], cp;
     for(let i = 0; i < 5; i++) {
+      if(journey.checkpoints[i]) {
+        cp = <span>
+          {journey.checkpoints[i].formattedAddress}
+          <DeleteForeverIcon color="action" onClick={e => removeCheckpoint(e, journey.checkpoints[i])}  style={{cursor: "pointer"}} />
+        </span>;
+      } else {
+        cp = <SearchLocationInput
+                name="origin"
+                label="Checkpoint"
+                setLocation={handleChange}
+                placeholder={`Checkpoint ${i+1}`}
+                value={ (journey.checkpoints[i] && journey.checkpoints[i].formattedAddress)}
+                id={`checkpoint${i}`}
+              />;
+      }
+
       cpList.push(
         <TimelineItem key={`checkpoint${i}`}>
           <TimelineOppositeContent
@@ -102,14 +139,7 @@ const AddCheckpoints = ({ journey, setCheckpoints}) => {
             <TimelineConnector className={classes.secondaryTail} />
           </TimelineSeparator>
           <TimelineContent>
-            <SearchLocationInput
-              name="origin"
-              label="Checkpoint"
-              setLocation={handleChange}
-              placeholder={`Checkpoint ${i+1}`}
-              value={ (journey.checkpoints[i] && journey.checkpoints[i].formattedAddress)}
-              id={`checkpoint${i}`}
-            />
+            {cp}
           </TimelineContent>
         </TimelineItem>
       )
@@ -144,6 +174,7 @@ const AddCheckpoints = ({ journey, setCheckpoints}) => {
             position: "relative",
           }}
         >
+          {message && (<Alert severity="info">{message}</Alert>)}
           <Timeline>
             <TimelineItem>
               <TimelineOppositeContent

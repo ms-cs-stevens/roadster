@@ -13,6 +13,7 @@ import {
 import React, {useState, useContext } from 'react';
 import Moment from "react-moment";
 import { makeStyles } from "@material-ui/core/styles";
+import Alert from '@material-ui/lab/Alert';
 import apiService from "../../services/apiService";
 import { AuthContext } from "../../firebase/Auth";
 
@@ -46,12 +47,9 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
     setSubmitting(true);
     try {
       const { data: updatedJourney } = await apiService.editResource(`journeys/${journey._id}`, data);
-      console.log("uodate", updatedJourney);
       updateJourneyDetails(updatedJourney);
     } catch (e) {
       console.log(e);
-      // TODO: set error on form
-      alert("Provide correct values");
     }
     setSubmitting(false);
   };
@@ -78,9 +76,7 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
           >
             <div className={classes.paper}>
               {submitting && (
-                <div>
-                  Please wait while we update your Roadtrip!
-                </div>
+                <Alert severity="info">Please wait while we update your Roadtrip!</Alert>
               )}
               <form className={classes.form} onSubmit={handleSubmit(handleFormSubmit)}>
                 <Grid item xs={10}>

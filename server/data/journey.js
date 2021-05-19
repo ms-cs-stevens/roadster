@@ -103,7 +103,7 @@ async function updateJourney(id, journeyData) {
 async function addCheckpoints(id, checkpoints) {
   let updateInfo = await Journey.findOneAndUpdate(
     { _id: id },
-    { $addToSet: { checkpoints: { $each: checkpoints } } }
+    { checkpoints: checkpoints }
   );
 
   return journeyObject(updateInfo);
@@ -137,7 +137,10 @@ async function updateImage(id, imagesArray) {
     { $set: { images: imagesArray } }
   );
 
-  return getJourney(id);
+  if (updateInfo.errors)
+    throw "Could not find and update the specified journey!";
+
+  return await getJourney(id);
 }
 
 module.exports = {

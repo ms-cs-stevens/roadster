@@ -148,12 +148,10 @@ module.exports = {
     }
 
     try {
-      console.log(req.body);
       const journey = await journeyData.addCheckpoints(
         req.params.id,
         req.body.checkpoints
       );
-      console.log(journey);
       res.json(journey);
     } catch (error) {
       console.log(error);
