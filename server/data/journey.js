@@ -31,7 +31,7 @@ function checkNumber(num, name) {
 function validateUpdateInfo(journeyInfo, journey) {
   let updatedObject = {};
   checkString(journeyInfo.name, "name");
-  checkString(journeyInfo.description, "description");
+  if (journey.description) checkString(journeyInfo.description, "description");
   checkNumber(journeyInfo.budget, "budget");
   checkNumber(journeyInfo.occupancy, "members");
 
@@ -77,6 +77,7 @@ async function createJourney(journeyInfo) {
 
 async function getJourney(id) {
   let journey = await Journey.findById(id);
+  console.log(id);
   return journeyObject(journey);
 }
 

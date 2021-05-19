@@ -40,16 +40,18 @@ const useStyles = makeStyles((theme) => ({
 const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
   const classes = useStyles();
   const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState("");
   const { currentUser } = useContext(AuthContext);
   const { handleSubmit, control } = useForm();
 
-  const handleFormSubmit = async (data) => {
+  const handleFormSubmit = async (formData) => {
     setSubmitting(true);
     try {
-      const { data: updatedJourney } = await apiService.editResource(`journeys/${journey._id}`, data);
-      updateJourneyDetails(updatedJourney);
+      const response = await apiService.editResource(`journeys/${journey._id}`, formData);
+      console.log(response);
+      updateJourneyDetails(response.journey);
     } catch (e) {
-      console.log(e);
+      setMessage(e.message);
     }
     setSubmitting(false);
   };
@@ -74,6 +76,7 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
               position: "relative",
             }}
           >
+            {message && (<Alert severity="info">{message}</Alert>)}
             <div className={classes.paper}>
               {submitting && (
                 <Alert severity="info">Please wait while we update your Roadtrip!</Alert>

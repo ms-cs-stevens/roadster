@@ -4,7 +4,7 @@ const authMiddleware = require("../firebase/authenticateToken");
 
 const journeysController = require("../controllers/journeysController");
 const usersController = require("../controllers/usersController");
-const requestController = require("../controllers/requestController");
+const invitationController = require("../controllers/invitationController");
 
 // Journey's routes
 router.get("/journeys", authMiddleware, journeysController.index);
@@ -42,34 +42,43 @@ router.patch("/users/:id/update", authMiddleware, usersController.update);
 //request routes
 //get all request by initiator
 //get all received invitations
-router.get("/requests/received/:id", authMiddleware, requestController.getAllReceivedInvitations);
+router.get("/requests/received/:id", authMiddleware, invitationController.getAllReceivedInvitations);
 //create request
 //modify request
-router.patch("/request/modify",authMiddleware,  requestController.update);
+router.patch("/request/modify",authMiddleware,  invitationController.update);
 //get request
-router.get("/requests/:id", authMiddleware,requestController.getRequest);
+router.get("/requests/:id", authMiddleware,invitationController.getRequest);
 */
-router.post("/requests", authMiddleware, requestController.create);
-router.get(
-  "/requests/sent/:id",
+router.post(
+  "/requests/:journeyId",
   authMiddleware,
-  requestController.getAllSentInvitations
+  invitationController.create
 );
+router.get(
+  "/requests",
+  authMiddleware,
+  invitationController.getAllUserInvitations
+);
+// router.get(
+//   "/requests/sent/:id",
+//   authMiddleware,
+//   invitationController.getAllSentInvitations
+// );
 
 //request routes
 //get all request by initiator
-// router.get("/requests/sent/:id", requestController.getAllSentInvitations);
+// router.get("/requests/sent/:id", invitationController.getAllSentInvitations);
 //get all received invitations
 // router.get(
 //   "/requests/received/:id",
-//   requestController.getAllReceivedInvitations
+//   invitationController.getAllReceivedInvitations
 // );
 // //create request
-// router.post("/request/new", requestController.create);
+// router.post("/request/new", invitationController.create);
 // //modify request
-// router.patch("/request/modify", requestController.update);
+// router.patch("/request/modify", invitationController.update);
 // //get request
-// router.get("/request/:id", requestController.getRequest);
+// router.get("/request/:id", invitationController.getRequest);
 
 router.get("*", async (req, res) => {
   res.status(404).json({ error: "Page not found!" });

@@ -96,8 +96,8 @@ function ImageGridList({ journey }) {
   useEffect(() => {
     async function fetchJourney() {
       let data = await apiService.getResource(`journeys/${journey._id}`);
-      setImages(data.images);
-      setJourneyImages(data.images);
+      setImages(data.journey.images);
+      setJourneyImages(data.journey.images);
     }
     fetchJourney();
   }, [journey]);
