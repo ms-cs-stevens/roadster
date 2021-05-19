@@ -22,6 +22,7 @@ import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import InfoCard from "./InfoCard.jsx";
 import Members from "./Members";
 import Description from "./Description";
+import Images from "./Images";
 import Map from "./Map.jsx";
 import Checkpoints from "./ShowCheckpoints.jsx";
 import apiService from "../../services/apiService";
@@ -67,7 +68,7 @@ const Dashboard = () => {
 
   const goToEdit = () => {
     history.push(`/journeys/${journey._id}/edit`);
-  }
+  };
 
   if (loading) {
     return "Loading";
@@ -97,11 +98,7 @@ const Dashboard = () => {
                   variant="text"
                   aria-label="text primary button group"
                 >
-                  <Button
-                    onClick={goToEdit}
-                    color="primary"
-                    variant="outlined"
-                  >
+                  <Button onClick={goToEdit} color="primary" variant="outlined">
                     <EditIcon />
                     Edit
                   </Button>
@@ -170,6 +167,9 @@ const Dashboard = () => {
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
                 <Chat journey={journey} />
+              </Grid>
+              <Grid item lg={8} md={12} xl={9} xs={12}>
+                <Images journey={journey} />
               </Grid>
             </Grid>
           </Container>
