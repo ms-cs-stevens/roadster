@@ -3,7 +3,6 @@ const request = require("../data/request");
 async function create(req, res) {
   try {
     let requestInfo = {
-      note: req.body.note,
       journeyId: req.body.journeyId,
       userId: req.body.userId,
       initiatorId: req.body.initiatorId,

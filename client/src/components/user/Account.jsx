@@ -5,7 +5,6 @@ import apiService from "../../services/apiService";
 import { NavLink } from "react-router-dom";
 import { updateUserName } from "../../firebase/firebaseFunctions";
 import { useForm, Controller } from "react-hook-form";
-import { CloudinaryContext } from "cloudinary-react";
 import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import { openUploadWidget } from "../../services/CloudinaryService";
@@ -71,6 +70,7 @@ function Account() {
 
   const beginUpload = (tag) => {
     const uploadOptions = {
+      multiple: false,
       cloudName: "dhpq62sqc",
       tags: [tag],
       uploadPreset: "juawc70d",

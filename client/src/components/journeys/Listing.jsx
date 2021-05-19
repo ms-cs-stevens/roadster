@@ -93,7 +93,6 @@ const JourneyListing = () => {
               >
                 <MenuItem value="user"> My Journeys </MenuItem>
                 <MenuItem value="all"> All Journeys </MenuItem>
-                <MenuItem value="pending">Pending</MenuItem>
               </Select>
             </FormControl>
           </Grid>

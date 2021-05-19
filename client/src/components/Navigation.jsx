@@ -72,54 +72,57 @@ export default function Navigation() {
           <Typography component="h1" variant="h6" className={classes.title}>
             Roadster
           </Typography>
-          {/* <Button color="inherit">Login</Button> */}
-          {currentUser && (
-            <Button
-              style={{ color: "#fff" }}
-              component={NavLink}
-              to="/journeys/new"
-            >
-              Plan Your Journey
-            </Button>
-          )}
-          {currentUser && (
-            <Button
-              style={{ color: "#fff" }}
-              component={NavLink}
-              to={"/journeys"}
-            >
-              Journeys
-            </Button>
-          )}
-          {currentUser && (
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          )}
-          {!currentUser && (
-            <Button
-              style={{ color: "#fff" }}
-              component={NavLink}
-              to={"/register"}
-            >
-              Register
-            </Button>
-          )}
-          {!currentUser && (
-            <Button style={{ color: "#fff" }} component={NavLink} to="/login">
-              Login
-            </Button>
+          {currentUser ? (
+            <>
+              <Button
+                style={{ color: "#fff" }}
+                component={NavLink}
+                to="/requests"
+              >
+                Invitations
+              </Button>
+              <Button
+                style={{ color: "#fff" }}
+                component={NavLink}
+                to="/journeys/new"
+              >
+                Plan Your Journey
+              </Button>
+              <Button
+                style={{ color: "#fff" }}
+                component={NavLink}
+                to={"/journeys"}
+              >
+                Journeys
+              </Button>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              {renderMenu}
+            </>
+          ) : (
+            <>
+              <Button
+                style={{ color: "#fff" }}
+                component={NavLink}
+                to={"/register"}
+              >
+                Register
+              </Button>
+              <Button style={{ color: "#fff" }} component={NavLink} to="/login">
+                Login
+              </Button>
+            </>
           )}
         </Toolbar>
       </AppBar>
-      {currentUser && renderMenu}
     </div>
   );
 }
