@@ -10,7 +10,7 @@ const requestController = require("../controllers/requestController");
 router.get("/journeys", authMiddleware, journeysController.index);
 router.get("/journeys/:id", authMiddleware, journeysController.show);
 router.post("/journeys", authMiddleware, journeysController.create);
-router.put("/journeys/:id", authMiddleware, journeysController.edit);
+router.patch("/journeys/:id", authMiddleware, journeysController.update);
 router.patch(
   "/journey/updateImage/:id",
   authMiddleware,

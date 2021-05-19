@@ -166,20 +166,20 @@ function CreateJourney({ showWelcomeMessage }) {
                       <TextField
                         label="Group Members"
                         variant="outlined"
+                        id="members"
                         value={value}
                         type="number"
                         fullWidth
                         onChange={onChange}
                         className={error ? classes.warningStyles : null}
                         error={!!error}
-                        InputProps={{ inputProps: { min: 1, max: 10 } }}
+                        InputProps={{ inputProps: { min: 1 } }}
                         helperText={error ? error.message : null}
                       />
                     )}
                     rules={{
-                      required: "Group Members required",
-                      min: { value: 1, message: "1-10 Group Members" },
-                      max: { value: 10, message: "1-10 Group Members" },
+                      required: 'Group Members required',
+                      min: {value: 1, message: "Min 1 Group Members required"}
                     }}
                   />
                 </Grid>
@@ -195,7 +195,9 @@ function CreateJourney({ showWelcomeMessage }) {
                       <TextField
                         label="Tentative Budget"
                         variant="outlined"
+                        placeholder="Give your roadtrip a name"
                         value={value}
+                        id="budget"
                         className={error ? classes.warningStyles : null}
                         type="number"
                         fullWidth
@@ -218,6 +220,7 @@ function CreateJourney({ showWelcomeMessage }) {
                     }) => (
                       <TextField
                         label="Roadtrip name"
+                        id="name"
                         variant="outlined"
                         value={value}
                         className={error ? classes.warningStyles : null}
@@ -244,9 +247,9 @@ function CreateJourney({ showWelcomeMessage }) {
                           />
                         )}
                       />
-                      I want to allow other members of the journey to update it.
-                    </label>
-                  </section>
+                      I want to allow other members to update the Roadtrip
+                      </label>
+                    </section>
                 </Grid>
               </Grid>
               <Button

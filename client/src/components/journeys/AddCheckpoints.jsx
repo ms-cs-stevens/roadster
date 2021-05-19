@@ -120,10 +120,22 @@ const AddCheckpoints = ({ journey, setCheckpoints}) => {
 
   return (
     <Card style={{ "minHeight": "100vh" }}>
-      <CardHeader title="Checkpoints" />
-      <Button onClick={addCheckpointToJourney} variant="outlined">
-        Add Checkpoints
-      </Button>
+      <CardHeader
+          action={
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              onClick={addCheckpointToJourney}
+              className={classes.submit}
+            >
+              Save Stops
+            </Button>
+          }
+          title="Stops"
+          subheader={""}
+        />
       <Divider />
       <CardContent>
         <Box

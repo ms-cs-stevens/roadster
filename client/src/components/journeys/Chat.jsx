@@ -11,6 +11,7 @@ import {
   TextField,
   ListItem,
   Fab,
+  Typography,
 } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -23,13 +24,13 @@ import firebaseApp from "../../firebase/firebaseApp";
 
 const useStyles = makeStyles({
   chatSection: {
-    height: "80vh",
+    height: "75vh",
   },
   avatar: {
     backgroundColor: deepPurple[800],
   },
   messageArea: {
-    height: "65vh",
+    height: "60vh",
     overflowY: "auto",
   },
   chat: {
@@ -144,8 +145,44 @@ function Chat({ journey, db = firebaseApp.firestore() }) {
       })
     );
   };
+
   return (
     <div className={classes.chat}>
+      {showChat && (
+        <Grid
+          container
+          component={Paper}
+          elevation={5}
+          className={classes.chatSection}
+        >
+          <Grid item sm={12}>
+            <List className={classes.messageArea}>
+              {renderComments()}
+              <div ref={messagesEndRef} />
+            </List>
+            <Divider />
+            <Grid container style={{ padding: "20px" }}>
+              <Grid item xs={10}>
+                <TextField
+                  id="outlined-basic-email"
+                  label="Type Something"
+                  fullWidth
+                  ref={inputRef}
+                  type="text"
+                  value={newComment}
+                  variant="outlined"
+                  onChange={handleOnChange}
+                />
+              </Grid>
+              <Grid item xs={2} align="right">
+                <Fab onClick={handleOnSubmit} color="primary" aria-label="add" size="medium" >
+                  <SendIcon  fontSize="small" />
+                </Fab>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      )}
       <Grid container>
         <Grid container justify="flex-end" item xs={12}>
           <Fab
@@ -157,40 +194,6 @@ function Chat({ journey, db = firebaseApp.firestore() }) {
           </Fab>
         </Grid>
       </Grid>
-      {showChat && (
-        <Grid
-          container
-          component={Paper}
-          elevation={4}
-          className={classes.chatSection}
-        >
-          <Grid item sm={12}>
-            <List className={classes.messageArea}>
-              {renderComments()}
-              <div ref={messagesEndRef} />
-            </List>
-            <Divider />
-            <Grid container style={{ padding: "20px" }}>
-              <Grid item xs={11}>
-                <TextField
-                  id="outlined-basic-email"
-                  label="Type Something"
-                  fullWidth
-                  ref={inputRef}
-                  type="text"
-                  value={newComment}
-                  onChange={handleOnChange}
-                />
-              </Grid>
-              <Grid item xs={1} align="right">
-                <Fab onClick={handleOnSubmit} color="primary" aria-label="add">
-                  <SendIcon />
-                </Fab>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      )}
     </div>
   );
 }

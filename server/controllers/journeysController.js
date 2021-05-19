@@ -16,6 +16,13 @@ getJourneyWithCreator = async (journey) => {
   return journey;
 };
 
+preventJourneyEdit = () => {
+  return (
+    req.currentUser.uid !== journey.creatorId &&
+    (!journey.editable || !journey.users.include(req.currentUser.uid))
+  );
+};
+
 // TODO: Add validations if required
 
 module.exports = {
@@ -42,13 +49,18 @@ module.exports = {
       const journeys = data.map((journey) => getJourneyWithCreator(journey));
       res.json({ journeys: await Promise.all(journeys) });
     } catch (e) {
-      res.sendStatus(422).json({ error: e.message });
+      res.sendStatus(422).json({ message: e.message });
     }
   },
 
   async create(req, res) {
     try {
       validateJourneyInfo(req.body);
+    } catch (error) {
+      res.sendStatus(422).json({ message: e });
+    }
+
+    try {
       let journeyInfo = {
         origin: req.body.origin,
         destination: req.body.destination,
@@ -63,7 +75,7 @@ module.exports = {
       res.json(journeyData);
     } catch (e) {
       console.log(e);
-      res.sendStatus(500);
+      res.sendStatus(500).json({ message: e });
     }
   },
 
@@ -73,21 +85,33 @@ module.exports = {
       res.json(journeyData);
     } catch (e) {
       console.log(e);
-      res.sendStatus(500);
+      res.sendStatus(404).json({ message: e });
     }
   },
 
-  async edit(req, res) {
+  async update(req, res) {
+    if (preventJourneyEdit()) {
+      return res
+        .sendStatus(403)
+        .json({ message: "You are not authorized to perform this request" });
+    }
+
     try {
-      const journeyData = await journey.editJourney(req.body);
-      res.json(journeyData);
+      const journeyData = await journey.updateJourney(req.params.id, req.body);
+      res.json({ data: journeyData });
     } catch (e) {
       console.log(e);
-      res.sendStatus(500);
+      res.sendStatus(500).json({ message: e });
     }
   },
 
   async updateImage(req, res) {
+    if (preventJourneyEdit()) {
+      return res
+        .sendStatus(403)
+        .json({ message: "You are not authorized to perform this request" });
+    }
+
     try {
       const journeyData = await journey.updateImage(
         req.params.id,
@@ -96,11 +120,17 @@ module.exports = {
       res.json(journeyData);
     } catch (e) {
       console.log(e);
-      res.sendStatus(500);
+      res.sendStatus(500).json({ message: e });
     }
   },
 
   async addCheckpoints(req, res) {
+    if (preventJourneyEdit()) {
+      return res
+        .sendStatus(403)
+        .json({ message: "You are not authorized to perform this request" });
+    }
+
     try {
       const journeyData = await journey.addCheckpoints(
         req.params.id,
@@ -109,7 +139,7 @@ module.exports = {
       res.json(journeyData);
     } catch (error) {
       console.log(error);
-      res.sendStatus(500);
+      res.sendStatus(500).json({ message: e });
     }
   },
 };

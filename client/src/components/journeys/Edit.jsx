@@ -1,16 +1,20 @@
 import { Helmet } from "react-helmet";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
 import { Box, Container, Grid, Typography } from "@material-ui/core";
 import Members from "./Members";
 import Map from "./Map.jsx";
 import { useParams } from "react-router-dom";
 import apiService from "../../services/apiService";
 import AddCheckpoints from "./AddCheckpoints.jsx";
+import EditJourneyDetails from "./EditJourneyDetails";
+import { AuthContext } from "../../firebase/Auth";
 
 const EditJourney = () => {
   const { id } = useParams();
   const [journey, setJourney] = useState(undefined);
   const [loading, setLoading] = useState(true);
+  const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchJourney() {
@@ -25,9 +29,22 @@ const EditJourney = () => {
     setJourney({...journey, checkpoints: checkpoints});
   }
 
+  const updateJourneyDetails = (updatedJourney) => {
+    setJourney(updatedJourney);
+  }
+
   const setDistanceTime = (data) => {
     // setRouteProperty(data);
   };
+
+  const preventCurrentUserToEdit = () => {
+    if(!journey) return false;
+    return (currentUser.uid !== journey.creatorId && (!journey.editable || !journey.users.include(currentUser.uid)) );
+  }
+
+  if (preventCurrentUserToEdit()) {
+    return <Redirect to={`/journeys/${journey._id}`} />;
+  }
 
   if (loading) {
     return "Loading";
@@ -45,9 +62,15 @@ const EditJourney = () => {
           }}
         >
           <Container maxWidth="lg">
-            <Typography component="h2" variant="h5">
-              Edit Journey
-            </Typography>
+            <br />
+            <Grid container direction="row" spacing={5}>
+              <Grid item lg={7} sm={6}>
+                <Typography component="h2" variant="h5">
+                  Edit {journey.name}
+                </Typography>
+              </Grid>
+            </Grid>
+            <br />
             <Grid container spacing={3}>
               <Grid item lg={7} md={12} xl={9} xs={12}>
                 <Map journey={journey} setDistanceTime={setDistanceTime} />
@@ -59,6 +82,7 @@ const EditJourney = () => {
                 <Members journey={journey} />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
+                <EditJourneyDetails journey={journey} updateJourneyDetails={updateJourneyDetails}/>
               </Grid>
             </Grid>
           </Container>

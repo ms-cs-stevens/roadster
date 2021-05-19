@@ -16,6 +16,9 @@ const journeySchema = new Schema(
     },
     origin: locationSchema,
     destination: locationSchema,
+    description: {
+      type: String,
+    },
     budget: {
       type: Number,
       min: 0,
@@ -23,16 +26,15 @@ const journeySchema = new Schema(
     occupancy: {
       type: Number,
       min: 1,
-      // required: [true, 'You must provide number people occupying you on journey'],
       default: 1,
     },
     startDate: {
       type: Date,
       default: Date.now,
     },
-    endDate: {
-      type: Date,
-    },
+    // endDate: {
+    //   type: Date,
+    // },
     creatorId: {
       type: String,
       ref: "User",
@@ -56,12 +58,6 @@ const journeySchema = new Schema(
       {
         type: String,
         ref: "Image",
-      },
-    ],
-    comments: [
-      {
-        type: String,
-        ref: "Comment",
       },
     ],
     checkpoints: [

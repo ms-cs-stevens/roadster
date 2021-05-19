@@ -24,14 +24,25 @@ const InfoCard = ({ journey }) => {
             <Typography component="h2" variant="h6">
               Name
             </Typography>
-            <Typography>{journey.name}</Typography>
-            <br />
+            <Typography style={{color: "#333"}}>{journey.name}</Typography>
             <br />
             <Typography component="h2" variant="h6">
               Description
             </Typography>
-            <Typography>{journey.description}</Typography>
+            <Typography style={{color: "#333"}}>
+              {journey.description || "No description available for the roadtrip"}
+            </Typography>
+            {/* <br />
+            <Typography component="h2" variant="h6">
+              Tentative Start Date
+            </Typography>
+            <Typography style={{color: "#333"}}>
+              {<Moment format="MMM D, YYYY">{journey.startDate}</Moment>}
+            </Typography> */}
             <br />
+            <Typography style={{fontStyle: "italic", color: "blue"}}>
+              Editable by { journey.editable ? "Members" : "Owner" } only
+            </Typography>
           </Box>
         </CardContent>
       </Card>
