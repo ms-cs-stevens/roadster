@@ -20,7 +20,7 @@ preventJourneyEdit = (currentUser, journey) => {
   console.log(currentUser.uid !== journey.creatorId);
   return (
     currentUser.uid !== journey.creatorId &&
-    (!journey.editable || !journey.users.include(currentUser.uid))
+    (!journey.editable || !journey.users.includes(currentUser.uid))
   );
 };
 
@@ -153,6 +153,29 @@ module.exports = {
         req.body.checkpoints
       );
       res.json(journey);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: e });
+    }
+  },
+
+  async getMembers(req, res) {
+    try {
+      let journey = await journeyData.getJourney(req.params.id);
+      if (!journey) throw new Error("Journey not found");
+      let data = await journeyData.getMembers(req.params.id);
+      res.json({ members: data.members, journey: data.journey });
+    } catch (e) {
+      res.status(404).json({ error: e.message });
+    }
+  },
+
+  async addMembers(req, res) {
+    try {
+      let journey = await journeyData.getJourney(req.params.id);
+      if (!journey) throw new Error("Journey not found");
+      let data = await journeyData.addMembers(req.params.id, req.body.users);
+      res.json({ members: data.members, journey: data.journey });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: e });

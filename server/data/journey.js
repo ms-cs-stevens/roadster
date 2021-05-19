@@ -1,4 +1,5 @@
 const { Journey } = require("../models");
+const userData = require("./user");
 
 journeyObject = (journey) => {
   return {
@@ -71,7 +72,7 @@ async function createJourney(journeyInfo) {
     name: journeyInfo.name,
   });
 
-  if (!journey) throw "Something went wrong while creating journey";
+  if (!journey) throw new Error("Something went wrong while creating journey");
 
   return journeyObject(journey);
 }
@@ -95,7 +96,7 @@ async function updateJourney(id, journeyData) {
   );
 
   if (updateInfo.errors)
-    throw "Could not find and update the specified journey!";
+    throw new Error("Could not find and update the specified journey!");
 
   return await this.getJourney(id);
 }
@@ -126,16 +127,42 @@ async function getAllJourneys() {
   return journeys.map((journey) => journeyObject(journey));
 }
 
-async function updateImage(id, imagesArray) {
+async function updateImage(id, images) {
   let updateInfo = await Journey.findOneAndUpdate(
     { _id: id },
-    { $set: { images: imagesArray } }
+    { $addToSet: { images } }
   );
 
   if (updateInfo.errors)
-    throw "Could not find and update the specified journey!";
+    throw new Error("Could not find and update the specified journey!");
 
   return await getJourney(id);
+}
+
+async function addMembers(id, users) {
+  let journey = await getJourney(id);
+  if (!journey) throw new Error("Journey not found");
+  let updateInfo = await Journey.findOneAndUpdate(
+    { _id: id },
+    { $addToSet: { users } }
+  );
+  if (updateInfo.errors)
+    throw new Error("Could not find and update the specified journey!");
+
+  return await getMembers(id);
+}
+
+async function getMembers(id) {
+  let members = [];
+  let journey = await getJourney(id);
+  if (!journey) throw new Error("Journey not found");
+  if (journey.users) {
+    const promises =
+      journey.users && journey.users.map((userId) => userData.getUser(userId));
+    members = await Promise.all(promises);
+  }
+  journey = await getJourney(id);
+  return { members, journey };
 }
 
 module.exports = {
@@ -146,4 +173,6 @@ module.exports = {
   getAllJourneys,
   updateImage,
   addCheckpoints,
+  addMembers,
+  getMembers,
 };
