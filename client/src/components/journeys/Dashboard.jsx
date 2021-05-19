@@ -65,6 +65,13 @@ const Dashboard = () => {
     setRouteProperty(data);
   };
 
+  const accessChat = () => {
+    return (
+      journey.creatorId === currentUserId ||
+      (journey.users && journey.users.includes(currentUserId))
+    );
+  };
+
   const generatePdf = () => {
     html2canvas(document.getElementById("journeyDash"), {
       proxy: "server.js",
@@ -180,7 +187,7 @@ const Dashboard = () => {
                 <Description journey={journey} />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
-                <Chat journey={journey} />
+                {accessChat() && <Chat journey={journey} />}
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
                 <Images journey={journey} />
