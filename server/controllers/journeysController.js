@@ -1,4 +1,4 @@
-const journey = require("../data/journey");
+const journeyData = require("../data/journey");
 const userData = require("../data/user");
 
 validateJourneyInfo = (journey) => {
@@ -16,10 +16,11 @@ getJourneyWithCreator = async (journey) => {
   return journey;
 };
 
-preventJourneyEdit = () => {
+preventJourneyEdit = (currentUser, journey) => {
+  console.log(currentUser.uid !== journey.creatorId);
   return (
-    req.currentUser.uid !== journey.creatorId &&
-    (!journey.editable || !journey.users.include(req.currentUser.uid))
+    currentUser.uid !== journey.creatorId &&
+    (!journey.editable || !journey.users.include(currentUser.uid))
   );
 };
 
@@ -32,13 +33,13 @@ module.exports = {
       let data;
       switch (journeysFilter) {
         case "user":
-          data = await journey.getAllUserJourneys(req.currentUser.uid);
+          data = await journeyData.getAllUserJourneys(req.currentUser.uid);
           break;
         case "all":
-          data = await journey.getAllJourneys();
+          data = await journeyData.getAllJourneys();
           break;
         case "pending":
-          data = await journey.getAllJourneys();
+          data = await journeyData.getAllJourneys();
           break;
         default:
           throw new Error(
@@ -49,7 +50,7 @@ module.exports = {
       const journeys = data.map((journey) => getJourneyWithCreator(journey));
       res.json({ journeys: await Promise.all(journeys) });
     } catch (e) {
-      res.sendStatus(422).json({ message: e.message });
+      res.status(422).json({ message: e.message });
     }
   },
 
@@ -57,7 +58,7 @@ module.exports = {
     try {
       validateJourneyInfo(req.body);
     } catch (error) {
-      res.sendStatus(422).json({ message: e });
+      res.status(422).json({ message: e });
     }
 
     try {
@@ -71,75 +72,92 @@ module.exports = {
         name: req.body.name,
       };
 
-      const journeyData = await journey.createJourney(journeyInfo);
-      res.json(journeyData);
+      const journey = await journeyData.createJourney(journeyInfo);
+      res.json(journey);
     } catch (e) {
       console.log(e);
-      res.sendStatus(500).json({ message: e });
+      res.status(500).json({ message: e });
     }
   },
 
   async show(req, res) {
     try {
-      const journeyData = await journey.getJourney(req.params.id);
-      res.json(journeyData);
+      const journey = await journeyData.getJourney(req.params.id);
+      res.json(journey);
     } catch (e) {
       console.log(e);
-      res.sendStatus(404).json({ message: e });
+      res.status(404).json({ message: e });
     }
   },
 
   async update(req, res) {
-    if (preventJourneyEdit()) {
-      return res
-        .sendStatus(403)
-        .json({ message: "You are not authorized to perform this request" });
+    try {
+      const journey = await journeyData.getJourney(req.params.id);
+      if (preventJourneyEdit(req.currentUser, journey)) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to perform this request" });
+      }
+    } catch (error) {
+      return res.status(404).json({ message: "Journey not found" });
     }
 
     try {
-      const journeyData = await journey.updateJourney(req.params.id, req.body);
-      res.json({ data: journeyData });
+      const journey = await journeyData.updateJourney(req.params.id, req.body);
+      res.json({ data: journey });
     } catch (e) {
       console.log(e);
-      res.sendStatus(500).json({ message: e });
+      res.status(500).json({ message: e });
     }
   },
 
   async updateImage(req, res) {
-    if (preventJourneyEdit()) {
-      return res
-        .sendStatus(403)
-        .json({ message: "You are not authorized to perform this request" });
+    try {
+      const journey = await journeyData.getJourney(req.params.id);
+      if (preventJourneyEdit(req.currentUser, journey)) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to perform this request" });
+      }
+    } catch (error) {
+      return res.status(404).json({ message: "Journey not found" });
     }
 
     try {
-      const journeyData = await journey.updateImage(
+      const journey = await journeyData.updateImage(
         req.params.id,
         req.body.imageArray
       );
-      res.json(journeyData);
+      res.json(journey);
     } catch (e) {
       console.log(e);
-      res.sendStatus(500).json({ message: e });
+      res.status(500).json({ message: e });
     }
   },
 
   async addCheckpoints(req, res) {
-    if (preventJourneyEdit()) {
-      return res
-        .sendStatus(403)
-        .json({ message: "You are not authorized to perform this request" });
+    try {
+      const journey = await journeyData.getJourney(req.params.id);
+      if (preventJourneyEdit(req.currentUser, journey)) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to perform this request" });
+      }
+    } catch (error) {
+      return res.status(404).json({ message: "Journey not found" });
     }
 
     try {
-      const journeyData = await journey.addCheckpoints(
+      console.log(req.body);
+      const journey = await journeyData.addCheckpoints(
         req.params.id,
         req.body.checkpoints
       );
-      res.json(journeyData);
+      console.log(journey);
+      res.json(journey);
     } catch (error) {
       console.log(error);
-      res.sendStatus(500).json({ message: e });
+      res.status(500).json({ message: e });
     }
   },
 };

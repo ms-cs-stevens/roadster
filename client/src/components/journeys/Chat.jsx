@@ -11,7 +11,6 @@ import {
   TextField,
   ListItem,
   Fab,
-  Typography,
 } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import ChatIcon from "@material-ui/icons/Chat";

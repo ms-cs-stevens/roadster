@@ -63,7 +63,7 @@ const journeyReducer = (state, event) => {
 
 const AddCheckpoints = ({ journey, setCheckpoints}) => {
   const classes = useStyles();
-  const [formData, setCP] = useReducer(journeyReducer, {checkpoints: []});
+  const [formData, setCP] = useReducer(journeyReducer, {checkpoints: journey.checkpoints});
 
   const addCheckpointToJourney = async () => {
     try {
@@ -80,11 +80,11 @@ const AddCheckpoints = ({ journey, setCheckpoints}) => {
   }
 
   const handleChange = (event) => {
-    console.log(event.detail)
     setCP({
       value: (event.detail && event.detail.location),
       name: event.target.name
     });
+    console.log("form data", formData)
     setCheckpoints(formData.checkpoints);
   };
 
