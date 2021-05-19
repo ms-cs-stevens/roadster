@@ -166,6 +166,7 @@ function CreateJourney({ showWelcomeMessage }) {
                       <TextField
                         label="Group Members"
                         variant="outlined"
+                        id="members"
                         value={value}
                         type="number"
                         fullWidth
@@ -196,6 +197,7 @@ function CreateJourney({ showWelcomeMessage }) {
                         variant="outlined"
                         placeholder="Give your roadtrip a name"
                         value={value}
+                        id="budget"
                         className={error ? classes.warningStyles : null}
                         type="number"
                         fullWidth
@@ -218,6 +220,7 @@ function CreateJourney({ showWelcomeMessage }) {
                     }) => (
                       <TextField
                         label="Roadtrip name"
+                        id="name"
                         variant="outlined"
                         value={value}
                         className={error ? classes.warningStyles : null}

@@ -10,10 +10,11 @@ import {
   TextField,
   Checkbox,
 } from "@material-ui/core";
-import React, {useState,useEffect} from 'react';
+import React, {useState, useContext } from 'react';
 import Moment from "react-moment";
 import { makeStyles } from "@material-ui/core/styles";
 import apiService from "../../services/apiService";
+import { AuthContext } from "../../firebase/Auth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
   const classes = useStyles();
   const [submitting, setSubmitting] = useState(false);
+  const { currentUser } = useContext(AuthContext);
   const { handleSubmit, control } = useForm();
 
   const handleFormSubmit = async (data) => {
@@ -53,6 +55,11 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
     }
     setSubmitting(false);
   };
+
+  const preventMembersToEdit = () => {
+    if(!journey) return false;
+    return (currentUser.uid === journey.creatorId);
+  }
 
   if (journey) {
     return (
@@ -83,6 +90,7 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
                       defaultValue={journey.name}
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
+                          id="name"
                           label="Roadtrip name *"
                           variant="outlined"
                           value={value}
@@ -105,6 +113,7 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
                           label="Group Members *"
+                          id="members"
                           variant="outlined"
                           value={value}
                           type="number"
@@ -128,6 +137,7 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
                       defaultValue={journey.budget}
                       render={({ field: { onChange, value }, fieldState: { error } }) => (
                         <TextField
+                          id="budget"
                           label="Tentative Budget *"
                           variant="outlined"
                           value={value}
@@ -187,8 +197,7 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
                   </Grid>
                   <br />
                   <Grid item xs={12}>
-                    <section id="input-checkbox">
-                      <label>
+                    {preventMembersToEdit() && (<label>
                       <Controller
                         name="editable"
                         control={control}
@@ -202,8 +211,7 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
                         )}
                       />
                       I want to allow other members to update the Roadtrip *
-                      </label>
-                    </section>
+                    </label>)}
                   </Grid>
                   <Button
                     type="submit"
