@@ -65,6 +65,20 @@ const journeySchema = new Schema(
         type: locationSchema,
       },
     ],
+    comments: [
+      {
+        _id: {
+          type: String,
+          default: () => nanoid(),
+        },
+        posterId: {
+          type: String,
+          default: nanoid(),
+        },
+        content: String,
+      },
+      { timestamps: true },
+    ],
   },
   {
     timestamps: true,

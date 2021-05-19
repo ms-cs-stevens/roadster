@@ -24,6 +24,15 @@ preventJourneyEdit = (currentUser, journey) => {
   );
 };
 
+/* addComment = async (journey) => {
+  const newData = journey.comments;
+  const oldData = await journeyData.getJourney(journey.id);
+  
+  if(newData !== oldData) {
+
+  } 
+} */
+
 // TODO: Add validations if required
 
 module.exports = {

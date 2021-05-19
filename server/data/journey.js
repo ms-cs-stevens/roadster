@@ -17,6 +17,7 @@ journeyObject = (journey) => {
     modifiedBy: journey.modifiedBy,
     users: journey.users,
     images: journey.images,
+    comments: journey.comments,
     updatedAt: journey.updatedAt,
   };
 };
@@ -27,6 +28,14 @@ function checkString(string, name) {
 
 function checkNumber(num, name) {
   if (!num || Number.isNaN(parseInt(num))) throw `Please provide valid ${name}`;
+}
+
+function validateComments(comments) {
+  if (comments.length === 0) return false;
+  comments.forEach((comment) => {
+    if (!comment.posterId) throw "No anonymous comments allowed.";
+    checkString(comment.content, "comment");
+  });
 }
 
 function validateUpdateInfo(journeyInfo, journey) {
@@ -55,6 +64,10 @@ function validateUpdateInfo(journeyInfo, journey) {
     updatedObject.editable = journeyInfo.editable;
   }
 
+  if (journeyInfo.comments != journey.comments) {
+    updatedObject.comments = journeyInfo.comments;
+  }
+
   if (Object.keys(updatedObject).length <= 0)
     throw `No information has been provided to update the specified journey`;
 }
@@ -69,6 +82,7 @@ async function createJourney(journeyInfo) {
     creatorId: journeyInfo.creatorId,
     modifiedBy: journeyInfo.creatorId,
     name: journeyInfo.name,
+    comments: journeyInfo.comments,
   });
 
   if (!journey) throw "Something went wrong while creating journey";
@@ -143,6 +157,17 @@ async function updateImage(id, imagesArray) {
   return await getJourney(id);
 }
 
+async function addComments(id, update) {
+  let updateInfo = await Journey.findOneAndUpdate(
+    { _id: id },
+    { $set: { comments: update } }
+  );
+  if (updateInfo.errors)
+    throw "Could not find and update the specified journey!";
+
+  return await getJourney(id);
+}
+
 module.exports = {
   createJourney,
   getJourney,
@@ -151,5 +176,6 @@ module.exports = {
   getPendingJourneys,
   getAllJourneys,
   updateImage,
+  addComments,
   addCheckpoints,
 };

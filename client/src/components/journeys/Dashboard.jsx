@@ -26,6 +26,7 @@ import Images from "./Images";
 import Map from "./Map.jsx";
 import Checkpoints from "./ShowCheckpoints.jsx";
 import apiService from "../../services/apiService";
+import Comments from "./Comments";
 import Chat from "./Chat";
 
 const Dashboard = () => {
@@ -171,6 +172,9 @@ const Dashboard = () => {
               <Grid item lg={8} md={12} xl={9} xs={12}>
                 <Images journey={journey} />
               </Grid>
+              {/* <Grid item lg={3} sm={6} xl={3} xs={12}>
+                <Comments journey={journey}/>
+              </Grid> */}
             </Grid>
           </Container>
         </Box>
