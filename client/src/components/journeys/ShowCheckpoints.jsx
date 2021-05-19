@@ -75,7 +75,7 @@ const JourneyTimeline = ({ journey }) => {
   };
 
   return (
-    <Card style={{ "min-height": "100vh" }}>
+    <Card style={{ minHeight: "100vh" }}>
       <CardHeader title="Timeline" />
       <Divider />
       <CardContent>

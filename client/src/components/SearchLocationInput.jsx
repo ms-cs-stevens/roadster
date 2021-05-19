@@ -1,10 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
-import RoomIcon from '@material-ui/icons/Room';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import React, { useState, useEffect, useRef } from "react";
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import RoomIcon from "@material-ui/icons/Room";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
-function SearchLocationInput({ name, label, placeholder, icon, id, value, setLocation }) {
+function SearchLocationInput({
+  name,
+  label,
+  placeholder,
+  icon,
+  id,
+  value,
+  setLocation,
+}) {
   const [query, setQuery] = useState(value || "");
   const autoCompleteRef = useRef(null);
   let autoComplete;
@@ -71,8 +79,8 @@ function SearchLocationInput({ name, label, placeholder, icon, id, value, setLoc
       locationDetails.lng = place.geometry.location.lng();
       let event = new CustomEvent("setFormData", {
         detail: {
-          location: locationDetails
-        }
+          location: locationDetails,
+        },
       });
 
       // Trigger custom hook when location is set
@@ -81,22 +89,29 @@ function SearchLocationInput({ name, label, placeholder, icon, id, value, setLoc
   }
 
   function handleScriptLoad() {
-    if(!window.google) return;
+    if (!window.google) return;
 
     const options = {
       componentRestrictions: { country: ["us", "ca"] },
-      fields: ["address_components", "geometry", "formatted_address", "place_id"],
+      fields: [
+        "address_components",
+        "geometry",
+        "formatted_address",
+        "place_id",
+      ],
       types: ["(cities)"], // type: ['geocode', 'address', 'establishment', '(regions)', '(cities)']
       // origin: map.getCenter(),
       // strictBounds: false,
-    }
+    };
 
     autoComplete = new window.google.maps.places.Autocomplete(
       autoCompleteRef.current,
       options
     );
 
-    autoComplete.addListener('place_changed', () => handlePlaceSelect(setQuery, autoCompleteRef));
+    autoComplete.addListener("place_changed", () =>
+      handlePlaceSelect(setQuery, autoCompleteRef)
+    );
   }
 
   icon = icon || <RoomIcon color="action" />;
@@ -104,16 +119,17 @@ function SearchLocationInput({ name, label, placeholder, icon, id, value, setLoc
   useEffect(() => {
     // TODO: FormData doesn't reset on deleting location from input field
     // TODO: Check issue with exceeding rate limit
-    if(autoCompleteRef.current.value.length > 5)
+    if (autoCompleteRef.current.value.length > 5)
       handleScriptLoad(setQuery, autoCompleteRef);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
-
 
   useEffect(() => {
     // Custom hook to set location value in the form
-    autoCompleteRef.current.addEventListener("setFormData", function(event) {
+    autoCompleteRef.current.addEventListener("setFormData", function (event) {
       setLocation(event);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -129,9 +145,11 @@ function SearchLocationInput({ name, label, placeholder, icon, id, value, setLoc
         autoComplete={name}
         placeholder={placeholder}
         value={query}
-        onChange={event => setQuery(event.target.value)}
+        onChange={(event) => setQuery(event.target.value)}
         InputProps={{
-          startAdornment: <InputAdornment position="start">{icon}</InputAdornment>,
+          startAdornment: (
+            <InputAdornment position="start">{icon}</InputAdornment>
+          ),
         }}
       />
     </Grid>

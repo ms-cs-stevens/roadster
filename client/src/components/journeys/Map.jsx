@@ -25,10 +25,12 @@ const Map = ({ journey, setDistanceTime }) => {
     let origin = journey.origin;
     let destination = journey.destination;
     let waypoints = [];
-    journey.checkpoints.map((cp) => waypoints.push({
-      location: (new window.google.maps.LatLng(cp.lat,cp.lng)),
-      stopover: true
-    }))
+    journey.checkpoints.map((cp) =>
+      waypoints.push({
+        location: new window.google.maps.LatLng(cp.lat, cp.lng),
+        stopover: true,
+      })
+    );
 
     if (origin && destination) {
       DirectionsService.route(
@@ -49,6 +51,7 @@ const Map = ({ journey, setDistanceTime }) => {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [journey]);
 
   const mapContainerStyles = {
@@ -63,7 +66,11 @@ const Map = ({ journey, setDistanceTime }) => {
 
   return (
     <div>
-      <GoogleMap mapContainerStyle={mapContainerStyles} zoom={6} center={jerseyCity}>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyles}
+        zoom={6}
+        center={jerseyCity}
+      >
         {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
     </div>

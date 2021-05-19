@@ -4,7 +4,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import Explore from "@material-ui/icons/Explore";
@@ -37,6 +36,17 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  warningStyles: {
+    "& .MuiFormLabel-root.Mui-error": {
+      color: "#e72400 !important",
+    },
+    "& .MuiInput-underline.Mui-error:after": {
+      borderBottomColor: "#e72400 !important",
+    },
+    "& .MuiFormHelperText-root.Mui-error": {
+      color: "#e72400 !important",
+    },
+  },
 }));
 
 const journeyReducer = (state, event) => {
@@ -46,10 +56,10 @@ const journeyReducer = (state, event) => {
   };
 };
 
-function CreateJourney() {
+function CreateJourney({ showWelcomeMessage }) {
   const history = useHistory();
   const classes = useStyles();
-  const [journey, setJourney] = useReducer(journeyReducer, {checkpoints: []});
+  const [journey, setJourney] = useReducer(journeyReducer, { checkpoints: [] });
   const [submitting, setSubmitting] = useState(false);
   const { handleSubmit, control } = useForm();
 
@@ -59,11 +69,10 @@ function CreateJourney() {
 
   const handleFormSubmit = async (data) => {
     // TODO: Fix below condition for form submission and set form error
-    if ( !journey || !journey.origin || !journey.destination )
-      return;
+    if (!journey || !journey.origin || !journey.destination) return;
 
     setSubmitting(true);
-    const formData = {...journey, ...data};
+    const formData = { ...journey, ...data };
 
     try {
       const journey = await apiService.createResource("journeys", formData);
@@ -85,9 +94,9 @@ function CreateJourney() {
 
   return (
     <Container component="main" maxWidth="lg">
-    <Helmet>
-      <title>Roadster | Plan Your Journey</title>
-    </Helmet>
+      <Helmet>
+        <title>Roadster | Plan Your Journey</title>
+      </Helmet>
       <CssBaseline />
       <Grid container spacing={4}>
         <Grid item md={7} xs={12}>
@@ -98,70 +107,96 @@ function CreateJourney() {
             <Avatar className={classes.avatar}>
               <Explore />
             </Avatar>
-            <Typography component="h1" variant="h5">
-              Plan Your Journey
-            </Typography>
-            {submitting && (
-              <div>
-                Please wait while we create your Roadtrip!
-              </div>
+            {showWelcomeMessage ? (
+              <>
+                <Typography component="h1" variant="h5">
+                  Welcome to Roadster
+                </Typography>
+                <Typography
+                  component="h2"
+                  style={{ color: "#333" }}
+                  variant="h6"
+                >
+                  Turn your road trip into an adventure!
+                </Typography>
+              </>
+            ) : (
+              <Typography component="h1" variant="h5">
+                Plan Your Journey
+              </Typography>
             )}
-            <form className={classes.form} onSubmit={handleSubmit(handleFormSubmit)}>
+
+            {submitting && (
+              <div>Please wait while we create your Roadtrip!</div>
+            )}
+            <form
+              className={classes.form}
+              onSubmit={handleSubmit(handleFormSubmit)}
+            >
               <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <SearchLocationInput
-                  name="origin"
-                  label="Origin"
-                  setLocation={handleChange}
-                  placeholder="New York, NY"
-                  id="origin"
-                  icon={<TripOriginIcon color="action" fontSize="small" />}
-                />
+                <Grid item xs={12}>
+                  <SearchLocationInput
+                    name="origin"
+                    label="Origin"
+                    setLocation={handleChange}
+                    placeholder="New York, NY"
+                    id="origin"
+                    icon={<TripOriginIcon color="action" fontSize="small" />}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <SearchLocationInput
-                  name="destination"
-                  setLocation={handleChange}
-                  label="Destination"
-                  placeholder="Destination"
-                  icon={<RoomIcon color="action" />}
-                  id="destination"
-                />
+                  <SearchLocationInput
+                    name="destination"
+                    setLocation={handleChange}
+                    label="Destination"
+                    placeholder="Destination"
+                    icon={<RoomIcon color="action" />}
+                    id="destination"
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                <Controller
-                  name="occupancy"
-                  control={control}
-                  defaultValue={1}
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      label="Group Members"
-                      variant="outlined"
-                      value={value}
-                      type="number"
-                      fullWidth
-                      onChange={onChange}
-                      error={!!error}
-                      InputProps={{ inputProps: { min: 1, max: 10 } }}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ required: 'Group Members required',
-                            min: {value: 1, message: "1-10 Group Members"},
-                            max: {value: 10, message: "1-10 Group Members"}}}
-                />
+                  <Controller
+                    name="occupancy"
+                    control={control}
+                    defaultValue={1}
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextField
+                        label="Group Members"
+                        variant="outlined"
+                        value={value}
+                        type="number"
+                        fullWidth
+                        onChange={onChange}
+                        className={error ? classes.warningStyles : null}
+                        error={!!error}
+                        InputProps={{ inputProps: { min: 1, max: 10 } }}
+                        helperText={error ? error.message : null}
+                      />
+                    )}
+                    rules={{
+                      required: "Group Members required",
+                      min: { value: 1, message: "1-10 Group Members" },
+                      max: { value: 10, message: "1-10 Group Members" },
+                    }}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Controller
                     name="budget"
                     control={control}
                     defaultValue=""
-                    render={({ field: { onChange, value }, fieldState: { error } }) => (
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
                       <TextField
                         label="Tentative Budget"
                         variant="outlined"
-                        required
                         value={value}
+                        className={error ? classes.warningStyles : null}
                         type="number"
                         fullWidth
                         onChange={onChange}
@@ -169,31 +204,35 @@ function CreateJourney() {
                         helperText={error ? error.message : null}
                       />
                     )}
-                    rules={{ required: 'Budget required'}}
-                    />
+                    rules={{ required: "Budget required" }}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                <Controller
-                  name="name"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <TextField
-                      label="Roadtrip name"
-                      variant="outlined"
-                      value={value}
-                      fullWidth
-                      onChange={onChange}
-                      error={!!error}
-                      helperText={error ? error.message : null}
-                    />
-                  )}
-                  rules={{ required: 'Roadtrip name required' }}
-                />
+                  <Controller
+                    name="name"
+                    control={control}
+                    defaultValue=""
+                    render={({
+                      field: { onChange, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextField
+                        label="Roadtrip name"
+                        variant="outlined"
+                        value={value}
+                        className={error ? classes.warningStyles : null}
+                        fullWidth
+                        onChange={onChange}
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                      />
+                    )}
+                    rules={{ required: "Roadtrip name required" }}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                    <section id="input-checkbox">
-                      <label>
+                  <section id="input-checkbox">
+                    <label>
                       <Controller
                         name="editable"
                         control={control}
@@ -206,8 +245,8 @@ function CreateJourney() {
                         )}
                       />
                       I want to allow other members of the journey to update it.
-                      </label>
-                    </section>
+                    </label>
+                  </section>
                 </Grid>
               </Grid>
               <Button
@@ -221,7 +260,7 @@ function CreateJourney() {
               </Button>
             </form>
           </div>
-      </Grid>
+        </Grid>
       </Grid>
     </Container>
   );
