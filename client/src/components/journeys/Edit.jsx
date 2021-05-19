@@ -37,6 +37,11 @@ const EditJourney = () => {
     // setRouteProperty(data);
   };
 
+  const currentUserOwner = () => {
+    if (!journey) return false;
+    return currentUser.uid === journey.creatorId;
+  };
+
   const preventCurrentUserToEdit = () => {
     if (!journey) return false;
     return (
@@ -85,7 +90,10 @@ const EditJourney = () => {
                 />
               </Grid>
               <Grid item lg={4} md={6} xl={3} xs={12}>
-                <Members journeyId={journey._id} showSearch={true} />
+                <Members
+                  journeyId={journey._id}
+                  showSearch={currentUserOwner()}
+                />
               </Grid>
               <Grid item lg={8} md={12} xl={9} xs={12}>
                 <EditJourneyDetails
