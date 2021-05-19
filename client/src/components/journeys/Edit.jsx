@@ -19,7 +19,7 @@ const EditJourney = () => {
   useEffect(() => {
     async function fetchJourney() {
       let data = await apiService.getResource(`journeys/${id}`);
-      setJourney(data);
+      setJourney(data.journey);
       setLoading(false);
     }
     fetchJourney();
