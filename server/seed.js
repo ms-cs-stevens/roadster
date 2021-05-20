@@ -22,35 +22,23 @@ mongoose.connection.on("error", (err) => {
 });
 
 // READY?! Let's go!
-const { Journey, Location, Request, User } = require("./models");
-const { journeys, locations, requests, users } = require("./dump");
+const { Journey, User } = require("./models");
+const { journeys, users } = require("./dump");
 
 async function createJourneys() {
   const createdJourneys = await Journey.create(journeys);
-  console.log(`${createdJourneys.length} journeys created !!`);
-}
-
-async function createLocations() {
-  const createdLocations = await Location.create(locations);
-  console.log(`${createdLocations.length} locations created !!`);
-}
-
-async function createRequests() {
-  const createdRequests = await Request.create(requests);
-  console.log(`${createdRequests.length} requests created !!`);
+  console.log(`${createdJourneys.length} journeys created.`);
 }
 
 async function createUsers() {
   let createdUsers = await User.create(users);
-  console.log(`${createdUsers.length} users created !!`);
+  console.log(`${createdUsers.length} users created.`);
 }
 
 async function dumpDatabase() {
   // create new db and new collections with data
   await createJourneys();
-  await createLocations();
   await createUsers();
-  await createRequests();
   process.exit();
 }
 
