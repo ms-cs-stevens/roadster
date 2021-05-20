@@ -9,6 +9,7 @@ import apiService from "../../services/apiService";
 import AddCheckpoints from "./AddCheckpoints.jsx";
 import EditJourneyDetails from "./EditJourneyDetails";
 import { AuthContext } from "../../firebase/Auth";
+import { NavLink } from "react-router-dom";
 
 const EditJourney = () => {
   const { id } = useParams();
@@ -78,12 +79,13 @@ const EditJourney = () => {
                 </Typography>
               </Grid>
               <Grid container justify="flex-end" item lg={5} sm={6}>
-                <Button
-                  type="submit"
-                  variant="outlined"
-                  color="primary"
-                >
-                  Go Back to Journey
+                <Button type="submit" variant="outlined" color="primary">
+                  <NavLink
+                    style={{ textDecoration: "none", color: "inherit" }}
+                    to={`/journeys/${journey._id}`}
+                  >
+                    Go Back to Journey
+                  </NavLink>
                 </Button>
               </Grid>
             </Grid>
