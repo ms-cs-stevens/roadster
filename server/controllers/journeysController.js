@@ -38,18 +38,14 @@ module.exports = {
         case "all":
           data = await journeyData.getAllJourneys();
           break;
-        case "pending":
-          data = await journeyData.getAllJourneys();
-          break;
         default:
-          throw new Error(
-            "Invalid Journey filter. Filter should be either 'user', 'all' or 'pending'"
-          );
+          throw "Invalid Journey filter. Filter should be either 'user', 'all'";
       }
 
       const journeys = data.map((journey) => getJourneyWithCreator(journey));
       res.json({ journeys: await Promise.all(journeys) });
     } catch (e) {
+      console.log(e);
       res.status(422).json({ message: e.message });
     }
   },
