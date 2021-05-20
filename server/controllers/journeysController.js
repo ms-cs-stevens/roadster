@@ -1,5 +1,6 @@
 const journeyData = require("../data/journey");
 const userData = require("../data/user");
+const invitationData = require("../data/invitation");
 
 validateJourneyInfo = (journey) => {
   if (!journey) throw "Provide journey details";
@@ -17,7 +18,6 @@ getJourneyWithCreator = async (journey) => {
 };
 
 preventJourneyEdit = (currentUser, journey) => {
-  console.log(currentUser.uid !== journey.creatorId);
   return (
     currentUser.uid !== journey.creatorId &&
     (!journey.editable || !journey.users.includes(currentUser.uid))
@@ -38,18 +38,14 @@ module.exports = {
         case "all":
           data = await journeyData.getAllJourneys();
           break;
-        case "pending":
-          data = await journeyData.getAllJourneys();
-          break;
         default:
-          throw new Error(
-            "Invalid Journey filter. Filter should be either 'user', 'all' or 'pending'"
-          );
+          throw "Invalid Journey filter. Filter should be either 'user', 'all'";
       }
 
       const journeys = data.map((journey) => getJourneyWithCreator(journey));
       res.json({ journeys: await Promise.all(journeys) });
     } catch (e) {
+      console.log(e);
       res.status(422).json({ message: e.message });
     }
   },
@@ -83,7 +79,11 @@ module.exports = {
   async show(req, res) {
     try {
       const journey = await journeyData.getJourney(req.params.id);
-      res.json(journey);
+      const invitation = await invitationData.getInvitation(
+        journey._id,
+        req.currentUser.uid
+      );
+      res.json({ journey, invitation });
     } catch (e) {
       console.log(e);
       res.status(404).json({ message: e });
@@ -104,10 +104,10 @@ module.exports = {
 
     try {
       const journey = await journeyData.updateJourney(req.params.id, req.body);
-      res.json({ data: journey });
+      res.json({ journey });
     } catch (e) {
-      console.log(e);
-      res.status(500).json({ message: e });
+      console.log("msg", e.message);
+      res.status(500).json({ message: e.message });
     }
   },
 

@@ -4,7 +4,7 @@ const authMiddleware = require("../firebase/authenticateToken");
 
 const journeysController = require("../controllers/journeysController");
 const usersController = require("../controllers/usersController");
-const requestController = require("../controllers/requestController");
+const invitationController = require("../controllers/invitationController");
 
 // Journey's routes
 router.get("/journeys", authMiddleware, journeysController.index);
@@ -38,38 +38,23 @@ router.get("/users/:id", authMiddleware, usersController.show);
 router.post("/users", authMiddleware, usersController.create);
 router.patch("/users/:id/update", authMiddleware, usersController.update);
 
-/*
-//request routes
-//get all request by initiator
-//get all received invitations
-router.get("/requests/received/:id", authMiddleware, requestController.getAllReceivedInvitations);
-//create request
-//modify request
-router.patch("/request/modify",authMiddleware,  requestController.update);
-//get request
-router.get("/requests/:id", authMiddleware,requestController.getRequest);
-*/
-router.post("/requests", authMiddleware, requestController.create);
-router.get(
-  "/requests/sent/:id",
+// invitations
+router.post(
+  "/requests/:journeyId",
   authMiddleware,
-  requestController.getAllSentInvitations
+  invitationController.create
 );
-
-//request routes
-//get all request by initiator
-// router.get("/requests/sent/:id", requestController.getAllSentInvitations);
-//get all received invitations
-// router.get(
-//   "/requests/received/:id",
-//   requestController.getAllReceivedInvitations
-// );
-// //create request
-// router.post("/request/new", requestController.create);
-// //modify request
-// router.patch("/request/modify", requestController.update);
-// //get request
-// router.get("/request/:id", requestController.getRequest);
+router.get("/requests", authMiddleware, invitationController.index);
+router.patch(
+  "/requests/:id/accept",
+  authMiddleware,
+  invitationController.accept
+);
+router.patch(
+  "/requests/:id/reject",
+  authMiddleware,
+  invitationController.reject
+);
 
 router.get("*", async (req, res) => {
   res.status(404).json({ error: "Page not found!" });

@@ -12,8 +12,6 @@ journeyObject = (journey) => {
     editable: journey.editable,
     budget: journey.budget,
     checkpoints: journey.checkpoints,
-    startDate: journey.startDate,
-    endDate: journey.endDate,
     name: journey.name,
     modifiedBy: journey.modifiedBy,
     users: journey.users,
@@ -33,7 +31,7 @@ function checkNumber(num, name) {
 function validateUpdateInfo(journeyInfo, journey) {
   let updatedObject = {};
   checkString(journeyInfo.name, "name");
-  checkString(journeyInfo.description, "description");
+  if (journey.description) checkString(journeyInfo.description, "description");
   checkNumber(journeyInfo.budget, "budget");
   checkNumber(journeyInfo.occupancy, "members");
 
@@ -79,6 +77,7 @@ async function createJourney(journeyInfo) {
 
 async function getJourney(id) {
   let journey = await Journey.findById(id);
+  console.log(id);
   return journeyObject(journey);
 }
 
@@ -165,6 +164,12 @@ async function getMembers(id) {
   return { members, journey };
 }
 
+async function getJourneyByCreator(userId) {
+  const journeys = await Journey.find({ creatorId: userId });
+
+  return journeys.map((journey) => journeyObject(journey));
+}
+
 module.exports = {
   createJourney,
   getJourney,
@@ -175,4 +180,5 @@ module.exports = {
   addCheckpoints,
   addMembers,
   getMembers,
+  getJourneyByCreator,
 };

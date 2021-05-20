@@ -21,6 +21,7 @@ const exportedFunctions = {
       return res.data;
     } catch (e) {
       console.error(e);
+      throw e;
     }
   },
 
@@ -31,6 +32,7 @@ const exportedFunctions = {
       return res.data;
     } catch (e) {
       console.error(e);
+      throw e;
     }
   },
 
@@ -41,6 +43,7 @@ const exportedFunctions = {
       return res.data;
     } catch (e) {
       console.error(e);
+      throw e;
     }
   },
 
@@ -55,6 +58,7 @@ const exportedFunctions = {
       return res.data;
     } catch (e) {
       console.error(e);
+      throw e;
     }
   },
 };

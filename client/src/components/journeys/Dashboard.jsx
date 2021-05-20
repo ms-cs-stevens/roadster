@@ -18,7 +18,7 @@ import ExploreIcon from "@material-ui/icons/Explore";
 import MoneyIcon from "@material-ui/icons/Money";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import InfoCard from "./InfoCard.jsx";
 import Members from "./Members";
 import Description from "./Description";
@@ -39,26 +39,45 @@ const Dashboard = () => {
     totalDist: 0,
     totalTime: 0,
   });
+  const [allowEdit, setAllowEdit] = useState(false);
+  const [requestStatus, setRequestStatus] = useState("");
+  const [userStatus, setUserStatus] = useState("");
   const currentUserId = currentUser.uid;
 
   useEffect(() => {
     async function fetchJourney() {
-      let data = await apiService.getResource(`journeys/${id}`);
-      setJourney(data);
+      const data = await apiService.getResource(`journeys/${id}`);
+      const journeyDetails = data.journey;
+      setJourney(journeyDetails);
       setLoading(false);
+
+      setAllowEdit(
+        journeyDetails.creatorId === currentUserId ||
+          (journeyDetails.editable &&
+            journeyDetails.users.includes(currentUserId))
+      );
+
+      if(journeyDetails.creatorId === currentUser.uid) {
+        setUserStatus("(Owner)")
+      } else if(journeyDetails.users.includes(currentUser.uid)) {
+        setUserStatus("(Member)")
+      }
+
+      if (data.invitation) setRequestStatus(data.invitation.status);
     }
     fetchJourney();
   }, [id]);
 
-  useEffect(() => {}, [journey]);
-
   const joinJourney = async () => {
-    const requestPayload = {
-      journeyId: journey._id,
-      userId: journey.creatorId,
-      initiatorId: currentUserId,
-    };
-    const request = await apiService.createResource(`request`, requestPayload);
+    try {
+      const data = await apiService.createResource(`requests/${journey._id}`, {
+        userId: currentUserId,
+        acceptorId: journey.creatorId,
+      });
+      setRequestStatus(data.invitation.status);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const setDistanceTime = (data) => {
@@ -111,7 +130,7 @@ const Dashboard = () => {
             <Grid container direction="row" spacing={5}>
               <Grid item lg={7} sm={6}>
                 <Typography component="h2" variant="h5">
-                  Roadtrip | {journey.name}
+                  Roadtrip | {journey.name}&nbsp;{userStatus}
                 </Typography>
               </Grid>
               <Grid container justify="flex-end" item lg={5} sm={6}>
@@ -119,14 +138,33 @@ const Dashboard = () => {
                   variant="text"
                   aria-label="text primary button group"
                 >
-                  <Button onClick={goToEdit} color="primary" variant="outlined">
-                    <EditIcon />
-                    Edit
-                  </Button>
-                  <Button onClick={generatePdf} variant="outlined">
-                    <DeleteOutlineIcon />
-                    Delete
-                  </Button>
+                  {!allowEdit && requestStatus === "pending" && (
+                    <Typography component="h2" variant="h6">
+                      Request Sent
+                    </Typography>
+                  )}
+                  {!allowEdit && requestStatus === "" && (
+                    <Button
+                      onClick={joinJourney}
+                      color="primary"
+                      variant="outlined"
+                    >
+                      <PersonAddIcon />
+                      Join
+                    </Button>
+                  )}
+
+                  {allowEdit && (
+                    <Button
+                      onClick={goToEdit}
+                      color="primary"
+                      variant="outlined"
+                    >
+                      <EditIcon />
+                      Edit
+                    </Button>
+                  )}
+
                   <Button
                     onClick={generatePdf}
                     color="primary"
