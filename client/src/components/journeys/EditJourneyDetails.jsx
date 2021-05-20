@@ -19,7 +19,6 @@ import { AuthContext } from "../../firebase/Auth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    // marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -40,16 +39,18 @@ const useStyles = makeStyles((theme) => ({
 const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
   const classes = useStyles();
   const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState("");
   const { currentUser } = useContext(AuthContext);
   const { handleSubmit, control } = useForm();
 
-  const handleFormSubmit = async (data) => {
+  const handleFormSubmit = async (formData) => {
     setSubmitting(true);
     try {
-      const { data: updatedJourney } = await apiService.editResource(`journeys/${journey._id}`, data);
-      updateJourneyDetails(updatedJourney);
+      const response = await apiService.editResource(`journeys/${journey._id}`, formData);
+      console.log(response);
+      updateJourneyDetails(response.journey);
     } catch (e) {
-      console.log(e);
+      setMessage(e.message);
     }
     setSubmitting(false);
   };
@@ -74,6 +75,7 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
               position: "relative",
             }}
           >
+            {message && (<Alert severity="info">{message}</Alert>)}
             <div className={classes.paper}>
               {submitting && (
                 <Alert severity="info">Please wait while we update your Roadtrip!</Alert>
@@ -149,27 +151,6 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
                       />
                   </Grid>
                   <br />
-                  {/* <Controller
-                      name="startDate"
-                      control={control}
-                      defaultValue={<Moment format="mm/dd/yyyy">{journey.startDate}</Moment>}
-                      // defaultValue={journey.startDate}
-                      render={({ field: { onChange, value }, fieldState: { error } }) => (
-                      <TextField
-                        label="Start Date"
-                        type="date"
-                        variant="outlined"
-                        // value={<Moment format="MM-DD-YYYY">{value}</Moment>}
-                        value={value}
-                        onChange={onChange}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    )}
-                    />
-                  <br />
-                  <br /> */}
                   <Grid item xs={12} sm={12} md={10}>
                     <Controller
                       name="description"

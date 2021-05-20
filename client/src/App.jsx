@@ -15,7 +15,7 @@ import PasswordReset from "./components/user/PasswordReset";
 import Dashboard from "./components/journeys/Dashboard";
 import NotFound from "./components/NotFound";
 import EditJourney from "./components/journeys/Edit";
-import Requests from "./components/Requests";
+import Invitation from "./components/Invitation";
 
 const loadScript = (url, setLoaded) => {
   const script = document.createElement("script");
@@ -66,7 +66,7 @@ function App() {
                 path="/journeys/new"
                 component={CreateJourney}
               />
-              <PrivateRoute exact path="/requests" component={Requests} />
+              <PrivateRoute exact path="/requests" component={Invitation} />
               <PrivateRoute exact path="/journeys" component={JourneyListing} />
               <PrivateRoute exact path="/journeys/:id" component={Dashboard} />
               <PrivateRoute

@@ -46,6 +46,7 @@ function CardItem({ journey }) {
   const { currentUser } = useContext(AuthContext);
   const currentUserId = currentUser.uid;
   const [showEdit, setShowEdit] = useState(false);
+  const [userStatus, setUserStatus] = useState('')
 
   useEffect(() => {
     const journeyCreator = journey.creatorId === currentUserId;
@@ -57,6 +58,13 @@ function CardItem({ journey }) {
     } else {
       setShowEdit(false);
     }
+
+    if(journey.creatorId === currentUser.uid) {
+      setUserStatus("(Owner)")
+    } else if(journey.users.includes(currentUser.uid)) {
+      setUserStatus("(Member)")
+    }
+
   }, [journey, currentUser]);
 
   return (
@@ -80,7 +88,7 @@ function CardItem({ journey }) {
             </NavLink>
           )
         }
-        title={journey.name || "Roadtrip"}
+        title={`${(journey.name || "Roadtrip").toUpperCase()} ${userStatus}`}
         subheader={<Moment format="MMM D, YYYY">{journey.startDate}</Moment>}
       />
       <NavLink

@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const JourneyListing = () => {
   const classes = useStyles();
   const [journeys, setJourneys] = useState([]);
-  const [filter, setFilter] = useState("user");
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     async function fetchData() {

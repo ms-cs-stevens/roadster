@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const { nanoid } = require("nanoid");
 
-const requestSchema = new Schema(
+const invitationSchema = new Schema(
   {
     _id: {
       type: String,
@@ -21,12 +21,12 @@ const requestSchema = new Schema(
       type: String,
       required: [true, "You must provide an user"],
     },
-    initiatorId: {
+    acceptorId: {
       type: String,
-      required: [true, "You must provide an initiator"],
+      required: [true, "You must provide an acceptor"],
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Request", requestSchema);
+module.exports = mongoose.model("Invitation", invitationSchema);

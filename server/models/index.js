@@ -1,11 +1,11 @@
 const Image = require("./Image");
 const Journey = require("./Journey");
-const Request = require("./Request");
+const Invitation = require("./Invitation");
 const User = require("./User");
 
 module.exports = {
   Image,
   Journey,
-  Request,
+  Invitation,
   User,
 };

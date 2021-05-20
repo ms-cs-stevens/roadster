@@ -92,7 +92,7 @@ function SearchLocationInput({
     if (!window.google) return;
 
     const options = {
-      componentRestrictions: { country: ["us", "ca"] },
+      componentRestrictions: { country: ["us"] },
       fields: [
         "address_components",
         "geometry",

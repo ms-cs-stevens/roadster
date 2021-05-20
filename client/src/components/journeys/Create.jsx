@@ -68,7 +68,6 @@ function CreateJourney({ showWelcomeMessage }) {
   };
 
   const handleFormSubmit = async (data) => {
-    // TODO: Fix below condition for form submission and set form error
     if (!journey || !journey.origin || !journey.destination) return;
 
     setSubmitting(true);
@@ -149,7 +148,7 @@ function CreateJourney({ showWelcomeMessage }) {
                     name="destination"
                     setLocation={handleChange}
                     label="Destination"
-                    placeholder="Destination"
+                    placeholder="Niagara Falls, NY, USA"
                     icon={<RoomIcon color="action" />}
                     id="destination"
                   />
@@ -195,7 +194,7 @@ function CreateJourney({ showWelcomeMessage }) {
                       <TextField
                         label="Tentative Budget"
                         variant="outlined"
-                        placeholder="Give your roadtrip a name"
+                        placeholder="Budget"
                         value={value}
                         id="budget"
                         className={error ? classes.warningStyles : null}
@@ -219,7 +218,8 @@ function CreateJourney({ showWelcomeMessage }) {
                       fieldState: { error },
                     }) => (
                       <TextField
-                        label="Roadtrip name"
+                        label="Journey name"
+                        placeholder="Give your journey a name"
                         id="name"
                         variant="outlined"
                         value={value}
@@ -230,7 +230,7 @@ function CreateJourney({ showWelcomeMessage }) {
                         helperText={error ? error.message : null}
                       />
                     )}
-                    rules={{ required: "Roadtrip name required" }}
+                    rules={{ required: "Journey name required" }}
                   />
                 </Grid>
                 <Grid item xs={12}>
