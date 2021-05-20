@@ -30,6 +30,7 @@ const Comments = ({ journey, db = firebaseApp.firestore() }) => {
     const newCommentRef = useRef();
 
     let data = currentUser;
+    data.journeyId = journey._id;
 
     const { posterName, journeyId } = data;
 
