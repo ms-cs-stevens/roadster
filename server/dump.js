@@ -159,7 +159,7 @@ module.exports = {
     {
       _id: "5j3AsEWCjbyhpJyRk-o2c",
       occupancy: 4,
-      users: ["6oC9qNPytDOymhnjSZTHxSBDU7T2"],
+      users: [],
       images: [],
       origin: {
         _id: "-1VAEFh-B9qLOspTjRWUY",
@@ -362,7 +362,7 @@ module.exports = {
       email: "larrypage@gmail.com",
     },
     {
-      _id: "agarg10@stevens.edu",
+      _id: "ysayjNrFO3MxRcctK8gIk9HQxEA3",
       firstName: "Abby",
       lastName: "Jones",
       email: "agarg10@stevens.edu",
