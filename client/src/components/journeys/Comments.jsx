@@ -5,12 +5,16 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  ListItem,
+  ListItemText,
+  Grid,
   makeStyles,
 } from "@material-ui/core";
 import { AuthContext } from "../../firebase/Auth";
 import apiService from "../../services/apiService";
 import { formatRelative } from "date-fns";
 import firebaseApp from "../../firebase/firebaseApp";
+import { useFirestoreQuery } from "../hooks";
 import "firebase/firestore";
 
 const Comments = ({ journey, db = firebaseApp.firestore() }) => {
@@ -23,6 +27,8 @@ const Comments = ({ journey, db = firebaseApp.firestore() }) => {
     );
 
     const newCommentRef = useRef();
+
+    let data = currentUser;
 
     const { posterName, journeyId } = data;
 
@@ -92,16 +98,10 @@ const Comments = ({ journey, db = firebaseApp.firestore() }) => {
             comments &&
             comments.map((comment, i) => {
                 console.log(comment);
-                const [firstName, lastName] = comment.posterName.split(" ");
                 return (
                 <ListItem key={i}>
                     <Grid container>
                     <Grid item xs={12}>
-                        <ListItemAvatar align={align(comment)}>
-                        <Avatar alt={firstName} className={classes.avatar}>
-                            {(firstName[0] + lastName[0]).toUpperCase()}
-                        </Avatar>
-                        </ListItemAvatar>
                         <ListItemText
                         align={align(comment)}
                         primary={comment.content}
