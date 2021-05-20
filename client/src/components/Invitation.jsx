@@ -95,13 +95,12 @@ const Invitation = (props) => {
           <ListItemText
             primary={
               <NavLink
-                aria-label="journey edit link"
+                aria-label="journey link"
                 style={{ textDecoration: "none" }}
-                to={`/journeys/${invite.journey._id}/edit`}
+                to={`/journeys/${invite.journey._id}`}
               >
                 {invite.journey.name}
               </NavLink>
-
             }
           />
           <ListItemText
