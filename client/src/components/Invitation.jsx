@@ -24,11 +24,20 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: deepPurple[800],
   },
+  root: {
+    width: '100%',
+    // maxWidth: '36ch',
+    backgroundColor: theme.palette.background.paper,
+  },
+  inline: {
+    display: 'inline',
+  },
 }));
 
 const Invitation = (props) => {
-  const [invitations, setInvitations] = useState([]);
+  const [journeys, setJourneys] = useState([]);
   const [loading, setLoading] = useState(true);
+  const classes = useStyles();
   const { currentUser } = useContext(AuthContext);
   let currentUserId = currentUser.uid;
 
@@ -36,7 +45,9 @@ const Invitation = (props) => {
     async function fetchData() {
       try {
         let data = await apiService.getResource(`requests`);
-        setInvitations(data.invitations);
+        console.log(data);
+
+        setJourneys(data.journeys);
       } catch (error) {
         console.log(error);
       }
@@ -49,23 +60,31 @@ const Invitation = (props) => {
   const renderInvitationList = () => {
     let invitationList;
 
-    if(invitations.length > 0) {
-      invitationList = invitations.map((invitation) => {
+    if(journeys.length > 0) {
+      invitationList = journeys.map((journey) => {
+        console.log(journey)
         return (
           <>
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
+            <ListItem>
+              {/* <ListItemAvatar>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              </ListItemAvatar>
+              </ListItemAvatar> */}
               <ListItemText
-                primary="Brunch this weekend?"
+                primary={journey.name}
                 secondary= " — I'll be in your neighborhood doing errands this…"
               />
+
+
+
             </ListItem>
             <Divider variant="inset" component="li" />
           </>
         );
       });
+
+      invitationList = <List className={classes.root}>
+        {invitationList}
+      </List>
     } else {
       invitationList = <Typography variant="body2">No Invitations yet</Typography>;
     }
@@ -84,15 +103,15 @@ const Invitation = (props) => {
           <CssBaseline />
           <br />
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <Typography component="h1" variant="h5">
                 Invitations
               </Typography>
             </Grid>
           </Grid>
-          <Grid container spacing={5}>
-            {renderInvitationList()}
+          <Grid >
           </Grid>
+            {/* {renderInvitationList()} */}
         </Container>
       </>
     );

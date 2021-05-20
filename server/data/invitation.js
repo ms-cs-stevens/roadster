@@ -1,4 +1,6 @@
-const { Invitation } = require("../models");
+const { Invitation, Journey } = require("../models");
+const userData = require("./user");
+const journeyData = require("./journey");
 
 invitationObject = (invitation) => {
   return {
@@ -6,6 +8,7 @@ invitationObject = (invitation) => {
     status: invitation.status,
     journeyId: invitation.journeyId,
     userId: invitation.userId,
+    acceptorId: invitation.acceptorId,
   };
 };
 
@@ -13,7 +16,7 @@ async function create(invitationInfo) {
   let invitation = await Invitation.create({
     journeyId: invitationInfo.journeyId,
     userId: invitationInfo.userId,
-    initiatorId: invitationInfo.initiatorId,
+    acceptorId: invitationInfo.acceptorId,
   });
 
   if (!invitation) throw "Something went wrong while creating invitation";
@@ -21,14 +24,19 @@ async function create(invitationInfo) {
   return invitationObject(invitation);
 }
 
-async function getAllSentInvitations(id) {
-  let invitations = await Invitation.find({ initiatorId: id });
-  return invitations.map((invitation) => invitationObject(invitation));
-}
+async function getAllInvitations(userId) {
+  let invitations = await Invitation.find({
+    acceptorId: userId,
+    status: "pending",
+  });
+  let mappedInvitations = [];
 
-async function getAllReceivedInvitations(id) {
-  let invitations = await Invitation.find({ userId: id });
-  return invitations.map((invitation) => invitationObject(invitation));
+  for (const invite of invitations) {
+    const user = await userData.getUser(invite.userId);
+    const journey = await journeyData.getJourney(invite.journeyId);
+    mappedInvitations.push({ user, journey, invitation: invite });
+  }
+  return mappedInvitations;
 }
 
 async function getInvitation(journeyId, userId) {
@@ -48,19 +56,9 @@ async function update(invitationObject) {
   return getInvitation(invitationObject._id);
 }
 
-async function getAllUserInvitations(userId) {
-  const invitations = await Invitation.find({
-    userId: userId,
-    status: "pending",
-  });
-  return invitations.map((invitation) => invitationObject(invitation));
-}
-
 module.exports = {
   create,
-  getAllSentInvitations,
-  getAllReceivedInvitations,
+  getAllInvitations,
   getInvitation,
   update,
-  getAllUserInvitations,
 };

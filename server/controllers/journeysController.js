@@ -106,8 +106,8 @@ module.exports = {
       const journey = await journeyData.updateJourney(req.params.id, req.body);
       res.json({ journey });
     } catch (e) {
-      console.log("msg", e);
-      res.status(500).json({ message: e });
+      console.log("msg", e.message);
+      res.status(500).json({ message: e.message });
     }
   },
 

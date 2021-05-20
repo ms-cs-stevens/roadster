@@ -164,6 +164,12 @@ async function getMembers(id) {
   return { members, journey };
 }
 
+async function getJourneyByCreator(userId) {
+  const journeys = await Journey.find({ creatorId: userId });
+
+  return journeys.map((journey) => journeyObject(journey));
+}
+
 module.exports = {
   createJourney,
   getJourney,
@@ -174,4 +180,5 @@ module.exports = {
   addCheckpoints,
   addMembers,
   getMembers,
+  getJourneyByCreator,
 };

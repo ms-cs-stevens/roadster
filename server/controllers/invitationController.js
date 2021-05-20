@@ -1,12 +1,14 @@
 const invitationData = require("../data/invitation");
+const journeyData = require("../data/journey");
+const userData = require("../data/user");
 
 async function create(req, res) {
   try {
     let invitationInfo = {
       journeyId: req.params.journeyId,
       status: "pending",
-      userId: req.currentUser.uid,
-      // initiatorId: req.currentUser.uid,
+      acceptorId: req.body.acceptorId,
+      userId: req.body.userId,
     };
 
     console.log(invitationInfo);
@@ -18,40 +20,14 @@ async function create(req, res) {
   }
 }
 
-async function getAllSentInvitations(req, res) {
+async function index(req, res) {
   try {
-    const invitation = await invitationData.getAllSentInvitations(
-      req.params.id
-    );
-    res.json(invitation);
+    let currentUserId = req.currentUser.uid;
+    let invitations = await invitationData.getAllInvitations(currentUserId);
+    console.log(invitations);
+    res.json(invitations);
   } catch (e) {
-    console.log(e);
-    res.sendStatus(500);
-  }
-}
-
-async function getAllReceivedInvitations(req, res) {
-  try {
-    const invitation = await invitationData.getAllReceivedInvitations(
-      req.params.id
-    );
-    res.json(invitation);
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(500);
-  }
-}
-
-async function getAllUserInvitations(req, res) {
-  try {
-    const invitations = await invitationData.getAllUserInvitations(
-      req.currentUser.uid
-    );
-    console.log("contr", invitations);
-    res.json({ invitations });
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(500);
+    res.status(500).send(e);
   }
 }
 
@@ -67,8 +43,6 @@ async function update(req, res) {
 
 module.exports = {
   create,
-  getAllReceivedInvitations,
+  index,
   update,
-  getAllSentInvitations,
-  getAllUserInvitations,
 };

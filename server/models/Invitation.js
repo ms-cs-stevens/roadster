@@ -21,10 +21,10 @@ const invitationSchema = new Schema(
       type: String,
       required: [true, "You must provide an user"],
     },
-    // initiatorId: {
-    //   type: String,
-    //   required: [true, "You must provide an initiator"],
-    // },
+    acceptorId: {
+      type: String,
+      required: [true, "You must provide an acceptor"],
+    },
   },
   { timestamps: true }
 );

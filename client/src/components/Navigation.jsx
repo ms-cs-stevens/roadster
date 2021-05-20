@@ -86,7 +86,7 @@ export default function Navigation() {
                 component={NavLink}
                 to="/requests"
               >
-                Invitations
+                Request
               </Button>
               <Button
                 style={{ color: "#fff" }}

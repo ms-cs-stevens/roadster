@@ -61,7 +61,7 @@ const Dashboard = () => {
 
   const joinJourney = async () => {
     try {
-      const data = await apiService.createResource(`requests/${journey._id}`, {});
+      const data = await apiService.createResource(`requests/${journey._id}`, {userId: currentUserId, acceptorId: journey.creatorId });
       setRequestStatus(data.invitation.status);
     } catch (error) {
       console.log(error);
