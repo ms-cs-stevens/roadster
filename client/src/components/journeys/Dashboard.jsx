@@ -27,6 +27,7 @@ import Map from "./Map.jsx";
 import Checkpoints from "./ShowCheckpoints.jsx";
 import apiService from "../../services/apiService";
 import Chat from "./Chat";
+import Comments from "./Comments"
 import { AuthContext } from "../../firebase/Auth";
 
 const Dashboard = () => {
@@ -202,6 +203,11 @@ const Dashboard = () => {
                   value={journey.occupancy}
                   icon={<PeopleOutlineIcon />}
                   color={green}
+                />
+              </Grid>
+              <Grid item lg={3} sm={6} xl={3} xs={12}>
+                <Comments
+                  journey={journey}
                 />
               </Grid>
               <Grid item lg={3} sm={6} xl={3} xs={12}>
