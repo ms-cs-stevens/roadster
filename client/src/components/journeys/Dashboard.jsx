@@ -18,7 +18,7 @@ import ExploreIcon from "@material-ui/icons/Explore";
 import MoneyIcon from "@material-ui/icons/Money";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import InfoCard from "./InfoCard.jsx";
 import Members from "./Members";
 import Description from "./Description";
@@ -51,17 +51,20 @@ const Dashboard = () => {
       setLoading(false);
       setAllowEdit(
         journeyDetails.creatorId === currentUserId ||
-        (journeyDetails.editable && journeyDetails.users.includes(currentUserId))
+          (journeyDetails.editable &&
+            journeyDetails.users.includes(currentUserId))
       );
-      if(data.invitation)
-        setRequestStatus(data.invitation.status);
+      if (data.invitation) setRequestStatus(data.invitation.status);
     }
     fetchJourney();
   }, [id]);
 
   const joinJourney = async () => {
     try {
-      const data = await apiService.createResource(`requests/${journey._id}`, {userId: currentUserId, acceptorId: journey.creatorId });
+      const data = await apiService.createResource(`requests/${journey._id}`, {
+        userId: currentUserId,
+        acceptorId: journey.creatorId,
+      });
       setRequestStatus(data.invitation.status);
     } catch (error) {
       console.log(error);
@@ -131,15 +134,27 @@ const Dashboard = () => {
                       Request Sent
                     </Typography>
                   )}
-                  {!allowEdit && requestStatus !== "pending" && (<Button onClick={joinJourney} color="primary" variant="outlined">
-                    <PersonAddIcon />
-                    Join
-                  </Button>)}
+                  {!allowEdit && requestStatus !== "pending" && (
+                    <Button
+                      onClick={joinJourney}
+                      color="primary"
+                      variant="outlined"
+                    >
+                      <PersonAddIcon />
+                      Join
+                    </Button>
+                  )}
 
-                  {allowEdit && (<Button onClick={goToEdit} color="primary" variant="outlined">
-                    <EditIcon />
-                    Edit
-                  </Button>)}
+                  {allowEdit && (
+                    <Button
+                      onClick={goToEdit}
+                      color="primary"
+                      variant="outlined"
+                    >
+                      <EditIcon />
+                      Edit
+                    </Button>
+                  )}
 
                   <Button
                     onClick={generatePdf}

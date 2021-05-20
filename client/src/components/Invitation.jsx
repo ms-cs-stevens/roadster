@@ -2,42 +2,38 @@ import {
   Card,
   CardHeader,
   Divider,
-  Grid,
   List,
   ListItem,
-  Typography,
+  Avatar,
+  ListItemAvatar,
   ListItemText,
   makeStyles,
+  Box,
   Container,
-  CssBaseline,
 } from "@material-ui/core";
-import { Helmet } from "react-helmet";
 import { useEffect, useState, useContext } from "react";
 import apiService from "../services/apiService";
 import { deepPurple } from "@material-ui/core/colors";
+import { Helmet } from "react-helmet";
 import { AuthContext } from "../firebase/Auth";
-import { NavLink } from "react-router-dom";
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: deepPurple[800],
   },
   root: {
-    width: '100%',
-    // maxWidth: '36ch',
+    width: "100%",
     backgroundColor: theme.palette.background.paper,
   },
   inline: {
-    display: 'inline',
+    display: "inline",
   },
 }));
 
 const Invitation = (props) => {
-  const [journeys, setJourneys] = useState([]);
-  const [loading, setLoading] = useState(true);
   const classes = useStyles();
+  const [invitations, setInvitations] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
   let currentUserId = currentUser.uid;
 
@@ -46,8 +42,7 @@ const Invitation = (props) => {
       try {
         let data = await apiService.getResource(`requests`);
         console.log(data);
-
-        setJourneys(data.journeys);
+        setInvitations(data);
       } catch (error) {
         console.log(error);
       }
@@ -56,64 +51,59 @@ const Invitation = (props) => {
     fetchData();
   }, [currentUserId]);
 
-
-  const renderInvitationList = () => {
-    let invitationList;
-
-    if(journeys.length > 0) {
-      invitationList = journeys.map((journey) => {
-        console.log(journey)
-        return (
-          <>
-            <ListItem>
-              {/* <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              </ListItemAvatar> */}
-              <ListItemText
-                primary={journey.name}
-                secondary= " — I'll be in your neighborhood doing errands this…"
-              />
-
-
-
-            </ListItem>
-            <Divider variant="inset" component="li" />
-          </>
-        );
-      });
-
-      invitationList = <List className={classes.root}>
-        {invitationList}
-      </List>
+  const renderInvitations = () => {
+    if (invitations && invitations.length) {
+      return invitations.map((invite, i) => (
+        <ListItem divider={i < invitations.length - 1} key={invite._id}>
+          <ListItemAvatar>
+            <Avatar
+              alt={invite.user.firstName}
+              src={invite.user.profileImage}
+              className={classes.avatar}
+            >
+              {invite.user.firstName[0] + invite.user.lastName[0]}
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText
+            primary={invite.user.firstName + " " + invite.user.lastName}
+          />
+        </ListItem>
+      ));
     } else {
-      invitationList = <Typography variant="body2">No Invitations yet</Typography>;
+      return <ListItem>No Requests for your journeys yet.</ListItem>;
     }
-    return invitationList;
   };
 
   if (loading) {
     return "Loading";
   } else {
     return (
-      <>
+      <div>
         <Helmet>
-          <title>Roadster | Invitations </title>
+          <title>Roadster | Requests</title>
         </Helmet>
-        <Container component="main" maxWidth="lg">
-          <CssBaseline />
-          <br />
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography component="h1" variant="h5">
-                Invitations
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid >
-          </Grid>
-            {/* {renderInvitationList()} */}
-        </Container>
-      </>
+        <Box
+          sx={{
+            backgroundColor: "background.default",
+            minHeight: "100%",
+            py: 3,
+          }}
+        >
+          <Container maxWidth="lg">
+            <br />
+            <Card>
+              <CardHeader
+                subtitle={`${invitations && invitations.length} in total`}
+                title="Invitations"
+              />
+              <Divider />
+              <br />
+              <List>{renderInvitations()}</List>
+              <Divider />
+            </Card>
+          </Container>
+        </Box>
+      </div>
     );
   }
 };
