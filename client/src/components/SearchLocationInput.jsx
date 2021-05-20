@@ -117,9 +117,7 @@ function SearchLocationInput({
   icon = icon || <RoomIcon color="action" />;
 
   useEffect(() => {
-    // TODO: FormData doesn't reset on deleting location from input field
-    // TODO: Check issue with exceeding rate limit
-    if (autoCompleteRef.current.value.length > 5)
+    if (autoCompleteRef.current.value.length > 4)
       handleScriptLoad(setQuery, autoCompleteRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);

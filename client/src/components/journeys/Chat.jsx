@@ -169,6 +169,7 @@ function Chat({ journey, db = firebaseApp.firestore() }) {
                   ref={inputRef}
                   type="text"
                   value={newComment}
+                  autoComplete="off"
                   variant="outlined"
                   onChange={handleOnChange}
                 />

@@ -10,13 +10,14 @@ import {
   GridList,
   GridListTile,
 } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { CloudinaryContext, Image } from "cloudinary-react";
 import { openUploadWidget } from "../../services/CloudinaryService";
 import apiService from "../../services/apiService";
 import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import axios from "axios";
+import { AuthContext } from "../../firebase/Auth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +41,8 @@ function ImageGridList({ journey }) {
   const [journeyImages, setJourneyImages] = useState(null);
   const [showSave, setShowSave] = useState(false);
   const [imageCounter, setImageCounter] = useState(0);
+  const [allowEdit, setAllowEdit] = useState(false);
+  const { currentUser } = useContext(AuthContext);
 
   const beginUpload = (tag) => {
     console.log(tag);
@@ -96,6 +99,12 @@ function ImageGridList({ journey }) {
   useEffect(() => {
     async function fetchJourney() {
       let data = await apiService.getResource(`journeys/${journey._id}`);
+
+      setAllowEdit(
+        journey.creatorId === currentUser.uid ||
+          (journey.editable &&
+            journey.users.includes(currentUser.uid))
+      );
       setImages(data.journey.images);
       setJourneyImages(data.journey.images);
     }
@@ -135,7 +144,7 @@ function ImageGridList({ journey }) {
       <CardHeader
         title="Image Gallery"
         action={
-          showSave ? (
+          allowEdit && (showSave ? (
             <Button onClick={saveImages} variant="contained" color="primary">
               Save images
             </Button>
@@ -147,7 +156,7 @@ function ImageGridList({ journey }) {
             >
               <PhotoCamera />
             </IconButton>
-          )
+          ))
         }
       />
       <Divider />
