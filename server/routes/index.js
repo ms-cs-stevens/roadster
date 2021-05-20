@@ -45,6 +45,8 @@ router.post(
   invitationController.create
 );
 router.get("/requests", authMiddleware, invitationController.index);
+router.get("/requests/:id/accept", authMiddleware, invitationController.accept);
+router.get("/requests/:id/reject", authMiddleware, invitationController.reject);
 
 router.get("*", async (req, res) => {
   res.status(404).json({ error: "Page not found!" });

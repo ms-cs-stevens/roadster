@@ -56,9 +56,38 @@ async function update(invitationObject) {
   return getInvitation(invitationObject._id);
 }
 
+async function accept(id) {
+  let updateInfo = await Invitation.findOneAndUpdate(
+    { _id: id },
+    { $set: { status: "accept" } },
+    { runValidators: true }
+  );
+
+  if (updateInfo.errors) throw new Error("Could not accept the invitation!");
+
+  const invitation = await getInvitation(id);
+  await journeyData.addMembers(id, [invitation.userId]);
+
+  return invitation;
+}
+
+async function reject(id) {
+  let updateInfo = await Invitation.findOneAndUpdate(
+    { _id: id },
+    { $set: { status: "reject" } },
+    { runValidators: true }
+  );
+
+  if (updateInfo.errors) throw new Error("Could not reject the invitation!");
+
+  return await getInvitation(id);
+}
+
 module.exports = {
   create,
   getAllInvitations,
   getInvitation,
   update,
+  accept,
+  reject,
 };
