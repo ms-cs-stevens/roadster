@@ -39,8 +39,8 @@ const Members = ({ journeyId, showSearch }) => {
         `journeys/${journeyId}/members`
       );
       console.log("useEffect", data);
-      setMembers(data.members);
-      setJourney(data.journey);
+      setJourney(data && data.journey);
+      setMembers(data && data.members);
       setLoading(false);
     }
     fetchData();
@@ -75,9 +75,8 @@ const Members = ({ journeyId, showSearch }) => {
         { users: [...journey.users, member._id] }
       );
 
-      console.log("add", data);
-      setJourney(data.journey);
-      setMembers(data.members);
+      setJourney(data && data.journey);
+      setMembers(data && data.members);
       setSearchData(undefined);
       setSearchTerm("");
     } catch (e) {
