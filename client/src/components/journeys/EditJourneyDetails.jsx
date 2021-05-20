@@ -75,7 +75,6 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
               position: "relative",
             }}
           >
-            {message && (<Alert severity="info">{message}</Alert>)}
             <div className={classes.paper}>
               {submitting && (
                 <Alert severity="info">Please wait while we update your Roadtrip!</Alert>
