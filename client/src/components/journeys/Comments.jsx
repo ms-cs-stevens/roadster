@@ -55,21 +55,6 @@ const Comments = ({ journey, db = firebaseApp.firestore() }) => {
                     createdAt: new Date(),
                 };
 
-                comments.add(newCommentData);
-
-
-                let updateData = journey;
-                updateData.comments.push(newCommentData);
-
-                try {
-                    const data = await apiService.editResource(
-                    `journeys/${journey._id}`,
-                    updateData
-                    );
-                    setComments(data.comments);
-                } catch (e) {
-                    console.log(e);
-                }
                 setNewComment("");
             }
         }
