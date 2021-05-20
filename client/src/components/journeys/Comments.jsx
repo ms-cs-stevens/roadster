@@ -80,7 +80,7 @@ const Comments = ({ journey, db = firebaseApp.firestore() }) => {
         };
 
         const align = (comment) => {
-            return data.posterName === comment.username ? "right" : "left";
+            return data.posterName === comment.posterName ? "right" : "left";
         };
 
         const handleOnTyping = (e) => {
@@ -92,7 +92,7 @@ const Comments = ({ journey, db = firebaseApp.firestore() }) => {
             comments &&
             comments.map((comment, i) => {
                 console.log(comment);
-                const [firstName, lastName] = comment.username.split(" ");
+                const [firstName, lastName] = comment.posterName.split(" ");
                 return (
                 <ListItem key={i}>
                     <Grid container>
