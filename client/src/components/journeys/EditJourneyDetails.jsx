@@ -19,7 +19,6 @@ import { AuthContext } from "../../firebase/Auth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    // marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -152,27 +151,6 @@ const EditJourneyDetails = ({ journey, updateJourneyDetails }) => {
                       />
                   </Grid>
                   <br />
-                  {/* <Controller
-                      name="startDate"
-                      control={control}
-                      defaultValue={<Moment format="mm/dd/yyyy">{journey.startDate}</Moment>}
-                      // defaultValue={journey.startDate}
-                      render={({ field: { onChange, value }, fieldState: { error } }) => (
-                      <TextField
-                        label="Start Date"
-                        type="date"
-                        variant="outlined"
-                        // value={<Moment format="MM-DD-YYYY">{value}</Moment>}
-                        value={value}
-                        onChange={onChange}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    )}
-                    />
-                  <br />
-                  <br /> */}
                   <Grid item xs={12} sm={12} md={10}>
                     <Controller
                       name="description"

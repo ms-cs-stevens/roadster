@@ -43,7 +43,7 @@ async function update(req, res) {
 
 async function accept(req, res) {
   try {
-    const invitation = await invitationData.accept(req.body);
+    const invitation = await invitationData.accept(req.params.id);
     res.json({ invitation, message: "Invitation accepted" });
   } catch (e) {
     console.log(e);
@@ -53,7 +53,7 @@ async function accept(req, res) {
 
 async function reject(req, res) {
   try {
-    const invitation = await invitationData.reject(req.body);
+    const invitation = await invitationData.reject(req.params.id);
     res.json({ invitation, message: "Invitation accepted" });
   } catch (e) {
     console.log(e);

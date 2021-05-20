@@ -22,10 +22,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   avatar: {
-    backgroundColor: theme.palette.secondary.main,
     width: theme.spacing(5),
     border: "1px solid #fff",
     fontSize: "1em",
+    color: "#333",
     fontWeight: "bold",
     height: theme.spacing(5),
   },
@@ -102,8 +102,9 @@ export default function Navigation() {
               >
                 Journeys
               </Button>
+              &nbsp;
               <Avatar
-                aria-label="account of current user"
+                aria-label={currentUser.name}
                 aria-controls={menuId}
                 aria-haspopup="true"
                 onClick={handleProfileMenuOpen}

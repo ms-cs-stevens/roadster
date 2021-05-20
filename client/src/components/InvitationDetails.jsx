@@ -12,12 +12,10 @@ import {
   Button,
   Container,
 } from "@material-ui/core";
-import { NavLink } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import apiService from "../services/apiService";
 import { deepPurple } from "@material-ui/core/colors";
 import { Helmet } from "react-helmet";
-import { useHistory } from "react-router-dom";
 import { AuthContext } from "../firebase/Auth";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,12 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Invitation = (props) => {
+const Invitation = ({ invite }) => {
   const classes = useStyles();
   const [invitations, setInvitations] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(AuthContext);
-  const history = useHistory();
   let currentUserId = currentUser.uid;
 
   useEffect(() => {
@@ -55,25 +52,19 @@ const Invitation = (props) => {
     fetchData();
   }, [currentUserId]);
 
-  const acceptInvitation = async (invite) => {
+  const acceptInvitation = async (inviteId, i) => {
     try {
-      let data = await apiService.editResource(`requests/${invite._id}/accept`);
+      let data = await apiService.editResource(`requests/${inviteId}/accept`);
+      invitat
       console.log(data);
-      history.push(`/journeys/${invite.journeyId}`);
+      setInvitations(data);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const rejectInvitation = async (invite) => {
-    try {
-      let data = await apiService.editResource(`requests/${invite._id}/reject`);
-      console.log(data);
-      history.push(`/journeys/${invite.journeyId}`);
-
-    } catch (error) {
-      console.log(error);
-    }
+  const rejectInvitation = async (inviteId) => {
+    requests/:id/reject
   }
 
   const renderInvitations = () => {
@@ -94,24 +85,17 @@ const Invitation = (props) => {
           />
           <ListItemText
             primary={
-              <NavLink
-                aria-label="journey edit link"
-                style={{ textDecoration: "none" }}
-                to={`/journeys/${invite.journey._id}/edit`}
-              >
-                {invite.journey.name}
-              </NavLink>
-
+              invite.journey.name
             }
           />
           <ListItemText
             primary={
-              invite.invitation.status === "pending" ? (<>
+              <>
                 <Button
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={(e) => acceptInvitation(invite.invitation)}
+                  onClick={(e) => acceptInvitation(invite._id, i)}
                   className={classes.submit}
                 >
                   Accept
@@ -121,13 +105,12 @@ const Invitation = (props) => {
                   type="submit"
                   variant="contained"
                   color="primary"
-                  onClick={(e) => rejectInvitation(invite.invitation)}
+                  onClick={(e) => rejectInvitation(invite._id)}
                   className={classes.submit}
                 >
                   Reject
                 </Button>
-              </>)
-               : invite.status
+              </>
             }
           />
         </ListItem>

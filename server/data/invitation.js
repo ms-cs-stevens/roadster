@@ -47,6 +47,13 @@ async function getInvitation(journeyId, userId) {
   return invitation ? invitationObject(invitation) : null;
 }
 
+async function getInvitationById(id) {
+  const invitation = await Invitation.findOne({
+    _id: id,
+  });
+  return invitation ? invitationObject(invitation) : null;
+}
+
 async function update(invitationObject) {
   let updateInfo = await Invitation.findOneAndUpdate(
     { _id: invitationObject._id },
@@ -59,14 +66,14 @@ async function update(invitationObject) {
 async function accept(id) {
   let updateInfo = await Invitation.findOneAndUpdate(
     { _id: id },
-    { $set: { status: "accept" } },
+    { $set: { status: "approved" } },
     { runValidators: true }
   );
 
   if (updateInfo.errors) throw new Error("Could not accept the invitation!");
 
-  const invitation = await getInvitation(id);
-  await journeyData.addMembers(id, [invitation.userId]);
+  const invitation = await getInvitationById(id);
+  await journeyData.addMembers(invitation.journeyId, [invitation.userId]);
 
   return invitation;
 }
@@ -74,13 +81,13 @@ async function accept(id) {
 async function reject(id) {
   let updateInfo = await Invitation.findOneAndUpdate(
     { _id: id },
-    { $set: { status: "reject" } },
+    { $set: { status: "rejected" } },
     { runValidators: true }
   );
 
   if (updateInfo.errors) throw new Error("Could not reject the invitation!");
 
-  return await getInvitation(id);
+  return await getInvitationById(id);
 }
 
 module.exports = {

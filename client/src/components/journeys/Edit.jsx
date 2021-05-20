@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet";
 import React, { useEffect, useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import { Box, Container, Grid, Typography } from "@material-ui/core";
+import { Box, Container, Grid, Typography, Button } from "@material-ui/core";
 import Members from "./Members";
 import Map from "./Map.jsx";
 import { useParams } from "react-router-dom";
@@ -76,6 +76,15 @@ const EditJourney = () => {
                 <Typography component="h2" variant="h5">
                   Edit {journey.name}
                 </Typography>
+              </Grid>
+              <Grid container justify="flex-end" item lg={5} sm={6}>
+                <Button
+                  type="submit"
+                  variant="outlined"
+                  color="primary"
+                >
+                  Go Back to Journey
+                </Button>
               </Grid>
             </Grid>
             <br />

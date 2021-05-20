@@ -41,6 +41,7 @@ const Dashboard = () => {
   });
   const [allowEdit, setAllowEdit] = useState(false);
   const [requestStatus, setRequestStatus] = useState("");
+  const [userStatus, setUserStatus] = useState("");
   const currentUserId = currentUser.uid;
 
   useEffect(() => {
@@ -49,11 +50,19 @@ const Dashboard = () => {
       const journeyDetails = data.journey;
       setJourney(journeyDetails);
       setLoading(false);
+
       setAllowEdit(
         journeyDetails.creatorId === currentUserId ||
           (journeyDetails.editable &&
             journeyDetails.users.includes(currentUserId))
       );
+
+      if(journeyDetails.creatorId === currentUser.uid) {
+        setUserStatus("(Owner)")
+      } else if(journeyDetails.users.includes(currentUser.uid)) {
+        setUserStatus("(Member)")
+      }
+
       if (data.invitation) setRequestStatus(data.invitation.status);
     }
     fetchJourney();
@@ -121,7 +130,7 @@ const Dashboard = () => {
             <Grid container direction="row" spacing={5}>
               <Grid item lg={7} sm={6}>
                 <Typography component="h2" variant="h5">
-                  Roadtrip | {journey.name}
+                  Roadtrip | {journey.name}&nbsp;{userStatus}
                 </Typography>
               </Grid>
               <Grid container justify="flex-end" item lg={5} sm={6}>
@@ -134,7 +143,7 @@ const Dashboard = () => {
                       Request Sent
                     </Typography>
                   )}
-                  {!allowEdit && requestStatus !== "pending" && (
+                  {!allowEdit && requestStatus === "" && (
                     <Button
                       onClick={joinJourney}
                       color="primary"
