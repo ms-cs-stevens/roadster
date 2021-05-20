@@ -12,8 +12,6 @@ journeyObject = (journey) => {
     editable: journey.editable,
     budget: journey.budget,
     checkpoints: journey.checkpoints,
-    startDate: journey.startDate,
-    endDate: journey.endDate,
     name: journey.name,
     modifiedBy: journey.modifiedBy,
     users: journey.users,
