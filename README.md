@@ -1,5 +1,31 @@
 # Roadster
 
+## Section 1 - Some screenshots:
+
+##### Creating a journey
+
+<img width="1436" alt="Screen Shot 2021-07-06 at 11 56 49 AM" src="https://user-images.githubusercontent.com/26408955/124632372-45859900-de52-11eb-817b-c54975f69279.png">
+
+##### Editing a journey
+
+<img width="1419" alt="Screen Shot 2021-07-06 at 11 59 00 AM" src="https://user-images.githubusercontent.com/26408955/124632244-2be45180-de52-11eb-89f9-bf9800c6c43b.png">
+
+##### Authentication
+
+<img width="1440" alt="Screen Shot 2021-07-06 at 12 02 15 PM" src="https://user-images.githubusercontent.com/26408955/124632423-5209f180-de52-11eb-9914-6d4596094134.png">
+
+##### Chat feature
+
+<img width="1435" alt="Screen Shot 2021-07-06 at 12 02 46 PM" src="https://user-images.githubusercontent.com/26408955/124632443-57673c00-de52-11eb-8137-ee6265fea8cb.png">
+
+##### Journey Dashboard
+<img width="1437" alt="Screen Shot 2021-07-06 at 12 06 02 PM" src="https://user-images.githubusercontent.com/26408955/124632789-a4e3a900-de52-11eb-881b-be75d63fe02f.png">
+
+##### Image upload for user profile and for journeys
+<img width="1440" alt="Screen Shot 2021-07-06 at 12 06 25 PM" src="https://user-images.githubusercontent.com/26408955/124632847-b1680180-de52-11eb-89d3-e4f900998767.png">
+
+## Section 2 - Installation:
+
 Make sure you have MongoDB installed and running on your system.
 
 In a terminal(anywhere) type in the follwing to get the Redis server running on the default port: sudo service redis-server start
@@ -38,28 +64,3 @@ Terminal 2-
 * Private group chat among co travellers(only)
 * Public comments on a journey
 * Caching of User data
-
-
-### Some screenshots
-
-##### Creating a journey
-
-<img width="1436" alt="Screen Shot 2021-07-06 at 11 56 49 AM" src="https://user-images.githubusercontent.com/26408955/124632372-45859900-de52-11eb-817b-c54975f69279.png">
-
-##### Editing a journey
-
-<img width="1419" alt="Screen Shot 2021-07-06 at 11 59 00 AM" src="https://user-images.githubusercontent.com/26408955/124632244-2be45180-de52-11eb-89f9-bf9800c6c43b.png">
-
-##### Authentication
-
-<img width="1440" alt="Screen Shot 2021-07-06 at 12 02 15 PM" src="https://user-images.githubusercontent.com/26408955/124632423-5209f180-de52-11eb-9914-6d4596094134.png">
-
-##### Chat feature
-
-<img width="1435" alt="Screen Shot 2021-07-06 at 12 02 46 PM" src="https://user-images.githubusercontent.com/26408955/124632443-57673c00-de52-11eb-8137-ee6265fea8cb.png">
-
-##### Journey Dashboard
-<img width="1437" alt="Screen Shot 2021-07-06 at 12 06 02 PM" src="https://user-images.githubusercontent.com/26408955/124632789-a4e3a900-de52-11eb-881b-be75d63fe02f.png">
-
-##### Image upload for user profile and for journeys
-<img width="1440" alt="Screen Shot 2021-07-06 at 12 06 25 PM" src="https://user-images.githubusercontent.com/26408955/124632847-b1680180-de52-11eb-89d3-e4f900998767.png">
