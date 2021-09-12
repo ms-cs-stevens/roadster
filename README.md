@@ -1,5 +1,7 @@
 # Roadster
 
+[Video presentation link](https://www.loom.com/share/ccd94d410320463c95d79419eb3f91f1)
+
 ## Section 1 - Some screenshots:
 
 ##### Creating a journey
